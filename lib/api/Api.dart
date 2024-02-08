@@ -1,78 +1,29 @@
 
 import 'dart:convert';
 import 'package:betakety_app/controllers/language_controller.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart'  as http ;
 import 'package:intl/intl.dart';
-
+import 'package:http/http.dart';
 
 class Api {
 
-  
-  Future request({
-    required String url ,
-    required Map  map ,
-    required Function  onSuccess  ,
-    required Function onError }  )async{
-    print(map) ;
-    await http.post(Uri.parse(AppConstants.baseUrl+url) ,body  : map
-    ) .then((http.Response response) {
-      print(response.statusCode);
-      var jsonStr = json.decode(response.body);
-       print(jsonStr) ;
-      onSuccess(response) ;
-
-      }
-      
-
-    
-      );
-
-  }
-  Future request2({
-  required String url ,
-  required Map  map ,
-  required Function  onSuccess  ,
-  required Function onError }  )async{
-  print(map) ;
-  print(jsonEncode(map)) ;
-  await http.post(Uri.parse(url) ,body  : jsonEncode(map)  , headers: {"Content-Type": "application/json"} ) .then((http.Response response) {
-  if(response.statusCode == 200) {
-    print(response.body) ;
-
-    var jsonStr = json.decode(response.body);
-  print(jsonStr) ;
-  onSuccess(response.body) ;
-  }
-  else {
-  onError("Connection Error") ;
-  return null ;
-  }
-
-  }
-  );
-
+  Future<Response> postData({ required String uri ,  required Map map}) async {
+    String url =AppConstants.baseUrl+uri;
+    print(url);
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode(map),
+    );
+    return response;
   }
 
 
-  Future getRequest({
-    required String url ,
-    required Function  onSuccess  ,
-    required Function onError}  )async{
-    await http.get(Uri.parse(url)  ) .then((http.Response response) {
-      if(response.statusCode == 200) {
-      var jsonStr = json.decode(response.body);
-         print(jsonStr) ;
-      onSuccess(response.body) ;
-      }
-      else {
-        onError("Connection Error") ;
-        return null ;
-      }
 
-    }
-      );
-
+  Future <Response> getData({
+    required String url })async{
+    final response =  await http.get(Uri.parse(url)  ) ;
+    return response ;
   }
   
 

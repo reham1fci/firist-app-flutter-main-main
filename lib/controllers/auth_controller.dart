@@ -31,9 +31,9 @@ class AuthController extends GetxController {
   void login({required String email, required String password}) async {
     _isLoading = true;
     update();
-          APIService apiService = APIService();
-        LoginReqModel user1 =  LoginReqModel(password:password , username: email );
-                LoginResponsModel res = await apiService.login(user1);
+    APIService apiService = APIService();
+    LoginReqModel user1 =  LoginReqModel(password:password , username: email );
+    LoginResponsModel res = await apiService.login(user1);
         print(res);
      if (res.success == true ) {
        Get.offAll(const NavBarScreen());
