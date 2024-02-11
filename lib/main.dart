@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:betakety_app/api/Api.dart';
 import 'package:betakety_app/util/constant.dart';
 import 'package:betakety_app/view/screens/auth/auth_screen.dart';
 import 'package:betakety_app/controllers/banner_controller.dart';
@@ -24,21 +23,17 @@ import 'view/screens/profile/profile_screen.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  Api api = Api() ;
-
-  bool  isConn = await api.checkInternet();
 
     bool? isLoggedIn = prefs.getBool('is_logged_in');
   Map<String, Map<String, String>> languages = await init();
-  runApp(MyApp(languages: languages, isLoggedIn: isLoggedIn ,isConn: isConn));
+  runApp(MyApp(languages: languages, isLoggedIn: isLoggedIn));
 }
 
 class MyApp extends StatelessWidget {
   final Map<String, Map<String, String>> languages;
   final bool? isLoggedIn;
-  final bool? isConn;
 
-  const MyApp({Key? key, required this.languages, this.isLoggedIn ,this.isConn})
+  const MyApp({Key? key, required this.languages, this.isLoggedIn})
       : super(key: key);
 
   get d => null;
