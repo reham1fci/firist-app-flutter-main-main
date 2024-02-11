@@ -1,3 +1,4 @@
+import 'package:betakety_app/controllers/auth_controller.dart';
 import 'package:betakety_app/util/dimensions.dart';
 import 'package:betakety_app/util/styles.dart';
 import 'package:betakety_app/view/screens/auth/auth_screen.dart';
@@ -28,8 +29,8 @@ class SignOutConfirmationDialog extends StatelessWidget {
               Expanded(
                   child: InkWell(
                 onTap: () {
-                  Get.offAll(AuthScreen());
-                  //Get.find<AuthController>().logout();
+                  //Get.offAll(AuthScreen());
+                  Get.find<AuthController>().logout();
                 },
                 child: Container(
                   padding: const EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),

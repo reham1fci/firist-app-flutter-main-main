@@ -24,7 +24,8 @@ class AuthController extends GetxController {
   int get selectedIndex => _selectedIndex;
 
   void logout() {
-    // authRepo.logout();
+    // authRepo.logout()
+ clearUserLogin() ;
     Get.offAll(const AuthScreen());
   }
 
@@ -50,6 +51,10 @@ class AuthController extends GetxController {
               'response_data', json.encode(user.toJson()));  await prefs.setString(
               'user', json.encode(user.toJson()));
           await prefs.setBool('is_logged_in', true);
+  }clearUserLogin( )async{
+   SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.remove("user") ;
+          await prefs.setBool('is_logged_in', false);
   }
   saveHeader(String header) {
     // authRepo.saveHeader(header);
