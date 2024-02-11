@@ -1,19 +1,25 @@
 
 import 'dart:convert';
-import 'package:betakety_app/controllers/language_controller.dart';
 import 'package:http/http.dart'  as http ;
 import 'package:intl/intl.dart';
 import 'package:http/http.dart';
+
+import '../util/app_constants.dart';
 
 class Api {
 
   Future<Response> postData({ required String uri ,  required Map map}) async {
     String url =AppConstants.baseUrl+uri;
     print(url);
+    Uri urii =
+    Uri(scheme: 'https', port: 3000, host: 'marsalogistics.com', path: 'new/hr_marsa_system/ar/api_hr_apps/Login_Api.php'); // to reach this endpoint: 'https://mywebsite.com:3000/folder'
+
     final response = await http.post(
       Uri.parse(url),
-      headers: {'Content-Type': 'application/json'},
-      body: json.encode(map),
+      headers:{
+        'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin':"*"},
+    body: json.encode(map),
     );
     return response;
   }
