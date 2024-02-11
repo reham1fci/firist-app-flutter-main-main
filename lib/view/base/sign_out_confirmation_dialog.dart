@@ -1,6 +1,6 @@
 import 'package:betakety_app/util/dimensions.dart';
 import 'package:betakety_app/util/styles.dart';
-import 'package:betakety_app/view/screes/auth/auth_screen.dart';
+import 'package:betakety_app/view/screens/auth/auth_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

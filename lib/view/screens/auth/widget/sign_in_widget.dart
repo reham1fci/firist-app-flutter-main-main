@@ -1,8 +1,9 @@
+import 'package:betakety_app/api/Api.dart';
 import 'package:betakety_app/controllers/auth_controller.dart';
 import 'package:betakety_app/view/base/custom_snackbar.dart';
 import 'package:betakety_app/util/dimensions.dart';
 import 'package:betakety_app/util/styles.dart';
-import 'package:betakety_app/view/screes/auth/forget_password_screen.dart';
+import 'package:betakety_app/view/screens/auth/forget_password_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -21,6 +22,7 @@ class SignInWidgetState extends State<SignInWidget> {
   TextEditingController? _emailController;
   TextEditingController? _passwordController;
   GlobalKey<FormState>? _formKeyLogin;
+  Api api = Api() ;
 
   @override
   void initState() {
@@ -113,7 +115,7 @@ class SignInWidgetState extends State<SignInWidget> {
             ));
   }
 
-  void _login() {
+  Future<void> _login() async {
     String email = _emailController!.text.trim();
     String password = _passwordController!.text.trim();
     if (email.isEmpty) {
@@ -122,8 +124,12 @@ class SignInWidgetState extends State<SignInWidget> {
       showCustomSnackBar('PASSWORD_MUST_BE_REQUIRED'.tr);
     } else {
      // Get.offAll(NavBarScreen());
-      Get.find<AuthController>().login(email: email, password: password);
-
+      if(await api.checkInternet()) {
+        Get.find<AuthController>().login(email: email, password: password);
+      }
+      else {
+        showCustomSnackBar('no_internet_connection'.tr) ;
+      }
     }
   }
 }

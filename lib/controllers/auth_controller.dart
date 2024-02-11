@@ -9,9 +9,9 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../view/screes/auth/auth_screen.dart';
+import '../view/screens/auth/auth_screen.dart';
 import '../view/base/custom_snackbar.dart';
-import '../view/screes/home/nav_screen.dart';
+import '../view/screens/home/nav_screen.dart';
 
 class AuthController extends GetxController {
 

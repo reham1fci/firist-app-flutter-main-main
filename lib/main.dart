@@ -1,38 +1,44 @@
 import 'dart:convert';
 
+import 'package:betakety_app/api/Api.dart';
 import 'package:betakety_app/util/constant.dart';
-import 'package:betakety_app/view/screes/auth/auth_screen.dart';
+import 'package:betakety_app/view/screens/auth/auth_screen.dart';
 import 'package:betakety_app/controllers/banner_controller.dart';
 import 'package:betakety_app/controllers/auth_controller.dart';
 import 'package:betakety_app/controllers/permission_controller.dart';
 import 'package:betakety_app/util/images.dart';
-import 'package:betakety_app/view/screes/home/nav_screen.dart';
-import 'package:betakety_app/view/screes/home/widget/squer_screen.dart';
-import 'package:betakety_app/view/screes/home/widget/custom_drawer.dart';
-import 'package:betakety_app/view/screes/home/widget/widget_list.dart';
-import 'package:betakety_app/view/screes/splash/splash_view.dart';
+import 'package:betakety_app/view/screens/home/nav_screen.dart';
+import 'package:betakety_app/view/screens/home/widget/squer_screen.dart';
+import 'package:betakety_app/view/screens/home/widget/custom_drawer.dart';
+import 'package:betakety_app/view/screens/home/widget/widget_list.dart';
+import 'package:betakety_app/view/screens/splash/splash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'controllers/language_controller.dart';
 import 'controllers/localization_controller.dart';
-import 'view/screes/home/home_screen.dart';
-import 'view/screes/profile/profile_screen.dart';
+import 'view/screens/home/home_screen.dart';
+import 'view/screens/profile/profile_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  bool? isLoggedIn = prefs.getBool('is_logged_in');
+  Api api = Api() ;
+
+  bool  isConn = await api.checkInternet();
+
+    bool? isLoggedIn = prefs.getBool('is_logged_in');
   Map<String, Map<String, String>> languages = await init();
-  runApp(MyApp(languages: languages, isLoggedIn: isLoggedIn));
+  runApp(MyApp(languages: languages, isLoggedIn: isLoggedIn ,isConn: isConn));
 }
 
 class MyApp extends StatelessWidget {
   final Map<String, Map<String, String>> languages;
   final bool? isLoggedIn;
+  final bool? isConn;
 
-  const MyApp({Key? key, required this.languages, this.isLoggedIn})
+  const MyApp({Key? key, required this.languages, this.isLoggedIn ,this.isConn})
       : super(key: key);
 
   get d => null;
@@ -112,7 +118,48 @@ Future<Map<String, Map<String, String>>> init() async {
 
   return languages;
 }
+/*Future<void> execute(
+    InternetConnectionChecker internetConnectionChecker,
+    ) async {
+  // Simple check to see if we have Internet
+  // ignore: avoid_print
+  print('''The statement 'this machine is connected to the Internet' is: ''');
+  final bool isConnected = await InternetConnectionChecker().hasConnection;
+  // ignore: avoid_print
+  print(
+    isConnected.toString(),
+  );
+  // returns a bool
 
+  // We can also get an enum instead of a bool
+  // ignore: avoid_print
+  print(
+    'Current status: ${await InternetConnectionChecker().connectionStatus}',
+  );
+  // Prints either InternetConnectionStatus.connected
+  // or InternetConnectionStatus.disconnected
+
+  // actively listen for status updates
+  final StreamSubscription<InternetConnectionStatus> listener =
+  InternetConnectionChecker().onStatusChange.listen(
+        (InternetConnectionStatus status) {
+      switch (status) {
+        case InternetConnectionStatus.connected:
+        // ignore: avoid_print
+          print('Data connection is available.');
+          break;
+        case InternetConnectionStatus.disconnected:
+        // ignore: avoid_print
+          print('You are disconnected from the internet.');
+          break;
+      }
+    },
+  );
+
+  // close listener after 30 seconds, so the program doesn't run forever
+  await Future<void>.delayed(const Duration(seconds: 30));
+  await listener.cancel();
+}*/
 class Messages extends Translations {
   final Map<String, Map<String, String>> languages;
   Messages({required this.languages});

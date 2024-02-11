@@ -1,5 +1,6 @@
 
 import 'dart:convert';
+import 'package:connectivity/connectivity.dart';
 import 'package:http/http.dart'  as http ;
 import 'package:intl/intl.dart';
 import 'package:http/http.dart';
@@ -31,10 +32,18 @@ class Api {
     final response =  await http.get(Uri.parse(url)  ) ;
     return response ;
   }
-  
+
+  Future<bool> checkInternet() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile) {
+      return true;
+    } else if (connectivityResult == ConnectivityResult.wifi) {
+      return true;
+    }
+    return false;}
 
 
-static String getDate(String format){
+    static String getDate(String format){
   var now =  DateTime.now();
   var formatter =  DateFormat(format);
   String formattedDate = formatter.format(now);

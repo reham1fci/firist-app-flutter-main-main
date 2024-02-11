@@ -1,5 +1,5 @@
 import 'package:betakety_app/view/base/color_resources.dart';
-import 'package:betakety_app/view/screes/auth/widget/sign_in_widget.dart';
+import 'package:betakety_app/view/screens/auth/widget/sign_in_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../controllers/auth_controller.dart';

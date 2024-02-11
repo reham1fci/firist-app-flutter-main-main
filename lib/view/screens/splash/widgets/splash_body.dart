@@ -2,8 +2,8 @@
 import 'package:betakety_app/util/app_constants.dart';
 import 'package:betakety_app/util/images.dart';
 import 'package:betakety_app/view/base/color_resources.dart';
-import 'package:betakety_app/view/screes/auth/auth_screen.dart';
-import 'package:betakety_app/view/screes/home/nav_screen.dart';
+import 'package:betakety_app/view/screens/auth/auth_screen.dart';
+import 'package:betakety_app/view/screens/home/nav_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
