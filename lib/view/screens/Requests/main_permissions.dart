@@ -1,15 +1,13 @@
-import 'package:betakety_app/permission/add_request_permission.dart';
 import 'package:betakety_app/permission/permission_request_screen.dart';
+import 'package:betakety_app/view/screens/Requests/add_request_permission.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nb_utils/nb_utils.dart';
-import '../../card_style/body_measurement.dart';
-import '../../card_style/body_measurementt.dart';
-import '../../controllers/permission_controller.dart';
-import '../../util/constant.dart';
-import '../../util/styles.dart';
-import 'add_request_per.dart';
-import 'view_request_per.dart';
+import '../../../card_style/body_measurement.dart';
+import 'permission_request_body.dart';
+import '../../../controllers/permission_controller.dart';
+import '../../../util/constant.dart';
+import '../../../util/styles.dart';
 
 class MainPermissions extends StatefulWidget {
   const MainPermissions({Key? key}) : super(key: key);
@@ -41,6 +39,8 @@ class _MainPermissionsState extends State<MainPermissions> {
           backgroundColor: Colors.white,
           elevation: 2.0,
           bottom: TabBar(
+
+
             onTap: (value) {
               Get.find<PermissionController>().changeSelected(value);
             },
@@ -55,7 +55,9 @@ class _MainPermissionsState extends State<MainPermissions> {
                 //icon: Icon(Icons.brightness_5_sharp),
                 text: 'processing'.tr,
               ),
+
             ],
+
           ),
         ),
         body: Column(
@@ -86,14 +88,14 @@ class _MainPermissionsState extends State<MainPermissions> {
                 ),
               ),
             ),
-            const Expanded(
+             Expanded(
               child: TabBarView(
                 children: [
                   // Center(
                   //   child: Text("It's cloudy here"),
                   // ),
-                  BodyMeasurementView2(),
-                  BodyMeasurementView2(),
+                  PermissionRequestBody(selectIndex: 0),
+                  PermissionRequestBody(selectIndex: 1),
                 ],
               ),
             ),

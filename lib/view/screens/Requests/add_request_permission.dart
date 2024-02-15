@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-import '../../util/constant.dart';
-import '../../view/base/custom_text_field.dart';
-import '../../view/base/custom_button.dart';
-import '../../view/base/custom_field_with_title.dart';
-import '../../controllers/permission_controller.dart';
-import '../../util/dimensions.dart';
-import '../../util/styles.dart';
+import '../../../util/constant.dart';
+import '../../base/custom_text_field.dart';
+import '../../base/custom_button.dart';
+import '../../base/custom_field_with_title.dart';
+import '../../../controllers/permission_controller.dart';
+import '../../../util/dimensions.dart';
+import '../../../util/styles.dart';
 
 class AddRequestPermission extends StatefulWidget {
   const AddRequestPermission({super.key});
@@ -252,7 +252,7 @@ class _AddRequestPermissionState extends State<AddRequestPermission> {
                   ),
                   child: CustomTextField(
                     onTap: () {
-                      pController.selectFile();
+                      pController.selectSingleFile();
                     },
                     maxLines: 2,
                     readOnly: true,

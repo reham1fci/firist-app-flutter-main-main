@@ -57,20 +57,20 @@ class RequestsPermissionsModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['success'] = success;
-    data['requestId'] = requestId;
+    //data['success'] = success;
+    //data['requestId'] = requestId;
     data['request_per_type'] = requestPerType;
     data['request_type'] = requestType;
     data['request_per_details'] = requestPerDetails;
     data['request_per_date'] = requestPerDate;
     data['request_per_time_from'] = requestPerTimeFrom;
     data['request_per_time_to'] = requestPerTimeTo;
-    data['request_per_stat'] = requestPerStat;
-    data['updateDate_Time'] = updateDateTime;
-    data['update_user_id'] = updateUserId;
-    data['the_reason'] = theReason;
-    data['add_user_id'] = addUserId;
-    data['createdDate_Time'] = createdDateTime;
+  //  data['request_per_stat'] = requestPerStat;
+    //data['updateDate_Time'] = updateDateTime;
+  //  data['update_user_id'] = updateUserId;
+   // data['the_reason'] = theReason;
+    data['employ_id'] = addUserId;
+    //data['createdDate_Time'] = createdDateTime;
     if (attatchement != null) {
       data['attatchement'] = attatchement!.map((v) => v.toJson()).toList();
     }

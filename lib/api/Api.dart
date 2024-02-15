@@ -1,5 +1,7 @@
 
 import 'dart:convert';
+import 'dart:io';
+import 'package:betakety_app/model/requests_permissions_model.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:http/http.dart'  as http ;
 import 'package:intl/intl.dart';
@@ -12,9 +14,7 @@ class Api {
   Future<Response> postData({ required String uri ,  required Map map}) async {
     String url =AppConstants.baseUrl+uri;
     print(url);
-    Uri urii =
-    Uri(scheme: 'https', port: 3000, host: 'marsalogistics.com', path: 'new/hr_marsa_system/ar/api_hr_apps/Login_Api.php'); // to reach this endpoint: 'https://mywebsite.com:3000/folder'
-
+    print(map);
     final response = await http.post(
       Uri.parse(url),
       headers:{
@@ -25,11 +25,10 @@ class Api {
     return response;
   }
 
-
-
   Future <Response> getData({
     required String url })async{
-    final response =  await http.get(Uri.parse(url)  ) ;
+
+    final response =  await http.get(Uri.parse(AppConstants.baseUrl+url)  ) ;
     return response ;
   }
 
@@ -43,10 +42,4 @@ class Api {
     return false;}
 
 
-    static String getDate(String format){
-  var now =  DateTime.now();
-  var formatter =  DateFormat(format);
-  String formattedDate = formatter.format(now);
-  print(formattedDate); // 2016-01-25
-  return formattedDate  ;
-}}
+   }

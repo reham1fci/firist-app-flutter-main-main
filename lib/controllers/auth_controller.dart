@@ -89,7 +89,11 @@ class AuthController extends GetxController {
   // bool isLogin() {
   //   return authRepo.isLoaging();
   // }
-
+  Future<LoginResponsModel> getLoginData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    LoginResponsModel user = LoginResponsModel.fromJson(json.decode(prefs!.getString("user")!));
+return user ;
+  }
   void getLocationPrediction() async {
     _checkPermission(() async {
       Position? p = await Geolocator.getCurrentPosition();

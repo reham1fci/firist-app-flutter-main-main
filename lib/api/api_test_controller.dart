@@ -53,7 +53,7 @@ class _ListLayoutsState extends State<ListLayouts> {
 
   @override
   void initState() {
-    Get.find<PermissionController>().loadData();
+    //Get.find<PermissionController>().loadData();
     super.initState();
   }
 

@@ -1,4 +1,4 @@
-import 'package:betakety_app/requests/permissions_requests/main_permissions.dart';
+import 'package:betakety_app/view/screens/Requests/main_permissions.dart';
 import 'package:betakety_app/util/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

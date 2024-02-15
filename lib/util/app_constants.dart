@@ -4,7 +4,8 @@ class AppConstants {
   static const double appVersion = 2.2;
   static const String baseUrl = "https://marsalogistics.com/new/hr_marsa_system/ar/api_hr_apps";
   static const String loginUri = '/Login_Api.php';
-  static const String categoryUri = '/api/v1/categories';
+  static const String addPermissionReq = '/insert_request_permission_api.php';
+  static const String showPermissionReq = '/show_request_permission_api.php';
   static const String bannerUri = '/api/v1/banners';
   static const String storeItemUri = '/api/v1/items/latest';
   static const String popularItemUri = '/api/v1/items/popular';
