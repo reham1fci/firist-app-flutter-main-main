@@ -10,16 +10,17 @@ import '../../controllers/permission_controller.dart';
 import '../../util/dimensions.dart';
 import '../../util/styles.dart';
 
-class AddRequestPerMohran extends StatefulWidget {
-  const AddRequestPerMohran({super.key});
+class AddRequestPermission extends StatefulWidget {
+  const AddRequestPermission({super.key});
 
   @override
-  State<AddRequestPerMohran> createState() => _AddRequestPerMohranState();
+  State<AddRequestPermission> createState() => _AddRequestPermissionState();
 }
 
-class _AddRequestPerMohranState extends State<AddRequestPerMohran> {
+class _AddRequestPermissionState extends State<AddRequestPermission> {
   @override
   void initState() {
+    print("add AddRequestPerMohran") ;
     //Get.find<PermissionController>().resetData();
     super.initState();
   }
@@ -251,7 +252,7 @@ class _AddRequestPerMohranState extends State<AddRequestPerMohran> {
                   ),
                   child: CustomTextField(
                     onTap: () {
-                      //pController.selectFile();
+                      pController.selectFile();
                     },
                     maxLines: 2,
                     readOnly: true,

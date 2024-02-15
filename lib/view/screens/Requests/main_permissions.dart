@@ -9,7 +9,6 @@ import '../../controllers/permission_controller.dart';
 import '../../util/constant.dart';
 import '../../util/styles.dart';
 import 'add_request_per.dart';
-import 'add_request_perr_mohran.dart';
 import 'view_request_per.dart';
 
 class MainPermissions extends StatefulWidget {
@@ -106,7 +105,7 @@ class _MainPermissionsState extends State<MainPermissions> {
             color: Colors.white,
           ),
           onPressed: () {
-            Get.to(AddRequestPerMohran());
+            Get.to(AddRequestPermission());
           },
         ),
       ),
