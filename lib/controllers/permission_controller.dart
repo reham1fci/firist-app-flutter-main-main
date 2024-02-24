@@ -1,10 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:io';
-
 import 'package:betakety_app/api/Api.dart';
 import 'package:betakety_app/controllers/auth_controller.dart';
 import 'package:betakety_app/model/login_model.dart';
 import 'package:betakety_app/util/app_constants.dart';
+import 'package:betakety_app/view/base/custom_lert_dialog.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -193,7 +193,7 @@ class PermissionController extends GetxController {
     // update();
   }
 
-  void validateFieldsAndShowSnackbar() {
+  Future<void> validateFieldsAndShowSnackbar() async {
     if (detailsController.text.isEmpty) {
       showCustomSnackBar("${'details'.tr} ${"is_required".tr}");
     } else if (dateController.text.isEmpty) {
@@ -218,6 +218,7 @@ postDataWithFile(uri: AppConstants.addPermissionReq) ;
     var response  = await  api.getData(url: url)  ;
 
       if (response.statusCode == 200) {
+        print("requests");
         print(jsonDecode(response.body));
 
         return jsonDecode(response.body);
@@ -244,10 +245,6 @@ postDataWithFile(uri: AppConstants.addPermissionReq) ;
     request.fields['request_per_date'] =dateController.text;
     request.fields['request_per_time_from'] = timeFromController.text;
     request.fields['request_per_time_to'] = timeToController.text;
-    //  data['request_per_stat'] = requestPerStat;
-    //data['updateDate_Time'] = updateDateTime;
-    //  data['update_user_id'] = updateUserId;
-    // data['the_reason'] = theReason;
     LoginResponsModel user =  await AuthController().getLoginData()  ;
     request.fields['employ_id'] = user.id!;
     print(request.fields);
@@ -262,8 +259,16 @@ var response  = await request.send() ;
       if (response.statusCode == 200){
         print(response) ;
         print("Uploaded!");
-      }
+        showOkDialog(context: Get.context
+            !,message: 'added_to_requests_permission'.tr ,isCancelBtn: false ,onOkClick:(){
+          Navigator.of( Get.context!).pop();
+          update() ;
+        } );
 
+        //return "success" ;
+
+      }
+//return "error" ;
 
   }
   List<dynamic> viewdata = [];

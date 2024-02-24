@@ -73,16 +73,16 @@ PermissionRequestItem(
                             child: Text(
                               "${filteredData[index]['request_per_stat'].toString().tr} ",
                               textAlign: TextAlign.center,
-                              style: const TextStyle(
+                              style:  TextStyle(
                                 // fontFamily:FitnessAppTheme.fontName,
                                 fontWeight: FontWeight.w200,
                                 fontSize: 16,
-                                color: Color.fromARGB(
-                                    255, 206, 217, 6),
+                                  color:  filteredData[index]['request_per_stat'] =="reject_req_per" ?Colors.red : const Color.fromARGB(
+                                    255, 206, 217, 6) ,
                               ),
                             ),
                           ),
-                          Padding(
+                        /*  Padding(
                             // ignore: prefer_const_constructors
                             padding: EdgeInsets.only(
                                 left: 8, bottom: 8),
@@ -100,7 +100,7 @@ PermissionRequestItem(
                                     .nearlyDarkBlue,
                               ),
                             ),
-                          ),
+                          ),*/
                         ],
                       ),
                       Column(
@@ -392,7 +392,7 @@ PermissionRequestItem(
           ],
         ),
       ),
-    );;
+    );
   }
 
 

@@ -4,18 +4,18 @@ import 'package:betakety_app/controllers/account_controller.dart';
 import 'package:betakety_app/model/account.dart';
 import 'package:betakety_app/util/constant.dart';
 import 'package:betakety_app/util/styles.dart';
-import 'package:betakety_app/view/screens/home/widget/debt_balance.dart';
+import 'package:betakety_app/view/screens/account_statement/widgets/account_statement_body.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class AccountBalance extends StatefulWidget{
-  const AccountBalance({super.key});
+class AccountStatement extends StatefulWidget{
+  const AccountStatement({super.key});
 
   @override
-  State<AccountBalance> createState() => _AccountBalanceState();
+  State<AccountStatement> createState() => _AccountStatementState();
 }
 
-class _AccountBalanceState extends State<AccountBalance> {
+class _AccountStatementState extends State<AccountStatement> {
   @override
   void initState() {
     // TODO: implement initState
@@ -78,14 +78,14 @@ custodyData.add(w) ;
                     color: kTitleColor, fontWeight: FontWeight.bold),
               ),
 
-              DebtBalance(debitData),
+              AccountStatementBody(debitData),
 
               Divider(color: Colors.black,),
               Text(
                 'custody_balance'.tr,
                 style: fontSizeMedium.copyWith(
                     color: kTitleColor, fontWeight: FontWeight.bold),
-              ), DebtBalance(custodyData),
+              ), AccountStatementBody(custodyData),
             ],
           ),
           )),) ;

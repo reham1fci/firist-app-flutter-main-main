@@ -29,6 +29,7 @@ class Api {
     required String url })async{
 
     final response =  await http.get(Uri.parse(AppConstants.baseUrl+url)  ) ;
+    print(AppConstants.baseUrl+url);
     return response ;
   }
 
@@ -37,6 +38,7 @@ class Api {
     if (connectivityResult == ConnectivityResult.mobile) {
       return true;
     } else if (connectivityResult == ConnectivityResult.wifi) {
+
       return true;
     }
     return false;}

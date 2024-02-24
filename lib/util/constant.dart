@@ -5,6 +5,7 @@ const kMainColor = Color(0xFF744ACC);
 const kGreyTextColor = Color(0xFF767C8F);
 const kBorderColorTextField = Color(0xFFC2C2C2);
 const kDarkWhite = Color(0xFFF1F7F7);
+const lightWhite = Color(0xFFFFFFFF);
 const kTitleColor = Color(0xFF1D1D1B);
 const kAlertColor = Color(0xFFFF8919);
 const kBgColor = Color(0xFFF7F7F8);

@@ -2,7 +2,7 @@ import 'package:betakety_app/api/Api.dart';
 import 'package:betakety_app/controllers/language_controller.dart';
 import 'package:betakety_app/main.dart';
 import 'package:betakety_app/view/base/custom_snackbar.dart';
-import 'package:betakety_app/view/screens/home/widget/mohran2.dart';
+import 'package:betakety_app/view/screens/account_statement/account_statement.dart';
 import 'package:betakety_app/view/screens/profile/profile_screen.dart';
 import 'package:betakety_app/view/screens/home/widget/salomon_bottom_bar.dart';
 import 'package:flutter/material.dart';
@@ -136,7 +136,7 @@ class NavbarController extends GetxController implements GetxService {
 
   final List<Widget> screen = [
     const Myapp(),
-    const FirstRoute(),
+    const AccountStatement(),
     const Screen3(),
     const ProfileScreen()
   ];

@@ -21,21 +21,7 @@ class PermissionRequestBody extends StatefulWidget {
 class PermissionRequestState extends State<PermissionRequestBody> {
   // final AnimationController? animationController;
   bool loader = false;
-  Future<dynamic> getData() async {
-    try {
-      final response = await http.get(Uri.parse(
-          'https://marsalogistics.com/new/resting/api/show_request_permission_api_mohran.php'));
 
-      if (response.statusCode == 200) {
-        return jsonDecode(response.body);
-      } else {
-        return "error";
-      }
-    } catch (e) {
-      print("Error: $e");
-      return "error";
-    }
-  }
 
   @override
   void initState() {

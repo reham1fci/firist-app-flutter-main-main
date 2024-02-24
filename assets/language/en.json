@@ -81,7 +81,7 @@
   "quantity": "Quantity",
   "select_variant": "Available Color",
   "delivery_charge": "Delivery Charge:",
-  "added_to_cart": "Added to cart",
+  "added_to_requests_permission": "Added to Permissions Requests",
   "added_in_cart": "Added in cart",
   "already_added": "This product is already added to cart",
   "coupons": "Coupons",
@@ -457,7 +457,7 @@
   "attachments": "Attachments",
   "display": "Display",
   "number": "Number",
-  "account_statement": "Account Statement",
+  "account_statement": "Account",
   "requests": "Requests",
   "salaries": "Salaries",
   "Attendance_and_Departure": "Attendance",
@@ -474,6 +474,14 @@
   "Suits": "Suits",
   "Insurance_discount": "Insurance Discount",
   "Total_salary": "Total Salary",
+   "debt" : "debt",
+   "credit" : "credit",
+   "balance" : "balance",
+  "debit_balance" : "Debit Balance",
+  "custody_balance" : "Custody Balance",
 
-  "file": "File"
+  "file": "File",
+  "0": "Pending",
+  "reject_req_per": "Rejected",
+  "approval_req_per": "Approved"
 }

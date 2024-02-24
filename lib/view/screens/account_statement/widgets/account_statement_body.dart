@@ -2,14 +2,14 @@ import 'package:betakety_app/model/account.dart';
 import 'package:betakety_app/util/constant.dart';
 import 'package:betakety_app/util/custom_app_theme.dart';
 import 'package:betakety_app/view/base/custom_button.dart';
-import 'package:betakety_app/view/screens/home/widget/debit_item.dart';
+import 'package:betakety_app/view/screens/account_statement/widgets/account_statement_item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class DebtBalance extends StatelessWidget{
+class AccountStatementBody extends StatelessWidget{
   List<Account> data = [];
 
-   DebtBalance(this.data);
+  AccountStatementBody(this.data);
 
 
   @override
@@ -85,7 +85,7 @@ margin: EdgeInsets.only(top: 15 ,bottom: 15 ,right: 3 ,left: 3),
                 ListView.separated(
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
-                      return DebitItem(data: data,index: index,);
+                      return AccountStatmentItem(data: data,index: index,);
                     },
                     separatorBuilder: (context, index) {
                       return const Divider();

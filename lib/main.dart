@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:betakety_app/controllers/account_controller.dart';
 import 'package:betakety_app/util/constant.dart';
 import 'package:betakety_app/view/screens/auth/auth_screen.dart';
 import 'package:betakety_app/controllers/banner_controller.dart';
@@ -98,6 +99,7 @@ Future<Map<String, Map<String, String>>> init() async {
   Get.put(BannersController());
   Get.put(AuthController());
   Get.put(PermissionController());
+  Get.put(AccountController());
   Map<String, Map<String, String>> languages = {};
   for (LanguageModel languageModel in AppConstants.languages) {
     String jsonStringValues = await rootBundle

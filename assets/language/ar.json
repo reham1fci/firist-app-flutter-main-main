@@ -81,7 +81,7 @@
   "quantity": "كمية",
   "select_variant": "حدد متغير",
   "delivery_charge": "رسوم التوصيل:",
-  "added_to_cart": "تمت الإضافة إلى عربة التسوق",
+  "added_to_requests_permission": "تمت الإضافة إلى طلبات الاذونات",
   "added_in_cart": "تمت الإضافة إلى عربة التسوق",
   "already_added": "تمت إضافة هذا المنتج بالفعل إلى سلة التسوق",
   "coupons": "كوبونات",
@@ -457,7 +457,7 @@
   "attachments": " المرفقات",
   "display": "عرض",
   "number": "رقم",
-  "account_statement": "كشف الحساب",
+  "account_statement": "الحساب",
   "requests": "الطلبات",
   "salaries": "الرواتب",
   "Attendance_and_Departure": "الحضور والإنصراف",
@@ -475,9 +475,15 @@
   "Suits": "البدلات",
   "Insurance_discount": "خصم التأمينات",
   "Total_salary": "إجمالي الر اتب",
-
-
-  "file": "ملف"
+  "debit_balance" : "رصيد السلف",
+  "custody_balance" : "رصيد العهد",
+  "debt" : "مدين",
+  "credit" : "داين",
+  "balance" : "رصيد",
+  "file": "ملف",
+  "0": "قيد الانتظار",
+  "reject_req_per": "تم الرفض",
+  "approval_req_per": " تمت الموافقه"
   
   
 }

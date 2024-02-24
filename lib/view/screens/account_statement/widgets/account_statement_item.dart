@@ -1,17 +1,17 @@
 import 'package:betakety_app/model/account.dart';
 import 'package:betakety_app/util/custom_app_theme.dart';
 import 'package:betakety_app/view/base/custom_button.dart';
-import 'package:betakety_app/view/screens/home/account_statement_details.dart';
+import 'package:betakety_app/view/screens/account_statement/account_statement_details.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-class DebitItem extends StatelessWidget {
+class AccountStatmentItem extends StatelessWidget {
   List<Account> data = [];
   int index  ;
 
 
-  DebitItem({required this.data, required this.index});
+  AccountStatmentItem({required this.data, required this.index});
 
   @override
   Widget build(BuildContext context) {

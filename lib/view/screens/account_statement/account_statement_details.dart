@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:betakety_app/controllers/account_controller.dart';
 import 'package:betakety_app/model/account.dart';
-import 'package:betakety_app/view/screens/home/widget/account_details_item.dart';
+import 'package:betakety_app/view/screens/account_statement/widgets/account_details_item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
