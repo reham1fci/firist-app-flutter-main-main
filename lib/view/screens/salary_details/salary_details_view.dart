@@ -1,27 +1,27 @@
+import 'package:betakety_app/controllers/salary_controller.dart';
+import 'package:betakety_app/util/constant.dart';
+import 'package:betakety_app/util/dimensions.dart';
+import 'package:betakety_app/util/styles.dart';
+import 'package:betakety_app/view/base/custom_button.dart';
+import 'package:betakety_app/view/base/custom_field_with_title.dart';
+import 'package:betakety_app/view/base/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:intl/intl.dart';
 
-import '../util/constant.dart';
-import '../view/base/custom_text_field.dart';
-import '../view/base/custom_button.dart';
-import '../view/base/custom_field_with_title.dart';
-import '../../controllers/permission_controller.dart';
-import '../util/dimensions.dart';
-import '../util/styles.dart';
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-class sal_details_mo extends StatefulWidget {
-  const sal_details_mo({Key? key}) : super(key: key);
+class salary_details_view extends StatefulWidget {
+  const salary_details_view({Key? key}) : super(key: key);
 
   @override
-  State<sal_details_mo> createState() => _sal_details_moState();
+  State<salary_details_view> createState() => _salary_details_State();
 }
 
-class _sal_details_moState extends State<sal_details_mo> {
+class _salary_details_State extends State<salary_details_view> {
   // @override
   // void initState() {
   //   //Get.find<PermissionController>().resetData();
@@ -81,8 +81,9 @@ class _sal_details_moState extends State<sal_details_mo> {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<PermissionController>(builder: (pController) {
+    return GetBuilder<SalaryController>(builder: (pController) {
       return Scaffold(
+
         backgroundColor: Theme.of(context).cardColor,
         // appBar: AppBar(
         //   title: Text("إضافة طلب إذن"),
@@ -134,15 +135,15 @@ class _sal_details_moState extends State<sal_details_mo> {
                             );
                             if (pickedDate != null) {
                               setState(() {
-                                pController.dateController.text =
+                                pController.dateFromController.text =
                                     DateFormat('yyyy-MM-dd').format(pickedDate);
                               });
                             }
                           },
                           readOnly: true,
-                          hintText: 'date'.tr,
+                          hintText: 'date_from'.tr,
                           inputType: TextInputType.text,
-                          controller: pController.dateController,
+                          controller: pController.dateFromController,
                         )),
                   ),
                   CustomFieldWithTitle(
@@ -170,15 +171,15 @@ class _sal_details_moState extends State<sal_details_mo> {
                             );
                             if (pickedDate != null) {
                               setState(() {
-                                pController.dateController.text =
+                                pController.dateToController.text =
                                     DateFormat('yyyy-MM-dd').format(pickedDate);
                               });
                             }
                           },
                           readOnly: true,
-                          hintText: 'date'.tr,
+                          hintText: 'date_to'.tr,
                           inputType: TextInputType.text,
-                          controller: pController.dateController,
+                          controller: pController.dateToController,
                         )),
                   ),
                 ],
