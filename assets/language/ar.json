@@ -483,7 +483,29 @@
   "file": "ملف",
   "0": "قيد الانتظار",
   "reject_req_per": "تم الرفض",
-  "approval_req_per": " تمت الموافقه"
-  
-  
+  "approval_req_per": " تمت الموافقه",
+  "salary_allowances": "الراتب بالبدلات ",
+  "date_commencement": "تاريخ البدء",
+  "count_days": "عدد الايام",
+  "total_salary": "اجمالي الراتب",
+  "days_target": "الايام مستثناه من التارجت",
+  "count_the_days2": "عدد الايام2",
+  "required_target": "التارجت المطلوب",
+  "chefz_target": "chefz target",
+  "jahez_target": "jahez target",
+  "hanger_target": "hanger target",
+  "target_restaurants": "resturants target",
+  "pakage_target": "package target",
+  "target_investigator": "invest target",
+  "nesba_mohkak": "nesba mohkaka",
+  "salary_mostahk": "salary mostahk",
+  "salf_khasm": "خصم السلف",
+  "ohad_khasm": "خصم العهدة",
+  "salary_hafez": "الحافظ",
+  "net_salary": "صافي الراتب",
+  "discount_hours": "ساعات الخصم",
+  "discount_attendance": " خصم الحضور",
+  "insurance_discount": "خصم التامينات",
+  "salary": "الراتب"
+
 }

@@ -24,7 +24,8 @@ return Account(
   debit: json["madenn"]
 );
 
-}factory Account.fromJsonDetails(Map<String, dynamic> json){
+}
+factory Account.fromJsonDetails(Map<String, dynamic> json){
 return Account(
   details: json["details"] ,
   definition:json["definition"],

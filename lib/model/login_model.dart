@@ -34,6 +34,7 @@ class LoginResponsModel {
   String? deptname;
   String? deptnameen;
   String? jobname;
+  String? loginType;
   String? jobnameen;
 
   LoginResponsModel(
@@ -67,6 +68,7 @@ class LoginResponsModel {
     deptnameen = json['deptnameen'];
     jobname = json['jobname'];
     jobnameen = json['jobnameen'];
+    loginType = json['office_employ'];
   }
 
   Map<String, dynamic> toJson() {
@@ -85,6 +87,7 @@ class LoginResponsModel {
     data['deptnameen'] = deptnameen;
     data['jobname'] = jobname;
     data['jobnameen'] = jobnameen;
+    data['office_employ'] = loginType;
     return data;
   }
 }

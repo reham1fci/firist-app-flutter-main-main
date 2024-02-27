@@ -11,6 +11,7 @@ class APIService {
     Api api  = Api()  ;
     final response = await api.postData(uri: AppConstants.loginUri, map: requestModel.toJson()) ;
     if (response.statusCode == 200 || response.statusCode == 400) {
+      print(json.decode(response.body));
       return LoginResponsModel.fromJson(json.decode(response.body));
     } else {
       throw Exception('Failed to load data!');

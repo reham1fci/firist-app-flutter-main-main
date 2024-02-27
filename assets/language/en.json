@@ -479,9 +479,33 @@
    "balance" : "balance",
   "debit_balance" : "Debit Balance",
   "custody_balance" : "Custody Balance",
-
   "file": "File",
   "0": "Pending",
   "reject_req_per": "Rejected",
-  "approval_req_per": "Approved"
+  "approval_req_per": "Approved",
+  "salary_allowances": "Salary Allowances",
+  "date_commencement": "Start Date",
+  "count_days": "Count Days",
+  "total_salary": "Total Salary",
+  "days_target": "days excluded from target",
+  "count_the_days2": "Count Days2",
+  "required_target": "Required Target",
+  "chefz_target": "chefz target",
+  "jahez_target": "jahez target",
+  "hanger_target": "hanger target",
+  "target_restaurants": "resturants target",
+  "pakage_target": "package target",
+  "target_investigator": "invest target",
+  "nesba_mohkak": "nesba mohkaka",
+  "salary_mostahk": "salary mostahk",
+  "salf_khasm": "Debit Deduction",
+  "ohad_khasm": "Custody Deduction",
+  "salary_hafez": "salary hafez",
+  "net_salary": "Net Salary",
+  "discount_hours": "Hours Deduction",
+  "discount_attendance": "Attendance Deduction",
+  "insurance_discount": "insurance Deduction",
+  "salary": "Salary"
+
+
 }

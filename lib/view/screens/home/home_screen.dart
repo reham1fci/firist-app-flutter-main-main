@@ -1,4 +1,5 @@
 import 'package:betakety_app/view/base/banners_view.dart';
+import 'package:betakety_app/view/screens/salary_details/salary_details_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,7 +14,6 @@ import 'widget/mohran.dart';
 import '../../../note/add.dart';
 import '../../../requests/permissions_requests/add_request_perr_mohran_saddam.dart';
 import '../../../requests/permissions_requests/add_request_perr_mohran_saddam2.dart';
-import '../../../salary_details/sal_details_mo.dart';
 import 'widget/squer_screen.dart';
 import '../../../util/styles.dart';
 import 'widget/widget_list.dart';
@@ -56,7 +56,7 @@ class Myapp extends StatelessWidget {
                       image: Images.salary,
                       width: Get.width / 3.2,
                       height: Get.width / 3.2,
-                      screen: sal_details_mo(),
+                      screen: salary_details_view(),
                     ),
                     Squermain(
                       title: 'Attendance_and_Departure'.tr,

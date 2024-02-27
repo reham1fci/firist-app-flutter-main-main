@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:marsa_delivery/localization/language_constrants.dart';
+import 'package:get/get.dart';
 
 class NoThingToShow extends StatelessWidget{
   const NoThingToShow({Key? key}) : super(key: key);
@@ -7,13 +7,16 @@ class NoThingToShow extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return   Container(child:
+    return   SizedBox(
+      width: double.infinity,
+      height: 100,
+      child:
      Center(
       child:   Column( children: <Widget>[
         //  Image.asset('images/nothing.png', fit: BoxFit.contain),
-        Text (getTranslated("not_find_item", context)??"")
+        Text( "no_data_found".tr)
       ], mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,),
-    ) , height: double.infinity, ) ;
+    ) , ) ;
   }
   }
