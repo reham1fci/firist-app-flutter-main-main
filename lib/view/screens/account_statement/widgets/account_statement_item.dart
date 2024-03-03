@@ -75,7 +75,7 @@ class AccountStatmentItem extends StatelessWidget {
             ],
           ),
           Row(children: [
-           Expanded(child:  SizedBox() ),
+            SizedBox() ,
             CustomButton(
                 width: 100,
                 height: 30,

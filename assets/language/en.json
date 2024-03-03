@@ -505,7 +505,13 @@
   "discount_hours": "Hours Deduction",
   "discount_attendance": "Attendance Deduction",
   "insurance_discount": "insurance Deduction",
-  "salary": "Salary"
+  "salary": "Salary" ,
+  "out_company": "you are out of company" ,
+  "mac_mobile":   "you must use your mobile" ,
+  "open_location":   "Open Location" ,
+  "log": "can't Login"
+
+
 
 
 }

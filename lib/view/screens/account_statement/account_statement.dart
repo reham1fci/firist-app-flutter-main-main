@@ -68,7 +68,7 @@ custodyData.add(w) ;
 
            SingleChildScrollView(  child:Padding(
             padding: const EdgeInsets.all(15), child:
-        Expanded(child:  Column(
+         Column(
             crossAxisAlignment:
             CrossAxisAlignment.start,
             children: [
@@ -88,6 +88,6 @@ custodyData.add(w) ;
               ), AccountStatementBody(custodyData),
             ],
           ),
-          )),) ;
+          )) ;
     });
 }}

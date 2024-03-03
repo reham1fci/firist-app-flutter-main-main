@@ -2,8 +2,9 @@ class LoginReqModel {
   String? username;
   String? password;
   String? name;
+  String? mobileMac ;
 
-  LoginReqModel({this.username, this.password, this.name = "sadam"});
+  LoginReqModel({this.username, this.password, this.name ,this.mobileMac});
 
   LoginReqModel.fromJson(Map<String, dynamic> json) {
     username = json['username'];
@@ -15,7 +16,7 @@ class LoginReqModel {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['username'] = username;
     data['password'] = password;
-    //data['name'] = name;
+    data['mac_address'] = mobileMac;
     return data;
   }
 }
@@ -36,6 +37,9 @@ class LoginResponsModel {
   String? jobname;
   String? loginType;
   String? jobnameen;
+  String? mobileMac;
+  String? companyLat ;
+  String? companyLng ;
 
   LoginResponsModel(
       {this.success,
@@ -51,6 +55,9 @@ class LoginResponsModel {
       this.deptname,
       this.deptnameen,
       this.jobname,
+        this.mobileMac ,
+        this.companyLat ,
+        this.companyLng,
       this.jobnameen});
 
   LoginResponsModel.fromJson(Map<String, dynamic> json) {
@@ -69,6 +76,9 @@ class LoginResponsModel {
     jobname = json['jobname'];
     jobnameen = json['jobnameen'];
     loginType = json['office_employ'];
+    mobileMac = json['mac_address'];
+    companyLng = json['company_lng'];
+    companyLat = json['company_lat'];
   }
 
   Map<String, dynamic> toJson() {
@@ -88,6 +98,9 @@ class LoginResponsModel {
     data['jobname'] = jobname;
     data['jobnameen'] = jobnameen;
     data['office_employ'] = loginType;
+    data['company_lat'] = companyLat;
+    data['company_lng'] = companyLng;
+    data['mac_address'] = mobileMac;
     return data;
   }
 }

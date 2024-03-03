@@ -506,6 +506,11 @@
   "discount_hours": "ساعات الخصم",
   "discount_attendance": " خصم الحضور",
   "insurance_discount": "خصم التامينات",
-  "salary": "الراتب"
+  "salary": "الراتب",
+  "out_company": "انت خارج الشركة",
+  "mac_mobile":   "هذا ليس هاتفك" ,
+  "open_location":   "افتح الموقع" ,
+  "log": "لا يمكن تسجيل دخول"
+
 
 }

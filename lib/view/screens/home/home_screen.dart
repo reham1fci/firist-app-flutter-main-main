@@ -1,4 +1,5 @@
 import 'package:betakety_app/view/base/banners_view.dart';
+import 'package:betakety_app/view/screens/attendance/finger_print.dart';
 import 'package:betakety_app/view/screens/salary_details/salary_details_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -63,6 +64,7 @@ class Myapp extends StatelessWidget {
                       image: Images.att,
                       width: Get.width / 3.2,
                       height: Get.width / 3.2,
+                      screen: FingerPrint(),
                     ),
                   ],
                 ),
@@ -251,7 +253,7 @@ class Myapp extends StatelessWidget {
                 //   },
                 //   child: const Text('slider2222'),
                 // ),
-                ElevatedButton(
+             /*   ElevatedButton(
                   onPressed: () {
                     // Add your button's functionality here
                     Navigator.push(
@@ -310,7 +312,7 @@ class Myapp extends StatelessWidget {
                     );
                   },
                   child: const Text('Add Note'),
-                ),
+                ),*/
 
                 // // Container(
                 //   child: const Text('Container 2'),

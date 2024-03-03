@@ -75,8 +75,8 @@ class AccountDetailsItem extends StatelessWidget{
                   left: 24, right: 24, top: 8, bottom: 8),
               child: Row(
                 children: <Widget>[
-                  Expanded(
-                    child: Column(
+                 // Expanded(child:
+              Column(
                       mainAxisAlignment:
                       MainAxisAlignment.center,
                       crossAxisAlignment:
@@ -113,9 +113,8 @@ class AccountDetailsItem extends StatelessWidget{
                         ),
                       ],
                     ),
-                  ),
-                  Expanded(
-                    child:
+               //   ),
+                 // Expanded(child:
                         Column(
                           mainAxisAlignment:
                           MainAxisAlignment.center,
@@ -157,9 +156,8 @@ class AccountDetailsItem extends StatelessWidget{
                             ),
                           ],
                         ),
-                  ),
-                  Expanded(
-                    child:
+                //  ),
+                 // Expanded(child:
                         Column(
                           mainAxisAlignment:
                           MainAxisAlignment.center,
@@ -200,7 +198,7 @@ class AccountDetailsItem extends StatelessWidget{
                             ),
                           ],
                         ),
-                  )
+            //      )
                 ],
               ),
             ),
@@ -208,8 +206,8 @@ class AccountDetailsItem extends StatelessWidget{
               padding: const EdgeInsets.only(
                   left: 24, right: 24, top: 4, bottom: 8),
               child:
-                  Expanded(
-                    child: Column(
+                 // Expanded(child:
+              Column(
                       mainAxisAlignment:
                       MainAxisAlignment.center,
                       crossAxisAlignment:
@@ -247,7 +245,7 @@ class AccountDetailsItem extends StatelessWidget{
                       ],
                     ),
                   ),
-              ),
+            //  ),
   ]))  );
 
 

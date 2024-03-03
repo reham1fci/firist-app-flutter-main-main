@@ -5,8 +5,10 @@ import 'package:betakety_app/api/Api.dart';
 import 'package:betakety_app/api/api_services.dart';
 import 'package:betakety_app/model/login_model.dart';
 import 'package:betakety_app/util/app_constants.dart';
+import 'package:flutter_udid/flutter_udid.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:mac_address/mac_address.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../view/screens/auth/auth_screen.dart';
@@ -33,7 +35,9 @@ class AuthController extends GetxController {
     _isLoading = true;
     update();
     APIService apiService = APIService();
-    LoginReqModel user1 =  LoginReqModel(password:password , username: email );
+     String mobileMac = await FlutterUdid.udid;
+print(mobileMac) ;
+    LoginReqModel user1 =  LoginReqModel(password:password , username: email , mobileMac:mobileMac );
     LoginResponsModel res = await apiService.login(user1);
         print(res);
      if (res.success == true ) {

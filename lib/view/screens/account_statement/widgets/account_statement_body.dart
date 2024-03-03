@@ -29,7 +29,9 @@ margin: EdgeInsets.only(top: 15 ,bottom: 15 ,right: 3 ,left: 3),
       Padding(
         padding: const EdgeInsets.only(
             left: 24, right: 24, top: 8, bottom: 8),
-        child:  Expanded(child:Column(
+        child:
+        //Expanded(child:
+        Column(
 
             crossAxisAlignment:
             CrossAxisAlignment.start,
@@ -94,7 +96,7 @@ margin: EdgeInsets.only(top: 15 ,bottom: 15 ,right: 3 ,left: 3),
 
     ]
     )
-      )) );
+      )) ;
   }
 
 }
