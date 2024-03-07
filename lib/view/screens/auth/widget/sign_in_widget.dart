@@ -30,8 +30,8 @@ class SignInWidgetState extends State<SignInWidget> {
     _formKeyLogin = GlobalKey<FormState>();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
-    _emailController!.text = 'sadamnagi5@gmail.com';
-    _passwordController!.text = 'ddd';
+    //_emailController!.text = '';
+    //_passwordController!.text = '';
   }
 
   @override

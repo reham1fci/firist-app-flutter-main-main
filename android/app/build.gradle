@@ -23,7 +23,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace "com.example.betakety_app"
+    namespace "com.marsa.marsa_hr"
     compileSdkVersion 34
     ndkVersion flutter.ndkVersion
 

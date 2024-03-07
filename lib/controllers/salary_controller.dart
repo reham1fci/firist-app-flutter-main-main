@@ -66,6 +66,8 @@ class SalaryController extends GetxController{
 
         }
         else{
+          loader = false;
+
           result  = false  ;
           update() ;
           throw Exception('Failed to load data!');
@@ -74,6 +76,9 @@ class SalaryController extends GetxController{
 
         }
          else {
+        loader = false;
+        result  = false  ;
+        update() ;
         throw Exception('Failed to load data!');
       }
 

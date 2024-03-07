@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:betakety_app/controllers/account_controller.dart';
 import 'package:betakety_app/model/account.dart';
+import 'package:betakety_app/util/constant.dart';
+import 'package:betakety_app/util/styles.dart';
 import 'package:betakety_app/view/screens/account_statement/widgets/account_details_item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -55,8 +57,22 @@ class _State extends State<AccountStatementDetails>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('details'.tr),),
-     body: GetBuilder<AccountController>(builder: (co) {
+      appBar: AppBar(
+    iconTheme: const IconThemeData(color: kTitleColor),
+    centerTitle: true,
+    title: Text(
+    'details'.tr,
+    style: fontSizeMedium,
+    ),
+    actions: const [
+    SizedBox(
+    width: 5.0,
+    ),
+    ],
+    backgroundColor: Colors.white,
+    elevation: 2.0,
+    ),
+    body: GetBuilder<AccountController>(builder: (co) {
       return  Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

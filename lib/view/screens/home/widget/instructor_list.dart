@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 //import 'package:maan_ui/Screens/Full%20Template/MaanLMS/Screens/Notification/notification_screen.dart';
 import 'package:nb_utils/nb_utils.dart';
 //import 'Model/instructor_model.dart';
 import '../../../../util/constant.dart';
-import 'instructor_model.dart';
+import '../../../../model/instructor_model.dart';
 
 class InstructorList extends StatefulWidget {
-  const InstructorList({Key? key}) : super(key: key);
+  List<InstructorItem>instructors  ;
+
+   InstructorList({Key? key , required this.instructors}) : super(key: key);
 
   @override
   _InstructorListState createState() => _InstructorListState();
@@ -17,6 +20,7 @@ class _InstructorListState extends State<InstructorList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor:Colors.white ,
       appBar: AppBar(
         iconTheme: const IconThemeData(color: kTitleColor),
         backgroundColor: Colors.white,
@@ -52,9 +56,9 @@ class _InstructorListState extends State<InstructorList> {
                 childAspectRatio: 1.3,
                 crossAxisCount: 2,
                 children: List.generate(
-                  instructors.length,
+                  widget.instructors.length,
                   (index) => InstructorCard(
-                    instructorList: instructors[index],
+                    instructorList: widget.instructors[index],
                   ),
                 ),
               ),
@@ -78,9 +82,9 @@ class InstructorCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Image(
-          image: AssetImage(instructorList.instructorPicture.toString()),
-        ),
+        instructorList.instructorSex == "female"?
+        Image.asset("images/lms/instructor7.png"):
+        Image.asset("images/lms/instructor8.png") ,
         Positioned(
           right: 15.0,
           top: 25.0,
@@ -88,28 +92,29 @@ class InstructorCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                instructorList.instructorName,
-                style: kTextStyle.copyWith(
+                instructorList.instructorName!.length>10?instructorList.instructorName!.substring(0 , 15) : instructorList.instructorName!,
+          style: kTextStyle.copyWith(
                     color: kTitleColor,
                     fontWeight: FontWeight.bold,
                     fontSize: 12.0),
               ),
               Text(
-                instructorList.instructorCategory,
+
+               instructorList.instructorCategory!,
                 style:
                     kTextStyle.copyWith(color: kGreyTextColor, fontSize: 10.0),
               ),
               Row(
                 children: [
                   Text(
-                    instructorList.instructorStudents,
+                    instructorList.instructorStudents!,
                     style: kTextStyle.copyWith(
                         color: kTitleColor,
                         fontWeight: FontWeight.bold,
                         fontSize: 12.0),
                   ),
                   Text(
-                    ' Students',
+                    'process'.tr,
                     style: kTextStyle.copyWith(
                         color: kGreyTextColor, fontSize: 10.0),
                   ),
@@ -118,14 +123,14 @@ class InstructorCard extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    instructorList.instructorCourses,
+                    " ",
                     style: kTextStyle.copyWith(
                         color: kTitleColor,
                         fontWeight: FontWeight.bold,
                         fontSize: 12.0),
                   ),
                   Text(
-                    ' Courses',
+                    ' ',
                     style: kTextStyle.copyWith(
                         color: kGreyTextColor, fontSize: 10.0),
                   ),
@@ -134,7 +139,7 @@ class InstructorCard extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    instructorList.instructorRating,
+                   "5.5",
                     style:
                         kTextStyle.copyWith(color: kMainColor, fontSize: 12.0),
                   ),

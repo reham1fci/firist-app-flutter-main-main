@@ -1,9 +1,7 @@
-import 'package:betakety_app/permission/permission_request_screen.dart';
 import 'package:betakety_app/view/screens/Requests/add_request_permission.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nb_utils/nb_utils.dart';
-import '../../../card_style/body_measurement.dart';
 import 'permission_request_body.dart';
 import '../../../controllers/permission_controller.dart';
 import '../../../util/constant.dart';
@@ -94,8 +92,8 @@ class _MainPermissionsState extends State<MainPermissions> {
                   // Center(
                   //   child: Text("It's cloudy here"),
                   // ),
-                  PermissionRequestBody(selectIndex: 0),
-                  PermissionRequestBody(selectIndex: 1),
+                  PermissionRequestBody(selectIndex: 0 ),
+                  PermissionRequestBody(selectIndex: 1 ),
                 ],
               ),
             ),
@@ -107,8 +105,9 @@ class _MainPermissionsState extends State<MainPermissions> {
             color: Colors.white,
           ),
           onPressed: () {
-            Get.to(AddRequestPermission());
-          },
+         //   Get.to(AddRequestPermission());
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => AddRequestPermission()));
+            }
         ),
       ),
     );

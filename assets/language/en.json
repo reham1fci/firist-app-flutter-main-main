@@ -509,7 +509,9 @@
   "out_company": "you are out of company" ,
   "mac_mobile":   "you must use your mobile" ,
   "open_location":   "Open Location" ,
-  "log": "can't Login"
+  "log": "can't Login",
+  "loading_info": "Loading your Location",
+  "process": "process"
 
 
 

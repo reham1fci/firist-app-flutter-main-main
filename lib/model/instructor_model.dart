@@ -1,18 +1,33 @@
 class InstructorItem {
-  String instructorName,
+  String? instructorName,
       instructorPicture,
       instructorCategory,
       instructorStudents,
-      instructorCourses,
+      instructorSex,
       instructorRating;
 
   InstructorItem(
       {required this.instructorName,required this.instructorPicture, required this.instructorCategory, required
-      this.instructorStudents, required this.instructorCourses, required this.instructorRating});
+      this.instructorStudents,  this.instructorSex,  this.instructorRating});
 
+
+  factory InstructorItem.fromJsonEmployee(Map<String, dynamic> json){
+    print("images")  ;
+
+
+    return InstructorItem (
+      instructorName: json["employ_name_ar"] ,
+      instructorCategory: json["job_name_ar"] ,
+      instructorPicture:"",
+      instructorStudents: json["count_occurrences"] ,
+        instructorSex :json["employ_sex"]
+
+
+
+    ); }
 }
 
-List<InstructorItem> instructors = [
+/*List<InstructorItem> instructors = [
   InstructorItem(
       instructorName: 'Albert Flores',
       instructorPicture: 'images/lms/instructor1.png',
@@ -77,4 +92,4 @@ List<InstructorItem> instructors = [
       instructorCourses: '12',
       instructorRating: '(4.8)'
   ),
-];
+];*/

@@ -41,8 +41,8 @@ print(mobileMac) ;
     LoginResponsModel res = await apiService.login(user1);
         print(res);
      if (res.success == true ) {
-       Get.offAll(const NavBarScreen());
        saveUserData(res);
+
      } else {
       showCustomSnackBar(res.message!);
     }
@@ -55,7 +55,9 @@ print(mobileMac) ;
               'response_data', json.encode(user.toJson()));  await prefs.setString(
               'user', json.encode(user.toJson()));
           await prefs.setBool('is_logged_in', true);
-  }clearUserLogin( )async{
+   Get.offAll(const NavBarScreen());
+
+ }clearUserLogin( )async{
    SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.remove("user") ;
           await prefs.setBool('is_logged_in', false);
@@ -95,7 +97,7 @@ print(mobileMac) ;
   // }
   Future<LoginResponsModel> getLoginData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    LoginResponsModel user = LoginResponsModel.fromJson(json.decode(prefs!.getString("user")!));
+    LoginResponsModel user = LoginResponsModel.fromJson(json.decode(prefs.getString("user")!));
 return user ;
   }
   void getLocationPrediction() async {

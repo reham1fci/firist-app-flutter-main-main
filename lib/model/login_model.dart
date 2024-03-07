@@ -40,6 +40,7 @@ class LoginResponsModel {
   String? mobileMac;
   String? companyLat ;
   String? companyLng ;
+  String? companyId ;
 
   LoginResponsModel(
       {this.success,
@@ -58,6 +59,7 @@ class LoginResponsModel {
         this.mobileMac ,
         this.companyLat ,
         this.companyLng,
+        this.companyId,
       this.jobnameen});
 
   LoginResponsModel.fromJson(Map<String, dynamic> json) {
@@ -79,6 +81,7 @@ class LoginResponsModel {
     mobileMac = json['mac_address'];
     companyLng = json['company_lng'];
     companyLat = json['company_lat'];
+    companyId= json['company_id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -101,6 +104,7 @@ class LoginResponsModel {
     data['company_lat'] = companyLat;
     data['company_lng'] = companyLng;
     data['mac_address'] = mobileMac;
+    data['company_id'] = companyId;
     return data;
   }
 }

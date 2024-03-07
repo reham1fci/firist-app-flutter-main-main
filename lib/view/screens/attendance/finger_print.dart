@@ -8,6 +8,7 @@ import 'package:betakety_app/util/constant.dart';
 import 'package:betakety_app/util/images.dart';
 import 'package:betakety_app/util/styles.dart';
 import 'package:betakety_app/view/base/custom_snackbar.dart';
+import 'package:betakety_app/view/base/loading_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
@@ -60,13 +61,24 @@ class _FingerPrintState extends State<FingerPrint> {
             elevation: 2.0,
           ),
           body:
-Column(children: [
+
           !co.isAuthenticated ?
+
+          Column(children: [
+
           Container(
             width: double.infinity,
             height:250 ,
             padding: EdgeInsets.only(top: 20),
-            child:Center(child: TextButton(
+            child:
+            co.currentLocation==null?
+            Center( child: Column(
+              children: [
+                CircularProgressIndicator(),
+                Container(margin: EdgeInsets.only(left: 7),child:Text('loading_info'.tr , style: TextStyle(color: Colors.red), ) ,),
+              ],))
+                :
+            Center(child: TextButton(
 
               onPressed: co.validateFieldsAndShowSnackbar,
               child:
@@ -77,12 +89,8 @@ Column(children: [
 
                   ],)
 
-            ),) ):
-          Image.asset(
-            Images.successIcon,
-            height: double.infinity,
-            width: double.infinity,
-          ),
+            ),) )
+         ,
   co.companyLocation!=null?
      Expanded(
           child:
@@ -97,7 +105,13 @@ Column(children: [
     },
   )):const CircularProgressIndicator(),
 
-         ] )
+         ] ):
+          Image.asset(
+            Images.successIcon,
+            height: double.infinity,
+            width: double.infinity,
+          )
+
       );
     });
   }}

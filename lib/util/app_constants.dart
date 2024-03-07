@@ -10,6 +10,7 @@ class AppConstants {
   static const String getAccountStatementDetails = '/account_statement_details_api.php';
   static const String employeeSalary = '/Employ_Salary_api.php';
   static const String attendanceFingerPrint = '/add_hoder_ensraf_api.php';
+  static const String bestEmployee = '/show_order_employee_depend_on_process_api.php';
   static const String bannerUri = '/api/v1/banners';
   static const String storeItemUri = '/api/v1/items/latest';
   static const String popularItemUri = '/api/v1/items/popular';

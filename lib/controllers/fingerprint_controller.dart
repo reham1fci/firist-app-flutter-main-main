@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:betakety_app/api/Api.dart';
@@ -5,6 +6,7 @@ import 'package:betakety_app/controllers/auth_controller.dart';
 import 'package:betakety_app/model/login_model.dart';
 import 'package:betakety_app/util/app_constants.dart';
 import 'package:betakety_app/view/base/custom_snackbar.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_udid/flutter_udid.dart';
 import 'package:geolocator/geolocator.dart';
@@ -24,11 +26,19 @@ class FingerPrintController extends GetxController {
   bool isAuthenticated = false;
   Api api  = Api() ;
   bool inCompany = false;
+  var currentLocation  ;
 
 @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
+    StreamSubscription<ServiceStatus> serviceStatusStream = Geolocator.getServiceStatusStream().listen(
+            (ServiceStatus status) {
+          print(status);
+          if(status  ==ServiceStatus.enabled ) {
+            _checkUserLocation() ;
+          }
+        });
     auth.isDeviceSupported().then(
           (bool isSupported) {
             _supportState = isSupported
@@ -47,7 +57,7 @@ class FingerPrintController extends GetxController {
      DateTime currentDate = DateTime.now();
 String date = DateFormat('yyyy-MM-dd').format(currentDate);
 String time = DateFormat('HH:mm:ss').format(currentDate);
-     String url  =  "${AppConstants.attendanceFingerPrint}?employ_id=${user.id!}&hodor_ensraf_date=${date}&hodor_time=${time}"   ;
+     String url  =  "${AppConstants.attendanceFingerPrint}?employ_id=${user.id!}&hodor_ensraf_date=${date}&hodor_time=${time}&company_id=${user.companyId!}"   ;
      //String url  =  "/Employ_Salary_api.php?employ_id=662918&date_from=2024-01-01&date_to=2024-01-31&employ_type=office";
      print(url) ;
 
@@ -57,7 +67,10 @@ String time = DateFormat('HH:mm:ss').format(currentDate);
 
        print(jsonDecode(response.body));
        var data = jsonDecode(response.body) ;
-
+       Future.delayed(Duration(seconds: 3)).then((_) {
+         Navigator.of(Get.context!).pop();
+           // Anything else you want
+         });
 
 
      }
@@ -120,6 +133,7 @@ String time = DateFormat('HH:mm:ss').format(currentDate);
      bool serviceEnabled;
      LocationPermission permission;
 
+
      // Test if location services are enabled.
      serviceEnabled = await Geolocator.isLocationServiceEnabled();
      if (!serviceEnabled) {
@@ -127,7 +141,6 @@ String time = DateFormat('HH:mm:ss').format(currentDate);
        // accessing the position and request users of the
        // App to enable the location services.
        showCustomSnackBar('you_have_to_allow'.tr);
-
        return Future.error('Location services are disabled.');
      }
 
@@ -152,9 +165,9 @@ String time = DateFormat('HH:mm:ss').format(currentDate);
      }
      Position position = await Geolocator .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
      print(position);
-     final currentLocation = toolkit.LatLng(position.latitude, position.longitude);
-    // final companyLocation = LatLng(double.parse(user!.companyLat!), double.parse(user!.companyLng!));
-     final testLocation = toolkit.LatLng(29.8765411,31.2921507 );
+      currentLocation = toolkit.LatLng(position.latitude, position.longitude);
+     final companyLocation = toolkit.LatLng(double.parse(user!.companyLat!), double.parse(user!.companyLng!));
+    final testLocation = toolkit.LatLng(29.8765411,31.2921507 );
      final MarkerId markerId = MarkerId("user");
 
      Marker marker2 = Marker(
@@ -165,7 +178,7 @@ String time = DateFormat('HH:mm:ss').format(currentDate);
      markers[markerId] = marker2;
 
      final distance =
-     toolkit.SphericalUtil.computeDistanceBetween(currentLocation, testLocation) ;
+     toolkit.SphericalUtil.computeDistanceBetween(currentLocation, companyLocation) ;
 
      if(distance<100){
          inCompany  = true ;

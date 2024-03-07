@@ -20,8 +20,7 @@ class AddRequestPermission extends StatefulWidget {
 class _AddRequestPermissionState extends State<AddRequestPermission> {
   @override
   void initState() {
-    print("add AddRequestPerMohran") ;
-    //Get.find<PermissionController>().resetData();
+    Get.find<PermissionController>().resetData();
     super.initState();
   }
 

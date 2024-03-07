@@ -1,4 +1,5 @@
 import 'package:betakety_app/util/custom_app_theme.dart';
+import 'package:betakety_app/view/screens/Requests/widget/attach_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -148,6 +149,12 @@ PermissionRequestItem(
                           ElevatedButton(
                             onPressed: () {
                               // Add the function to execute when the button is pressed
+                              print(filteredData[index]['attatchement']);
+                              var attachList  = filteredData[index]['attatchement']as List  ;
+                             String attach_url  = attachList[0]["attach_link"] ;
+                              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) =>
+                                  AttachView(attach_url)));
+
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor:

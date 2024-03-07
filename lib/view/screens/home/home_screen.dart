@@ -1,3 +1,9 @@
+import 'dart:convert';
+
+import 'package:betakety_app/api/Api.dart';
+import 'package:betakety_app/controllers/auth_controller.dart';
+import 'package:betakety_app/model/instructor_model.dart';
+import 'package:betakety_app/model/login_model.dart';
 import 'package:betakety_app/view/base/banners_view.dart';
 import 'package:betakety_app/view/screens/attendance/finger_print.dart';
 import 'package:betakety_app/view/screens/salary_details/salary_details_view.dart';
@@ -6,11 +12,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nb_utils/nb_utils.dart';
 import '../../../api/api_test.dart';
+import '../../../util/app_constants.dart';
 import '../../../util/constant.dart';
 import 'widget/card_test.dart';
 import '../../../util/images.dart';
 import 'widget/instructor_list.dart';
-import 'widget/instructor_model.dart';
 import 'widget/mohran.dart';
 import '../../../note/add.dart';
 import '../../../requests/permissions_requests/add_request_perr_mohran_saddam.dart';
@@ -19,9 +25,62 @@ import 'widget/squer_screen.dart';
 import '../../../util/styles.dart';
 import 'widget/widget_list.dart';
 
-class Myapp extends StatelessWidget {
+class Myapp extends StatefulWidget {
   const Myapp({super.key});
 
+  @override
+  State<Myapp> createState() => _MyappState();
+}
+
+class _MyappState extends State<Myapp> {
+  Api api  = Api()  ;
+  List<dynamic> _Data = [];
+  List<InstructorItem> instructorsList = [];
+  bool loader   = false  ;
+
+  getBestEmployee() async{
+     setState(() {
+       loader =  true  ;
+     });
+    final Map<String, dynamic> data = <String, dynamic>{};
+    LoginResponsModel user =  await AuthController().getLoginData()  ;
+    data["employ_id"] =user.id;
+    String url  =  AppConstants.bestEmployee+"?"+"employ_id=" +user.id!   ;
+    print(url) ;
+    try {
+      var response  = await  api.getData(url: url)  ;
+
+      if (response.statusCode == 200) {
+        print("employee");
+        print(jsonDecode(response.body));
+        var result = jsonDecode(response.body) ;
+        _Data = (result['data'] as List);
+        for (int i = 0 ; i < _Data.length ; i ++) {
+          var jsonObj = _Data [i];
+          InstructorItem item = InstructorItem.fromJsonEmployee(jsonObj);
+          print(item.instructorName) ;
+
+          instructorsList.add(item) ;
+        }
+        setState(() {
+          loader  = false  ;
+        });
+        return response.body;
+
+      } else {
+        return "error";
+      }
+    } catch (e) {
+      print("Error: $e");
+      return "error";
+    }
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getBestEmployee() ;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,7 +158,7 @@ class Myapp extends StatelessWidget {
                       const Spacer(),
                       GestureDetector(
                         onTap: () {
-                          const InstructorList().launch(context);
+                           InstructorList(instructors:instructorsList).launch(context);
                         },
                         child: Text(
                           'see_all'.tr,
@@ -109,11 +168,11 @@ class Myapp extends StatelessWidget {
                     ],
                   ),
                 ),
-                HorizontalList(
+            loader?  Center(child: Container(width: 24,child:CircularProgressIndicator())) :  HorizontalList(
                   spacing: 10,
-                  itemCount: instructors.length,
+                  itemCount: instructorsList.length,
                   itemBuilder: (_, i) {
-                    return InstructorCard(instructorList: instructors[i]).onTap(
+                    return InstructorCard(instructorList: instructorsList[i]).onTap(
                       () {},
                       highlightColor: context.cardColor,
                     );

@@ -5,7 +5,9 @@ import 'package:betakety_app/controllers/auth_controller.dart';
 import 'package:betakety_app/model/login_model.dart';
 import 'package:betakety_app/util/app_constants.dart';
 import 'package:betakety_app/view/base/custom_lert_dialog.dart';
+import 'package:betakety_app/view/screens/Requests/main_permissions.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
@@ -47,19 +49,19 @@ class PermissionController extends GetxController {
   TextEditingController timeFromController = TextEditingController();
   TextEditingController timeToController = TextEditingController();
   TextEditingController fileNameController = TextEditingController();
-  // FilePickerResult? addedFile;
+  FilePickerResult? addedFile;
   var stream ;
   var length ;
-  // resetData() {
-  //   detailsController.clear();
-  //   dateController.clear();
-  //   t?imeFromController.clear();
-  //   timeToController.clear();
-  //   requestTypeTemp = requestTypeList[0];
-  //   permissionTypeTemp = permissionTypeList[0];
-  //   addedFile = null;
-  //   fileNameController.clear();
-  // }//
+  resetData() {
+  detailsController.clear();
+  dateController.clear();
+  timeFromController.clear();
+ timeToController.clear();
+ requestTypeTemp = requestTypeList[0];
+ permissionTypeTemp = permissionTypeList[0];
+  addedFile = null;
+   fileNameController.clear();
+  }
   String? filePath  ;
   RequestsPermissionsModel ? permissionsModel  ;
 
@@ -247,6 +249,7 @@ postDataWithFile(uri: AppConstants.addPermissionReq) ;
     request.fields['request_per_time_to'] = timeToController.text;
     LoginResponsModel user =  await AuthController().getLoginData()  ;
     request.fields['employ_id'] = user.id!;
+    request.fields['company_id'] = user.companyId!;
     print(request.fields);
     print(stream);
     print(length);
@@ -262,6 +265,8 @@ var response  = await request.send() ;
         showOkDialog(context: Get.context
             !,message: 'added_to_requests_permission'.tr ,isCancelBtn: false ,onOkClick:(){
           Navigator.of( Get.context!).pop();
+          Navigator.push(Get.context!, MaterialPageRoute(builder: (BuildContext context) => MainPermissions()));
+
           update() ;
         } );
 

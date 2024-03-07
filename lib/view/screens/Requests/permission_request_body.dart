@@ -1,5 +1,6 @@
 import 'package:betakety_app/controllers/permission_controller.dart';
 import 'package:betakety_app/view/screens/Requests/widget/permission_request_item.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,14 +12,14 @@ import 'package:http/http.dart' as http;
 class PermissionRequestBody extends StatefulWidget {
   int? selectIndex ;
 
-  PermissionRequestBody({super.key , this.selectIndex});
+  PermissionRequestBody({super.key , this.selectIndex });
 
 
   @override
   State<PermissionRequestBody> createState() => PermissionRequestState();
 }
 
-class PermissionRequestState extends State<PermissionRequestBody> {
+class PermissionRequestState extends State<PermissionRequestBody>  {
   // final AnimationController? animationController;
   bool loader = false;
 
@@ -28,7 +29,9 @@ class PermissionRequestState extends State<PermissionRequestBody> {
     _loadData();
 
     super.initState();
+
   }
+
 
   int slectedTab = 0;
 
@@ -58,6 +61,7 @@ class PermissionRequestState extends State<PermissionRequestBody> {
 
   @override
   Widget build(BuildContext context) {
+
     return GetBuilder<PermissionController>(builder: (co) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,

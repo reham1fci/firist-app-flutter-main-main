@@ -1,5 +1,6 @@
 
 import 'package:betakety_app/util/app_constants.dart';
+import 'package:betakety_app/util/constant.dart';
 import 'package:betakety_app/util/images.dart';
 import 'package:betakety_app/view/base/color_resources.dart';
 import 'package:betakety_app/view/screens/auth/auth_screen.dart';
@@ -63,12 +64,12 @@ class _SplashBodyState extends State<SplashBody> {
       const Text( AppConstants.appName ,style:   TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: 30.0 ,
-    color: ColorResources.primaryColor
+    color: kMainColor
     ),),
     //  padding:const EdgeInsets.all(100),) ,
     const   Spacer(),
 
-    const  CircularProgressIndicator(color: ColorResources.primaryColor,),
+    const  CircularProgressIndicator(color: kMainColor,),
     const   Spacer(),
 
 

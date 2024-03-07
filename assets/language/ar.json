@@ -491,14 +491,14 @@
   "days_target": "الايام مستثناه من التارجت",
   "count_the_days2": "عدد الايام2",
   "required_target": "التارجت المطلوب",
-  "chefz_target": "chefz target",
-  "jahez_target": "jahez target",
-  "hanger_target": "hanger target",
-  "target_restaurants": "resturants target",
-  "pakage_target": "package target",
-  "target_investigator": "invest target",
-  "nesba_mohkak": "nesba mohkaka",
-  "salary_mostahk": "salary mostahk",
+  "chefz_target": "شيفز تارجت",
+  "jahez_target": " جاهز تارجت",
+  "hanger_target": "هانجر تارجت",
+  "target_restaurants": "تارجت المطاعم",
+  "pakage_target": "باكج تارجت",
+  "target_investigator": "تارجت محقق",
+  "nesba_mohkak": "نسبة محقة",
+  "salary_mostahk": "الراتب المستحق",
   "salf_khasm": "خصم السلف",
   "ohad_khasm": "خصم العهدة",
   "salary_hafez": "الحافظ",
@@ -510,7 +510,10 @@
   "out_company": "انت خارج الشركة",
   "mac_mobile":   "هذا ليس هاتفك" ,
   "open_location":   "افتح الموقع" ,
-  "log": "لا يمكن تسجيل دخول"
+  "log": "لا يمكن تسجيل دخول",
+  "loading_info": "انتظر نحميل موقعك",
+  "process": "العمليات"
+
 
 
 }

@@ -74,6 +74,7 @@ class AccountDetailsItem extends StatelessWidget{
               padding: const EdgeInsets.only(
                   left: 24, right: 24, top: 8, bottom: 8),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                  // Expanded(child:
               Column(
@@ -209,7 +210,7 @@ class AccountDetailsItem extends StatelessWidget{
                  // Expanded(child:
               Column(
                       mainAxisAlignment:
-                      MainAxisAlignment.center,
+                      MainAxisAlignment.start,
                       crossAxisAlignment:
                       CrossAxisAlignment.start,
                       children: <Widget>[
