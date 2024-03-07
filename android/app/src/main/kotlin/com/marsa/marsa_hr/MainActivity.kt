@@ -1,4 +1,4 @@
-package com.example.betakety_app
+package com.marsa.marsa_hr
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 
