@@ -6,6 +6,7 @@ class AppConstants {
   static const String loginUri = '/Login_Api.php';
   static const String addPermissionReq = '/insert_request_permission_api.php';
   static const String showPermissionReq = '/show_request_permission_api.php';
+  static const String showAskingReq = '/Show_Issues_api.php';
   static const String getAccountBalance = '/account_statement_api.php';
   static const String getAccountStatementDetails = '/account_statement_details_api.php';
   static const String employeeSalary = '/Employ_Salary_api.php';

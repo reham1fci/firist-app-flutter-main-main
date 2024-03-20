@@ -5,12 +5,15 @@ import 'package:betakety_app/controllers/auth_controller.dart';
 import 'package:betakety_app/model/instructor_model.dart';
 import 'package:betakety_app/model/login_model.dart';
 import 'package:betakety_app/view/base/banners_view.dart';
+import 'package:betakety_app/view/base/custom_snackbar.dart';
 import 'package:betakety_app/view/screens/attendance/finger_print.dart';
 import 'package:betakety_app/view/screens/salary_details/salary_details_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:in_app_update/in_app_update.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:upgrader/upgrader.dart';
 import '../../../api/api_test.dart';
 import '../../../util/app_constants.dart';
 import '../../../util/constant.dart';
@@ -37,7 +40,7 @@ class _MyappState extends State<Myapp> {
   List<dynamic> _Data = [];
   List<InstructorItem> instructorsList = [];
   bool loader   = false  ;
-
+  final appcastURL = 'https://www.marsalogistics.com/new/marsadelivery/appcast.xml';
   getBestEmployee() async{
      setState(() {
        loader =  true  ;
@@ -75,17 +78,72 @@ class _MyappState extends State<Myapp> {
       return "error";
     }
   }
+  AppUpdateInfo? _updateInfo;
+
+  GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
+
+  Future<void> checkForUpdate() async {
+    InAppUpdate.checkForUpdate().then((info) {
+      setState(() {
+        _updateInfo = info;
+        if( _updateInfo?.updateAvailability ==
+            UpdateAvailability.updateAvailable
+        ) {
+          InAppUpdate.performImmediateUpdate()
+              .catchError((e) {
+            showCustomSnackBar(e.toString());
+            return AppUpdateResult.inAppUpdateFailed;
+          });
+        }
+        else{
+       //   showCustomSnackBar("no update");
+
+        }
+      });
+
+    }).catchError((e) {
+      showCustomSnackBar(e.toString());
+    });
+  }
+  var cfg ;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    Upgrader(
+        appcastConfig:
+        AppcastConfiguration(url: appcastURL, supportedOS: ['android']));
+    checkForUpdate();
+
     getBestEmployee() ;
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+     const appcastURL =
+        'https://www.marsalogistics.com/new/marsadelivery/appcast.xml';
+    final upgrader = Upgrader(
+        appcastConfig:
+        AppcastConfiguration(url: appcastURL, supportedOS: ['android']));
+    return
+
+    /*  UpgradeAlert(
+        onIgnore: (){
+          Navigator.of(context).pop() ;
+          return true  ;
+        } ,
+        upgrader: upgrader,
+          showLater: false,
+          showIgnore: true,
+
+         child:*/
+
+      Scaffold(
+        key: _scaffoldKey,
       backgroundColor: Colors.white,
-      body: Padding(
+      body:
+
+
+      Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: SafeArea(
           child: SingleChildScrollView(
@@ -143,7 +201,7 @@ class _MyappState extends State<Myapp> {
                   ),
                 ),
 //notification_screen=========================================================
-                const SizedBox(
+            /*   const SizedBox(
                   height: 20.0,
                 ),
                 Padding(
@@ -180,7 +238,7 @@ class _MyappState extends State<Myapp> {
                 ),
                 const SizedBox(
                   height: 20.0,
-                ),
+                ),*/
 //notification_screen==============/=======================================
 
                 // ElevatedButton(
@@ -391,6 +449,6 @@ class _MyappState extends State<Myapp> {
         ),
       ),
       //  bottomNavigationBar: const BottomNavigationBar11(),
-    );
+      ) ;
   }
 }

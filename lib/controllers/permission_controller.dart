@@ -209,12 +209,12 @@ postDataWithFile(uri: AppConstants.addPermissionReq) ;
     }
   }
 
-  Future<dynamic> getPermissionsRequests() async {
+  Future<dynamic> getRequests(String functionName) async {
     // data['the_reason'] = theReason
     final Map<String, dynamic> data = <String, dynamic>{};
     LoginResponsModel user =  await AuthController().getLoginData()  ;
     data["employ_id"] =user.id;
- String url  =  AppConstants.showPermissionReq+"?"+"employ_id=" +user.id!   ;
+ String url  =  functionName+"?"+"employ_id=" +user.id!   ;
  print(url) ;
  try {
     var response  = await  api.getData(url: url)  ;

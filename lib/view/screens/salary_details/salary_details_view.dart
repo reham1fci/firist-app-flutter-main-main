@@ -303,7 +303,7 @@ class _salary_details_State extends State<salary_details_view> {
                             ),
                             Expanded(
                               child: Text(
-  isEmployee? pController.salary!.salaryAfterInsurance!:   pController.salary!.netSalary!,
+  isEmployee? pController.salary!.salaryAfterInsurance!:pController.salary!.salaryAllowances!,
                                 style:
                                     kTextStyle.copyWith(color: kGreyTextColor),
                               ),

@@ -109,10 +109,13 @@ class InstructorCard extends StatelessWidget {
                   Text(
                     instructorList.instructorStudents!,
                     style: kTextStyle.copyWith(
+    color: kGreyTextColor, fontSize: 10.0),
+    ),
+                    /*kTextStyle.copyWith(
                         color: kTitleColor,
                         fontWeight: FontWeight.bold,
                         fontSize: 12.0),
-                  ),
+                  ),*/
                   Text(
                     'process'.tr,
                     style: kTextStyle.copyWith(

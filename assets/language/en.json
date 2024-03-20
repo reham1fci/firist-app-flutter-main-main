@@ -511,7 +511,10 @@
   "open_location":   "Open Location" ,
   "log": "can't Login",
   "loading_info": "Loading your Location",
-  "process": "process"
+  "process": "process" ,
+  "justification": "justification" ,
+  "asking": "Asking"
+
 
 
 

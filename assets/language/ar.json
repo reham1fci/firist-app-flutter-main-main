@@ -512,7 +512,9 @@
   "open_location":   "افتح الموقع" ,
   "log": "لا يمكن تسجيل دخول",
   "loading_info": "انتظر نحميل موقعك",
-  "process": "العمليات"
+  "process": "العمليات",
+  "justification": "تبرير",
+  "asking": "المسائلات"
 
 
 

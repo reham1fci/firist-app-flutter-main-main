@@ -1,4 +1,5 @@
 import 'package:betakety_app/controllers/permission_controller.dart';
+import 'package:betakety_app/util/app_constants.dart';
 import 'package:betakety_app/view/screens/Requests/widget/permission_request_item.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +46,7 @@ class PermissionRequestState extends State<PermissionRequestBody>  {
     setState(() {
       loader = true;
     });
-    var data = await  Get.find<PermissionController>().getPermissionsRequests();
+    var data = await  Get.find<PermissionController>().getRequests(AppConstants.showPermissionReq);
     if (data != 'error') {
       setState(() {
         _Data = (data['data'] as List);
