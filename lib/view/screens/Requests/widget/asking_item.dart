@@ -1,5 +1,6 @@
 import 'package:betakety_app/util/custom_app_theme.dart';
 import 'package:betakety_app/view/screens/Requests/widget/attach_view.dart';
+import 'package:betakety_app/view/screens/Requests/widget/justification.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -99,7 +100,7 @@ class AskingItem extends StatelessWidget{
         children: [
           filteredData[index] ["question_stat"]=="waiting_employee_response"? ElevatedButton(
             onPressed: () {
-
+showJustificationDialog(context:context ,hr_question_id: filteredData[index]["hr_question_id"] ,hr_question_date: filteredData[index]["hr_question_date"]) ;
             },
             style: ElevatedButton.styleFrom(
               backgroundColor:

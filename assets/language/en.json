@@ -81,7 +81,7 @@
   "quantity": "Quantity",
   "select_variant": "Available Color",
   "delivery_charge": "Delivery Charge:",
-  "added_to_requests_permission": "Added to Permissions Requests",
+  "added_to_requests_permission": "your request added successfully",
   "added_in_cart": "Added in cart",
   "already_added": "This product is already added to cart",
   "coupons": "Coupons",
@@ -513,6 +513,8 @@
   "loading_info": "Loading your Location",
   "process": "process" ,
   "justification": "justification" ,
+  "Enter_your_justification": "enter your justification",
+
   "asking": "Asking"
 
 

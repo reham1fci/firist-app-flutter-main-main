@@ -49,6 +49,7 @@ class PermissionController extends GetxController {
   TextEditingController timeFromController = TextEditingController();
   TextEditingController timeToController = TextEditingController();
   TextEditingController fileNameController = TextEditingController();
+  TextEditingController justificationController = TextEditingController();
   FilePickerResult? addedFile;
   var stream ;
   var length ;
@@ -273,6 +274,44 @@ var response  = await request.send() ;
         //return "success" ;
 
       }
+//return "error" ;
+
+  }
+  Future<void> insertJustification({ required String hr_question_id ,required  String hr_question_date }) async {
+    String url =AppConstants.baseUrl+AppConstants.insertJustification;
+    print(url) ;
+    var request =  http.MultipartRequest("POST",   Uri.parse(url));
+    request.fields['employee_reply'] = justificationController.text;
+    request.fields['hr_question_id'] = hr_question_id;
+    request.fields['hr_question_date'] = hr_question_date;
+    LoginResponsModel user =  await AuthController().getLoginData()  ;
+    request.fields['employ_id'] = user.id!;
+    print(request.fields);
+    print(stream);
+    print(length);
+    if(fileNameController.text.isNotEmpty){
+    var multipartFile = http.MultipartFile('files', stream, length,
+        filename:fileNameController.text);
+    request.files.add(multipartFile);}
+
+    var response  = await request.send() ;
+    print(response.statusCode) ;
+
+    if (response.statusCode == 200){
+      print(response) ;
+      print("Uploaded!");
+      showOkDialog(context: Get.context
+      !,message: 'added_to_requests_permission'.tr ,isCancelBtn: false ,onOkClick:(){
+      //  Navigator.of( Get.context!).pop();
+        Navigator.of( Get.context!).pop();
+      //  Navigator.push(Get.context!, MaterialPageRoute(builder: (BuildContext context) => MainPermissions()));
+
+        update() ;
+      } );
+
+      //return "success" ;
+
+    }
 //return "error" ;
 
   }

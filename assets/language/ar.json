@@ -81,7 +81,7 @@
   "quantity": "كمية",
   "select_variant": "حدد متغير",
   "delivery_charge": "رسوم التوصيل:",
-  "added_to_requests_permission": "تمت الإضافة إلى طلبات الاذونات",
+  "added_to_requests_permission": "تمت الإضافة بنجاح",
   "added_in_cart": "تمت الإضافة إلى عربة التسوق",
   "already_added": "تمت إضافة هذا المنتج بالفعل إلى سلة التسوق",
   "coupons": "كوبونات",
@@ -514,6 +514,7 @@
   "loading_info": "انتظر نحميل موقعك",
   "process": "العمليات",
   "justification": "تبرير",
+  "Enter_your_justification": "ادخل تبريرك",
   "asking": "المسائلات"
 
 
