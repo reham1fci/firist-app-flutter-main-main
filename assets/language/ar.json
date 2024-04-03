@@ -439,6 +439,8 @@
   "to_time": "الوقت الى",
   "file_add": " ارفق ملف",
   "attendance_and_withdrawal": "حضور / انصراف",
+  "attendance": "حضور",
+  "withdrawal": "انصراف",
 
   "retry": "حاول مرة آخرى",
 
@@ -514,6 +516,7 @@
   "loading_info": "انتظر نحميل موقعك",
   "process": "العمليات",
   "justification": "تبرير",
+  "Enter_your_justification": "ادخل تبريرك",
   "Enter_your_justification": "ادخل تبريرك",
   "asking": "المسائلات"
 

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:betakety_app/controllers/account_controller.dart';
+import 'package:betakety_app/controllers/attendance_controller.dart';
 import 'package:betakety_app/controllers/fingerprint_controller.dart';
 import 'package:betakety_app/controllers/salary_controller.dart';
 import 'package:betakety_app/util/constant.dart';
@@ -103,7 +104,7 @@ Future<Map<String, Map<String, String>>> init() async {
   Get.put(PermissionController());
   Get.put(AccountController());
   Get.put(SalaryController());
-  //Get.put(FingerPrintController());
+  Get.put(AttendanceController());
   Map<String, Map<String, String>> languages = {};
   for (LanguageModel languageModel in AppConstants.languages) {
     String jsonStringValues = await rootBundle

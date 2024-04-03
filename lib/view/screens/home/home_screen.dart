@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:betakety_app/api/Api.dart';
 import 'package:betakety_app/controllers/auth_controller.dart';
@@ -10,10 +11,12 @@ import 'package:betakety_app/view/screens/attendance/finger_print.dart';
 import 'package:betakety_app/view/screens/salary_details/salary_details_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:in_app_update/in_app_update.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:upgrader/upgrader.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../api/api_test.dart';
 import '../../../util/app_constants.dart';
 import '../../../util/constant.dart';
@@ -83,20 +86,25 @@ class _MyappState extends State<Myapp> {
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
 
   Future<void> checkForUpdate() async {
+   // InAppUpdate.
     InAppUpdate.checkForUpdate().then((info) {
       setState(() {
         _updateInfo = info;
         if( _updateInfo?.updateAvailability ==
             UpdateAvailability.updateAvailable
         ) {
+print("new update")  ;
           InAppUpdate.performImmediateUpdate()
               .catchError((e) {
             showCustomSnackBar(e.toString());
+
             return AppUpdateResult.inAppUpdateFailed;
           });
         }
         else{
-       //   showCustomSnackBar("no update");
+          print("no update")  ;
+
+          showCustomSnackBar("no update");
 
         }
       });
@@ -110,32 +118,52 @@ class _MyappState extends State<Myapp> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Upgrader(
+  /*  Upgrader(
         appcastConfig:
-        AppcastConfiguration(url: appcastURL, supportedOS: ['android']));
+        AppcastConfiguration(url: appcastURL, supportedOS: ['android']));*/
     checkForUpdate();
 
     getBestEmployee() ;
+  }
+  Future<void> _openStore() async {
+    String packageName = 'put your_package_name';
+    String appStoreUrl = 'https://apps.apple.com/app/$packageName';
+    String playStoreUrl = 'https://play.google.com/store/apps/details?id=com.marsa.marsa_hr';
+
+    if (await canLaunchUrl(Uri.parse(appStoreUrl )) && !Platform.isAndroid) {
+      await launchUrl(Uri.parse(appStoreUrl));
+    } else if (await canLaunchUrl(Uri.parse(playStoreUrl)) && Platform.isAndroid) {
+      await launchUrl(Uri.parse(playStoreUrl));
+    } else {
+      throw 'Could not launch store';
+    }
   }
   @override
   Widget build(BuildContext context) {
      const appcastURL =
         'https://www.marsalogistics.com/new/marsadelivery/appcast.xml';
     final upgrader = Upgrader(
+        durationUntilAlertAgain: const Duration(seconds: 3),
         appcastConfig:
-        AppcastConfiguration(url: appcastURL, supportedOS: ['android']));
+        AppcastConfiguration(url: appcastURL, supportedOS: ['android' ,'ios']));
     return
 
-    /*  UpgradeAlert(
-        onIgnore: (){
-          Navigator.of(context).pop() ;
-          return true  ;
-        } ,
+     UpgradeAlert(
+       /* onIgnore: (){
+          SystemNavigator.pop();
+          throw UnsupportedError('_');
+        } ,*/
         upgrader: upgrader,
-          showLater: false,
+         onUpdate: (){
+_openStore()  ;
+SystemNavigator.pop();
+throw UnsupportedError('_');
+return true;
+         },
           showIgnore: true,
+         showLater: false,
 
-         child:*/
+         child:
 
       Scaffold(
         key: _scaffoldKey,
@@ -449,6 +477,6 @@ class _MyappState extends State<Myapp> {
         ),
       ),
       //  bottomNavigationBar: const BottomNavigationBar11(),
-      ) ;
+      )) ;
   }
 }

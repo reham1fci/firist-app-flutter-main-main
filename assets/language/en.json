@@ -441,6 +441,8 @@
   "request_type": "Request Type",
   "file_add": "Add file",
   "attendance_and_withdrawal": "Attendance and Withdrawal",
+  "attendance": "attendance",
+  "withdrawal": "withdrawal",
   "from_time": "from time",
   "to_time": "to time",
   "leave_before": "Leaving before work ends",

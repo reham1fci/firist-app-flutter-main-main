@@ -9,6 +9,7 @@ import 'package:betakety_app/util/images.dart';
 import 'package:betakety_app/util/styles.dart';
 import 'package:betakety_app/view/base/custom_snackbar.dart';
 import 'package:betakety_app/view/base/loading_dialog.dart';
+import 'package:betakety_app/view/screens/attendance/attendance_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
@@ -45,6 +46,16 @@ class _FingerPrintState extends State<FingerPrint> {
     {
       return Scaffold(
           backgroundColor: Colors.white,
+          floatingActionButton: FloatingActionButton(onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => AttendanceDetails(),
+              ),
+            );
+          },
+           child: Text('details'.tr),
+          ),
           appBar: AppBar(
             iconTheme: const IconThemeData(color: kTitleColor),
             centerTitle: true,
