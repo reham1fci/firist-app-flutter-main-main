@@ -6,6 +6,7 @@ import 'package:betakety_app/controllers/auth_controller.dart';
 import 'package:betakety_app/model/login_model.dart';
 import 'package:betakety_app/util/app_constants.dart';
 import 'package:betakety_app/view/base/custom_snackbar.dart';
+import 'package:betakety_app/view/base/fingerprint_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_udid/flutter_udid.dart';
@@ -15,6 +16,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:maps_toolkit/maps_toolkit.dart' as toolkit;
+//import 'package:platform_device_id/platform_device_id.dart';
 
 class FingerPrintController extends GetxController {
    LocalAuthentication auth = LocalAuthentication();
@@ -32,7 +34,7 @@ class FingerPrintController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    StreamSubscription<ServiceStatus> serviceStatusStream = Geolocator.getServiceStatusStream().listen(
+   StreamSubscription<ServiceStatus> serviceStatusStream = Geolocator.getServiceStatusStream().listen(
             (ServiceStatus status) {
           print(status);
           if(status  ==ServiceStatus.enabled ) {
@@ -116,7 +118,7 @@ String time = DateFormat('HH:mm:ss').format(currentDate);
      update()
      ;}
    Future<void> validateFieldsAndShowSnackbar() async {
-     if(!inCompany){
+    if(!inCompany){
        showCustomSnackBar("${'out_company'.tr} ${"log".tr}");
 
      }
@@ -125,8 +127,19 @@ String time = DateFormat('HH:mm:ss').format(currentDate);
 
      }
      else{
-       _authenticateWithBiometrics() ;
+      _authenticateWithBiometrics() ;
+      // webFingerprintCheck() ;
      }
+   }
+   webFingerprintCheck(){
+  showFingerPrintDialog(context: Get.context! ,onOkClick: (){
+    Navigator.of(Get.context!).pop();
+    isAuthenticated = true  ;
+     registerFingerPrint() ;
+      update() ;
+
+
+  }) ;
 
    }
    void _checkUserLocation() async {
@@ -204,7 +217,9 @@ String time = DateFormat('HH:mm:ss').format(currentDate);
    _initData() async {
      user = await AuthController().getLoginData()  ;
      mobileMac = await FlutterUdid.udid;
-       companyLocation = CameraPosition(
+     // mobileMac = await PlatformDeviceId.getDeviceId;
+
+     companyLocation = CameraPosition(
        target: LatLng(double.parse(user!.companyLat!), double.parse(user!.companyLng!)),
        zoom: 14.4746,
      );

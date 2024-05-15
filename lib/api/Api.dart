@@ -17,9 +17,6 @@ class Api {
     print(map);
     final response = await http.post(
       Uri.parse(url),
-      headers:{
-        'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin':"*"},
     body: json.encode(map),
     );
     return response;

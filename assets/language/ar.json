@@ -484,6 +484,9 @@
   "balance" : "رصيد",
   "file": "ملف",
   "0": "قيد الانتظار",
+  "1": "قيد الانتظار",
+  "2": "مرفوض ",
+  "5": "قيد الانتظار",
   "reject_req_per": "تم الرفض",
   "approval_req_per": " تمت الموافقه",
   "salary_allowances": "الراتب بالبدلات ",
@@ -518,6 +521,18 @@
   "justification": "تبرير",
   "Enter_your_justification": "ادخل تبريرك",
   "Enter_your_justification": "ادخل تبريرك",
+  "vacation": "طلبات الاجازة",
+  "add_vacation": "اضافه طلب اجازة",
+  "accept": "موافقة",
+  "rejected": "مرفوضة",
+  "Extended sick leave 16": "إجازة مرضية مطولة 16",
+  "annual vacation": "إجازة سنوية ",
+  "Test leave to start work": "إجازة إختبار مباشرة العمل",
+  "Direct Work": "مباشرة العمل",
+  "inside": "داخلي",
+  "outside": "خارجى",
+  "vacation_place": " مكان الاجازة",
+  "days_num": "عدد الايام ",
   "asking": "المسائلات"
 
 

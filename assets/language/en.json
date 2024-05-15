@@ -516,7 +516,18 @@
   "process": "process" ,
   "justification": "justification" ,
   "Enter_your_justification": "enter your justification",
-
+  "vacation": "Vacation Requests",
+  "add_vacation": "Add Vacation Request",
+  "accept": "Accept",
+  "rejected": "Rejected",
+  "Extended sick leave 16": "Extended sick leave 16",
+  "annual vacation": "annual vacation",
+  "Test leave to start work": "Test leave to start work",
+  "Direct Work": "Direct Work",
+  "days_num": "Days num",
+  "inside": "InSide",
+  "outside": "OutSide",
+  "vacation_place": "Vacation Place",
   "asking": "Asking"
 
 

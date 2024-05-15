@@ -57,6 +57,7 @@ dependencies:
   flutter_pdfview: ^1.2.7
   connectivity:
   url_launcher: ^6.2.5
+  #platform_device_id: ^1.0.1
 dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:

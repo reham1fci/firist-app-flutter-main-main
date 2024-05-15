@@ -85,7 +85,7 @@ class _MyappState extends State<Myapp> {
 
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
 
-  Future<void> checkForUpdate() async {
+ /* Future<void> checkForUpdate() async {
    // InAppUpdate.
     InAppUpdate.checkForUpdate().then((info) {
       setState(() {
@@ -112,7 +112,7 @@ print("new update")  ;
     }).catchError((e) {
       showCustomSnackBar(e.toString());
     });
-  }
+  }*/
   var cfg ;
   @override
   void initState() {
@@ -121,7 +121,7 @@ print("new update")  ;
   /*  Upgrader(
         appcastConfig:
         AppcastConfiguration(url: appcastURL, supportedOS: ['android']));*/
-    checkForUpdate();
+   // checkForUpdate();
 
     getBestEmployee() ;
   }
@@ -147,7 +147,6 @@ print("new update")  ;
         appcastConfig:
         AppcastConfiguration(url: appcastURL, supportedOS: ['android' ,'ios']));
     return
-
      UpgradeAlert(
        /* onIgnore: (){
           SystemNavigator.pop();
@@ -477,6 +476,7 @@ return true;
         ),
       ),
       //  bottomNavigationBar: const BottomNavigationBar11(),
-      )) ;
+     )
+    ) ;
   }
 }

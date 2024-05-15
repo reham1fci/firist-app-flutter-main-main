@@ -17,7 +17,6 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:mac_address/mac_address.dart';
-import 'package:flutter_udid/flutter_udid.dart';
 
 class FingerPrint extends StatefulWidget {
 
