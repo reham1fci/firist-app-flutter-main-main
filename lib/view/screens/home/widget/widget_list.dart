@@ -1,3 +1,4 @@
+import 'package:betakety_app/view/screens/Requests/all_requests.dart';
 import 'package:betakety_app/view/screens/Requests/asking_view.dart';
 import 'package:betakety_app/view/screens/Requests/main_permissions.dart';
 import 'package:betakety_app/util/constant.dart';
@@ -166,6 +167,44 @@ class _WidgetListState extends State<WidgetList> {
                         ),
                         title: Text(
                           'vacation'.tr,
+                          style: fontSizeMedium,
+                        ),
+                        trailing: const CircleAvatar(
+                          backgroundColor: kFirstFullColor,
+                          radius: 15.0,
+                          child: Center(
+                            child: Icon(
+                              Icons.arrow_forward_ios,
+                              color: Colors.white,
+                              size: 15.0,
+                            ),
+                          ),
+                        ),
+                      ),
+
+                    ),
+                  ),Padding(
+                    padding: const EdgeInsets.only(bottom: 10.0),
+                    child: Container(
+                      padding: const EdgeInsets.all(10.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.0),
+                        color: const Color.fromARGB(255, 220, 217, 217),
+                      ),
+                      child: ListTile(
+                        onTap: () {
+                          Get.to(AllRequests());
+                          //const AppTopBar().launch(context);
+                        },
+                        leading: CircleAvatar(
+                          backgroundColor: Colors.white,
+                          radius: 25.0,
+                          child: Center(
+                            child: Image.asset('images/apptopbar.png'),
+                          ),
+                        ),
+                        title: Text(
+                          'all_requests'.tr,
                           style: fontSizeMedium,
                         ),
                         trailing: const CircleAvatar(

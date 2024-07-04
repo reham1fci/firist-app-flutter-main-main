@@ -1,4 +1,5 @@
 import 'package:betakety_app/model/vacation_type.dart';
+import 'package:betakety_app/util/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -22,7 +23,7 @@ class AddVacationRequestState extends State<AddVacationRequest> {
   void initState() {
     Get.find<PermissionController>().resetData();
     super.initState();
-    Get.find<PermissionController>().getVacationTypes();
+    Get.find<PermissionController>().getTypes(AppConstants.vacationTypes);
   }
 
   @override
@@ -244,7 +245,7 @@ class AddVacationRequestState extends State<AddVacationRequest> {
                   ),
                   child: CustomTextField(
                     onTap: () {
-                      pController.selectSingleFile();
+                      pController.selectSingleFile(pController.fileNameController  , "files");
                     },
                     maxLines: 2,
                     readOnly: true,

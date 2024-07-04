@@ -251,7 +251,7 @@ class _AddRequestPermissionState extends State<AddRequestPermission> {
                   ),
                   child: CustomTextField(
                     onTap: () {
-                      pController.selectSingleFile();
+                      pController.selectSingleFile(pController.fileNameController , "files");
                     },
                     maxLines: 2,
                     readOnly: true,

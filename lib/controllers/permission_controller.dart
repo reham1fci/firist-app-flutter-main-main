@@ -3,10 +3,13 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:betakety_app/api/Api.dart';
 import 'package:betakety_app/controllers/auth_controller.dart';
+import 'package:betakety_app/model/File.dart';
 import 'package:betakety_app/model/login_model.dart';
+import 'package:betakety_app/model/request_options.dart';
 import 'package:betakety_app/model/vacation_type.dart';
 import 'package:betakety_app/util/app_constants.dart';
 import 'package:betakety_app/view/base/custom_lert_dialog.dart';
+import 'package:betakety_app/view/screens/Requests/all_requests.dart';
 import 'package:betakety_app/view/screens/Requests/main_permissions.dart';
 import 'package:betakety_app/view/screens/Requests/vacation_request.dart';
 import 'package:file_picker/file_picker.dart';
@@ -67,6 +70,7 @@ class PermissionController extends GetxController {
   FilePickerResult? addedFile;
   var stream ;
   var length ;
+  List<SendFile> filesList  = [] ;
   resetData() {
   detailsController.clear();
   dateController.clear();
@@ -75,7 +79,7 @@ class PermissionController extends GetxController {
  requestTypeTemp = requestTypeList[0];
  permissionTypeTemp = permissionTypeList[0];
  vacationPlaceTemp = vacationPlaceList[0];
- vacationTypeTemp = VacationType(nameEn: "Extended sick leave 16", vacationId: "279916");
+ vacationTypeTemp = VacationType(nameEn: "Extended sick leave 16", Id: "279916");
   addedFile = null;
    fileNameController.clear();
   }
@@ -101,14 +105,14 @@ class PermissionController extends GetxController {
     }
   }
  var fileBytes  ;
-  selectSingleFile() async {
+  selectSingleFile(TextEditingController  controller  , String key ) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
 
     if (result != null) {
       if(kIsWeb){
       fileBytes = result.files.single.bytes;
 print(fileBytes);
-      fileNameController.text = result.files.single.name;
+      controller.text = result.files.single.name;
 
       }
       else{
@@ -117,13 +121,14 @@ print(fileBytes);
         stream =  http.ByteStream(file.openRead())..cast();
         // get file length
          length = await file.length();
-        fileNameController.text = result.files.single.path!;
+         controller.text = result.files.single.path!;
       }
 
 
     } else {
       // User canceled the picker
     }
+     filesList.add(SendFile(key: key, stream: stream, length: length)) ;
   }
 
   bool _isGetRequestsPermissions = false;
@@ -249,6 +254,23 @@ postDataWithFile(uri: AppConstants.addPermissionReq) ;
    else {
 insertVacationRequest(uri: AppConstants.insertVacation) ;
     }
+  } Future<void> validateRequestsAndShowSnackbar(  List<dynamic>? options) async {
+    for (int i  = 0 ; i < options!.length ; i ++) {
+       TextEditingController  controller  = options[i]["controller"] ;
+       String   req  = options[i]["required_type"] ;
+      if(controller.text.isEmpty &&req =="required") {
+        showCustomSnackBar("${options[i]["option_name_ar"]} ${"is_required".tr}");
+return ;
+      }
+    }
+    if (detailsController.text.isEmpty) {
+      showCustomSnackBar("${'details'.tr} ${"is_required".tr}");
+    }
+
+
+   else {
+insertRequest(uri: AppConstants.AddAllRequests) ;
+    }
   }
 
   Future<dynamic> getRequests(String functionName) async {
@@ -274,12 +296,12 @@ insertVacationRequest(uri: AppConstants.insertVacation) ;
       print("Error: $e");
       return "error";
     }
-  }Future<dynamic> getVacationTypes() async {
+  }Future<dynamic> getTypes( String functionName) async {
     vacationTypeList  = []  ;
     final Map<String, dynamic> data = <String, dynamic>{};
     LoginResponsModel user =  await AuthController().getLoginData()  ;
     data["company_id"] =user.companyId;
- String url  =  AppConstants.vacationTypes+"?company_id=" +user.companyId!   ;
+ String url  =  functionName+"?company_id=" +user.companyId!   ;
  print(url) ;
  try {
     var response  = await  api.getData(url: url)  ;
@@ -291,11 +313,22 @@ insertVacationRequest(uri: AppConstants.insertVacation) ;
         var jsonArr  =  jsonObj["data"] as List ;
         print(jsonArr) ;
         for(int i  =0  ; i< jsonArr.length ; i++  ){
+           if (functionName  == AppConstants.vacationTypes){
           VacationType v  =  VacationType.fromJson(jsonArr[i]) ;
           print(v.nameAr)  ;
            vacationTypeList!.add(v);
+           }
+            else{
+             VacationType v  =  VacationType.fromJsonRequests(jsonArr[i]) ;
+             print(v.nameAr)  ;
+             vacationTypeList!.add(v);
 
-        }vacationTypeTemp =vacationTypeList![0];
+
+           }
+
+        }
+
+        vacationTypeTemp =vacationTypeList![0];
         update();
         return jsonDecode(response.body);
 
@@ -307,6 +340,7 @@ insertVacationRequest(uri: AppConstants.insertVacation) ;
       return "error";
     }
   }
+
 /*addRequest  (){
     Api api = Api() ;
     api.postDataWithFile(uri: AppConstants.addPermissionReq, obj: permissionsModel!, path: filePath!);
@@ -365,7 +399,7 @@ var response  = await request.send() ;
     String url =AppConstants.baseUrl+uri;
     print(url) ;
     var request =  http.MultipartRequest("POST",   Uri.parse(url));
-    request.fields['vacation_typee'] =vacationTypeTemp!.vacationId!;
+    request.fields['vacation_typee'] =vacationTypeTemp!.Id!;
     request.fields['vacation_place'] = vacationPlaceTemp!.name;
     request.fields['details'] =detailsController.text;
     request.fields['where_travel'] =vacationPlaceController.text;
@@ -377,6 +411,7 @@ var response  = await request.send() ;
     print(request.fields);
     print(stream);
     print(length);
+
     if(fileNameController.text.isNotEmpty){
       var multipartFile ;
       if(kIsWeb){
@@ -405,6 +440,76 @@ var response  = await request.send() ;
             Navigator.of(Get.context!).pop();
             Navigator.push(Get.context!, MaterialPageRoute(
                 builder: (BuildContext context) => VacationRequest()));
+
+            update();
+          });
+    }}
+
+  Future<void> insertRequest({ required String uri }) async {
+    String url =AppConstants.baseUrl+uri;
+    print(url) ;
+    var request =  http.MultipartRequest("POST",   Uri.parse(url));
+
+    request.fields['request_type_id'] =vacationTypeTemp!.Id!;
+    request.fields['details'] =detailsController.text;
+    LoginResponsModel user =  await AuthController().getLoginData()  ;
+    request.fields['employ_id'] = user.id!;
+    request.fields['company_id'] = user.companyId!;
+    print(request.fields);
+    print(stream);
+    print(length);
+    List< Map<String, dynamic>> itemsMap = [];
+
+    for (int i  = 0 ; i <vacationTypeTemp!. options!.length ; i ++) {
+      TextEditingController  controller  = vacationTypeTemp!. options![i]["controller"] ;
+
+      Map<String, dynamic> map  =
+        {
+          "options_id" :vacationTypeTemp!. options![i]["options_id"],
+          "update_options_id": vacationTypeTemp!. options![i]["update_options_id"],
+          "value_type":  vacationTypeTemp!. options![i]["value_type"] ,
+          "var_name":  controller.text,
+        };
+      itemsMap.add(map) ;
+
+
+    }
+    String itemsJson = jsonEncode(itemsMap);
+    request.fields["options"] = itemsJson;
+    if(fileNameController.text.isNotEmpty){
+      var multipartFile ;
+      for(int i =0 ; i < filesList.length  ; i++) {
+        if(kIsWeb){
+          multipartFile =  http.MultipartFile.fromBytes(filesList[i].key!, filesList[i].fileBytes! ,filename: fileNameController.text);
+
+        }
+        else{
+          multipartFile = http.MultipartFile(filesList[i].key!, filesList[i].stream!, filesList[i].length!,
+              filename:fileNameController.text);
+        }
+        request.files.add(multipartFile);
+
+      }
+
+
+
+    }
+    var response  = await request.send() ;
+    print(response.statusCode) ;
+    print(request.fields);
+    print(request.files);
+
+    if (response.statusCode == 200) {
+      print(response);
+      print("Uploaded!");
+      showOkDialog(context: Get.context
+      !,
+          message: 'added_to_requests_permission'.tr,
+          isCancelBtn: false,
+          onOkClick: () {
+            Navigator.of(Get.context!).pop();
+            Navigator.push(Get.context!, MaterialPageRoute(
+                builder: (BuildContext context) => AllRequests()));
 
             update();
           });

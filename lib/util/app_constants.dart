@@ -18,6 +18,9 @@ class AppConstants {
   static const String  vacationTypes= '/Show_Vacation_Type_api.php';
   static const String  insertVacation= '/Insert_Vacaton_Request_api.php';
   static const String  getVacation= '/Show_Vacation_Rquest_api.php';
+  static const String  getRequestTypes= '/hr_request_type_api.php';
+  static const String  getAllRequests= '/Show_All_Request_api.php';
+  static const String  AddAllRequests= '/hr_add_all_request_api.php';
 
   //MESSAGING
   static const String conversationListUri = '/api/v1/customer/message/list';

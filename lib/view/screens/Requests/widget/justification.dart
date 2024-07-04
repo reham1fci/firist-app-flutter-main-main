@@ -39,7 +39,7 @@ showJustificationDialog({ required BuildContext context  , required String hr_qu
             ),
             child: CustomTextField(
               onTap: () {
-                pController.selectSingleFile();
+                pController.selectSingleFile(pController.fileNameController , "files");
               },
               maxLines: 2,
               readOnly: true,
