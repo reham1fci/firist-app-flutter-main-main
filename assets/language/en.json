@@ -529,10 +529,11 @@
   "outside": "OutSide",
   "vacation_place": "Vacation Place",
   "all_requests": "All Requests",
-  "asking": "Asking"
-
-
-
-
-
+   "asking": "Asking",
+  "apply_job": "Apply Job",
+  "optional":"Optional" ,
+"user_name": "User Name",
+"Enter_full_name_en": "Enter full name English language",
+  "Enter_full_name_ar": "Enter full name Arabic language",
+"USER_NAME_REQUIRED": "User Name is required"
 }

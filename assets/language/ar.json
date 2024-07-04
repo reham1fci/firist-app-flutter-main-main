@@ -520,7 +520,6 @@
   "process": "العمليات",
   "justification": "تبرير",
   "Enter_your_justification": "ادخل تبريرك",
-  "Enter_your_justification": "ادخل تبريرك",
   "vacation": "طلبات الاجازة",
   "add_vacation": "اضافه طلب اجازة",
   "accept": "موافقة",
@@ -534,9 +533,17 @@
   "vacation_place": " مكان الاجازة",
   "days_num": "عدد الايام ",
   "all_requests": "كل الطلبات",
+  "USER_NAME_REQUIRED" :" اسم المستخدم مطلوب" , 
 
-  "asking": "المسائلات"
 
+  "asking": "المسائلات" ,
 
+  "Enter_full_name_en": "ادخل اسمك بالغه الانجليزية",
+  "Enter_full_name_ar": "ادخل اسمك بالغه العربيه",
+
+  "user_name": "اسم المستخدم ",
+  "apply_job": "تقديم علي وظيفه",
+
+  "optional": "اختيارى"
 
 }

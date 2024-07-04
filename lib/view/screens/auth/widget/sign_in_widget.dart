@@ -4,6 +4,7 @@ import 'package:betakety_app/view/base/custom_snackbar.dart';
 import 'package:betakety_app/util/dimensions.dart';
 import 'package:betakety_app/util/styles.dart';
 import 'package:betakety_app/view/screens/auth/forget_password_screen.dart';
+import 'package:betakety_app/view/screens/auth/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -80,14 +81,25 @@ class SignInWidgetState extends State<SignInWidget> {
                       margin: const EdgeInsets.only(
                           right: Dimensions.PADDING_SIZE_SMALL),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           InkWell(
                             onTap: () => {Get.to(const ForgetPasswordScreen())},
                             child: Text('FORGET_PASSWORD'.tr,
                                 style: titilliumRegular.copyWith(
                                     color: Colors.black)),
+                          ),   InkWell(
+                            onTap: () => {Get.to( SignUp())},
+                            child: Text('SIGN_UP'.tr,
+                                style: titilliumRegular.copyWith(
+                                    color: Colors.black)),
                           ),
+
+
+
+
+
+
                         ],
                       ),
                     ),
@@ -124,12 +136,14 @@ class SignInWidgetState extends State<SignInWidget> {
       showCustomSnackBar('PASSWORD_MUST_BE_REQUIRED'.tr);
     } else {
      // Get.offAll(NavBarScreen());
-      if(await api.checkInternet()) {
+      Get.find<AuthController>().login(email: email, password: password);
+
+      /*if(await api.checkInternet()) {
         Get.find<AuthController>().login(email: email, password: password);
       }
       else {
         showCustomSnackBar('no_internet_connection'.tr) ;
-      }
+      }*/
     }
   }
 }

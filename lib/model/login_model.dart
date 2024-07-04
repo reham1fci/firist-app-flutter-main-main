@@ -26,7 +26,11 @@ class LoginResponsModel {
   String? message;
   String? id;
   String? name;
+  String? userName;
+  String? nameAr;
+  String? nameEn;
   String? email;
+  String? password;
   String? mobilenumber;
   String? photo;
   String? nameen;
@@ -41,12 +45,17 @@ class LoginResponsModel {
   String? companyLat ;
   String? companyLng ;
   String? companyId ;
+  String? appleDelete ;
 
   LoginResponsModel(
       {this.success,
       this.message,
       this.id,
       this.name,
+        this.password ,
+        this.nameAr,
+        this.nameEn,
+        this.userName ,
       this.email,
       this.mobilenumber,
       this.photo,
@@ -60,6 +69,7 @@ class LoginResponsModel {
         this.companyLat ,
         this.companyLng,
         this.companyId,
+        this.appleDelete  ,
       this.jobnameen});
 
   LoginResponsModel.fromJson(Map<String, dynamic> json) {
@@ -82,6 +92,7 @@ class LoginResponsModel {
     companyLng = json['company_lng'];
     companyLat = json['company_lat'];
     companyId= json['company_id'];
+    appleDelete= json['apple_delete'];
   }
 
   Map<String, dynamic> toJson() {
@@ -105,6 +116,19 @@ class LoginResponsModel {
     data['company_lng'] = companyLng;
     data['mac_address'] = mobileMac;
     data['company_id'] = companyId;
+    data['apple_delete'] = appleDelete;
+    return data;
+  }
+  Map<String, dynamic> signUpToJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+
+    data['employ_name_en'] = nameEn;
+    data['employ_name_ar'] = nameAr;
+    data['employ_email'] = email;
+    data['mobile_number'] = mobilenumber;
+    data['password'] =password ;
+    data['username'] = userName;
+
     return data;
   }
 }

@@ -2,7 +2,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:betakety_app/model/requests_permissions_model.dart';
-import 'package:connectivity/connectivity.dart';
+//import 'package:connectivity/connectivity.dart';
 import 'package:http/http.dart'  as http ;
 import 'package:intl/intl.dart';
 import 'package:http/http.dart';
@@ -17,6 +17,9 @@ class Api {
     print(map);
     final response = await http.post(
       Uri.parse(url),
+      headers:{
+        'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin':"*"},
     body: json.encode(map),
     );
     return response;
@@ -30,7 +33,7 @@ class Api {
     return response ;
   }
 
-  Future<bool> checkInternet() async {
+  /*Future<bool> checkInternet() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile) {
       return true;
@@ -38,7 +41,7 @@ class Api {
 
       return true;
     }
-    return false;}
+    return false;}*/
 
 
    }

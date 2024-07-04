@@ -28,11 +28,11 @@ class _NavBarScreenState extends State<NavBarScreen> {
   Future<void> checkInternet() async {
     Api api = Api() ;
 
-    bool  isConn = await api.checkInternet();
+   /* bool  isConn = await api.checkInternet();
     if (!isConn){
       showCustomSnackBar('no_internet_connection'.tr) ;
 
-    }
+    }*/
   }
 
   @override

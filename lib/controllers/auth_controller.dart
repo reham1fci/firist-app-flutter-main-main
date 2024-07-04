@@ -5,12 +5,15 @@ import 'package:betakety_app/api/Api.dart';
 import 'package:betakety_app/api/api_services.dart';
 import 'package:betakety_app/model/login_model.dart';
 import 'package:betakety_app/util/app_constants.dart';
+import 'package:betakety_app/view/base/custom_lert_dialog.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_udid/flutter_udid.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:mac_address/mac_address.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:mac_address/mac_address.dart';
 //import 'package:platform_device_id/platform_device_id.dart';
+
 import '../view/screens/auth/auth_screen.dart';
 import '../view/base/custom_snackbar.dart';
 import '../view/screens/home/nav_screen.dart';
@@ -35,10 +38,12 @@ class AuthController extends GetxController {
     _isLoading = true;
     update();
     APIService apiService = APIService();
-    String mobileMac = await FlutterUdid.udid;
+     String mobileMac = await FlutterUdid.udid;
+
    // String? mobileMac = await PlatformDeviceId.getDeviceId;
 
-    print(mobileMac) ;
+
+print(mobileMac) ;
     LoginReqModel user1 =  LoginReqModel(password:password , username: email , mobileMac:mobileMac );
     LoginResponsModel res = await apiService.login(user1);
         print(res);
@@ -54,10 +59,15 @@ class AuthController extends GetxController {
  saveUserData(LoginResponsModel user )async{
    SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.setString(
-              'response_data', json.encode(user.toJson()));  await prefs.setString(
-              'user', json.encode(user.toJson()));
-          await prefs.setBool('is_logged_in', true);
-   Get.offAll(const NavBarScreen());
+              'response_data', json.encode(user.toJson()));
+   await prefs.setBool('is_logged_in', true);
+
+   await prefs.setString(
+              'user', json.encode(user.toJson())).then((value) {
+     Get.offAll(const NavBarScreen());
+
+
+   });
 
  }clearUserLogin( )async{
    SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -81,7 +91,54 @@ class AuthController extends GetxController {
       return null;
     }
   }
+validateSignUpData(String nameEn , String userName , String nameAr , String email , String password ,String phone){
+  if (nameAr.isEmpty) {
+    showCustomSnackBar('NAME_FIELD_MUST_BE_REQUIRED'.tr);
+  }
+  else if (nameEn.isEmpty) {
+    showCustomSnackBar('NAME_FIELD_MUST_BE_REQUIRED'.tr);
+  }else if (userName.isEmpty) {
+    showCustomSnackBar('USER_NAME_REQUIRED'.tr);
+  }else if (email.isEmpty) {
+    showCustomSnackBar('EMAIL_MUST_BE_REQUIRED'.tr);
+  } else if (password.isEmpty) {
+    showCustomSnackBar('PASSWORD_MUST_BE_REQUIRED'.tr);
+  }
+  else{
+    signUp(nameEn, userName, nameAr, email, password, phone) ;
+  }
 
+}
+signUp(String nameEn , String userName , String nameAr , String email , String password ,String phone) async {
+  _isLoading = true;
+  update();
+  Api api = Api() ;
+  LoginResponsModel signup = LoginResponsModel(nameAr:nameAr ,nameEn: nameEn ,email:  email , mobilenumber: phone , password:  password , userName:  userName) ;
+  final response = await api.postData(uri: AppConstants.signupUrl, map: signup.signUpToJson()) ;
+  if(response.statusCode ==200){
+    print(response.body) ;
+     var res  =jsonDecode(response.body) ;
+     bool success = res["success"] ;
+
+    _isLoading = false;
+    if(success)
+      {
+    showOkDialog(context: Get.context
+    !,message: 'sign_up_successfully_now_login'.tr ,isCancelBtn: false ,onOkClick:(){
+      Navigator.of( Get.context!).pop();});
+      }else{
+      showOkDialog(context: Get.context
+      !,message: 'try again' ,isCancelBtn: false ,onOkClick:(){
+    });}
+
+    update();
+  }
+  {
+    _isLoading = false;
+    update();
+    print(response.statusCode) ;
+  }
+  }
   // String _getUserData() {
   //   return authRepo.getUserData();
   // }
