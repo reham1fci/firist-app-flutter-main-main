@@ -12,6 +12,8 @@ class AppConstants {
   static const String getAccountStatementDetails = '/account_statement_details_api.php';
    static const String insertJustification = '/Justification_api.php';
   static const String attendanceDetails = '/view_hodor_inseraf_api.php';
+  static const String loginFingerPrint = '/add_hoder_api.php';
+  static const String logoutFingerPrint = '/add_ensraf_api.php';
   static const String getShift = '/view_shift_api.php';
     static const String  vacationTypes= '/Show_Vacation_Type_api.php';
   static const String  insertVacation= '/Insert_Vacaton_Request_api.php';

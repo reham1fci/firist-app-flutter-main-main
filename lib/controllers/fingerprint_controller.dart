@@ -5,6 +5,7 @@ import 'package:betakety_app/api/Api.dart';
 import 'package:betakety_app/controllers/auth_controller.dart';
 import 'package:betakety_app/model/login_model.dart';
 import 'package:betakety_app/util/app_constants.dart';
+import 'package:betakety_app/view/base/custom_lert_dialog.dart';
 import 'package:betakety_app/view/base/custom_snackbar.dart';
 import 'package:betakety_app/view/base/fingerprint_alert.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,7 @@ class FingerPrintController extends GetxController {
    LocalAuthentication auth = LocalAuthentication();
   _SupportState _supportState = _SupportState.unknown;
   bool? _canCheckBiometrics;
+  String registerFingerPrintFunction  =  "" ;
   List<BiometricType>? _availableBiometrics;
   String _authorized = 'Not Authorized';
   bool isAuthenticating = false;
@@ -52,14 +54,14 @@ class FingerPrintController extends GetxController {
     );
     _initData() ;
   }
-
+ bool loginB4   = true  ;
 
    Future<dynamic> registerFingerPrint() async {
      LoginResponsModel user =  await AuthController().getLoginData()  ;
      DateTime currentDate = DateTime.now();
 String date = DateFormat('yyyy-MM-dd').format(currentDate);
 String time = DateFormat('HH:mm:ss').format(currentDate);
-     String url  =  "${AppConstants.attendanceFingerPrint}?employ_id=${user.id!}&hodor_ensraf_date=${date}&hodor_time=${time}&company_id=${user.companyId!}"   ;
+     String url  =  "${registerFingerPrintFunction}?employ_id=${user.id!}&hodor_ensraf_date=${date}&hodor_time=${time}&company_id=${user.companyId!}"   ;
      //String url  =  "/Employ_Salary_api.php?employ_id=662918&date_from=2024-01-01&date_to=2024-01-31&employ_type=office";
      print(url) ;
 
@@ -69,14 +71,37 @@ String time = DateFormat('HH:mm:ss').format(currentDate);
 
        print(jsonDecode(response.body));
        var data = jsonDecode(response.body) ;
-       Future.delayed(Duration(seconds: 3)).then((_) {
-         Navigator.of(Get.context!).pop();
+
+       if(data["success"]){
+       print(data["msg"]) ;
+       String msg  = data["msg"]  ;
+       print(msg) ;
+       if(msg  == "تمت الإضافه مسبقا"){
+         loginB4  = true  ;
+         update()  ;
+         showOkDialog(context: Get.context!    ,message: msg, isCancelBtn: false  ) ;
+       }
+       else{
+         loginB4  = false  ;
+          update() ;
+         Future.delayed(Duration(seconds: 3)).then((_) {
+           Navigator.of(Get.context!).pop();
            // Anything else you want
          });
+       }
+       }
+        else{
+         showOkDialog(context: Get.context!    ,message: "'Failed to load data!'", isCancelBtn: false  ) ;
+
+       }
+
+     /*  */
 
 
      }
      else {
+       showOkDialog(context: Get.context!    ,message: "'Failed to load data!'", isCancelBtn: false  ) ;
+
        throw Exception('Failed to load data!');
      }
 
@@ -193,7 +218,7 @@ String time = DateFormat('HH:mm:ss').format(currentDate);
      final distance =
      toolkit.SphericalUtil.computeDistanceBetween(currentLocation, companyLocation) ;
 
-     if(distance<100){
+     if(distance<200){
          inCompany  = true ;
          update();
 

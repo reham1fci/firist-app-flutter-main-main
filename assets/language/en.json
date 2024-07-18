@@ -535,5 +535,9 @@
 "user_name": "User Name",
 "Enter_full_name_en": "Enter full name English language",
   "Enter_full_name_ar": "Enter full name Arabic language",
-"USER_NAME_REQUIRED": "User Name is required"
+"USER_NAME_REQUIRED": "User Name is required",
+  "login_finger_print": "login finger print" ,
+  "login_confirmation": "are you sure you want to login" ,
+  "logout_finger_print": "logout finger print",
+  "logout_confirmation": "are you sure you want to logout"
 }

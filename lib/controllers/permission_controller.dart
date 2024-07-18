@@ -107,7 +107,9 @@ class PermissionController extends GetxController {
  var fileBytes  ;
   selectSingleFile(TextEditingController  controller  , String key ) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
-
+if(key.isEmpty){
+  key = controller.text  ;
+}
     if (result != null) {
       if(kIsWeb){
       fileBytes = result.files.single.bytes;
@@ -321,6 +323,9 @@ insertRequest(uri: AppConstants.AddAllRequests) ;
             else{
              VacationType v  =  VacationType.fromJsonRequests(jsonArr[i]) ;
              print(v.nameAr)  ;
+             for( int i  =  0  ;  i  <v.options!.length ; i ++){
+               v.options![i]["controller"] = TextEditingController();
+             }
              vacationTypeList!.add(v);
 
 

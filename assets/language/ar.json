@@ -544,6 +544,10 @@
   "user_name": "اسم المستخدم ",
   "apply_job": "تقديم علي وظيفه",
 
-  "optional": "اختيارى"
+  "optional": "اختيارى",
+  "login_finger_print": "اثبات دخول" ,
+  "logout_finger_print": "اثبات انصراف",
+  "login_confirmation": "تاكيد تريد  تسجيل حضور",
+  "logout_confirmation": "تاكيد تريد  تسجيل انصراف"
 
 }
