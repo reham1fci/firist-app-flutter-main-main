@@ -42,6 +42,7 @@ class LoginResponsModel {
   String? loginType;
   String? jobnameen;
   String? mobileMac;
+  String? passwordFingerprint;
   String? companyLat ;
   String? companyLng ;
   String? companyId ;
@@ -70,6 +71,7 @@ class LoginResponsModel {
         this.companyLng,
         this.companyId,
         this.appleDelete  ,
+        this.passwordFingerprint ,
       this.jobnameen});
 
   LoginResponsModel.fromJson(Map<String, dynamic> json) {
@@ -92,6 +94,7 @@ class LoginResponsModel {
     companyLng = json['company_lng'];
     companyLat = json['company_lat'];
     companyId= json['company_id'];
+    passwordFingerprint= json['password_q'];
     appleDelete= json['apple_delete'];
   }
 
@@ -116,6 +119,7 @@ class LoginResponsModel {
     data['company_lng'] = companyLng;
     data['mac_address'] = mobileMac;
     data['company_id'] = companyId;
+    data['password_q'] = passwordFingerprint;
     data['apple_delete'] = appleDelete;
     return data;
   }

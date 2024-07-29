@@ -8,6 +8,7 @@ import 'package:betakety_app/util/app_constants.dart';
 import 'package:betakety_app/view/base/custom_lert_dialog.dart';
 import 'package:betakety_app/view/base/custom_snackbar.dart';
 import 'package:betakety_app/view/base/fingerprint_alert.dart';
+import 'package:betakety_app/view/base/password_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_udid/flutter_udid.dart';
@@ -140,6 +141,23 @@ String time = DateFormat('HH:mm:ss').format(currentDate);
        if(isAuthenticated) {
          registerFingerPrint() ;
        }
+        else{
+         showPasswordDialog(Get.context!, (String password) {
+            if(password == user!.passwordFingerprint) {
+              isAuthenticated  = true  ;
+              _authorized = "Authorized";
+              registerFingerPrint() ;
+
+            }
+            else{
+              showCustomSnackBar('PASSWORD_DID_NOT_MATCH'.tr);
+            }
+           // Handle the password entered by the user
+           print('Password entered: $password');
+           // You can add authentication logic here
+         });
+          // make password
+       }
      update()
      ;}
    Future<void> validateFieldsAndShowSnackbar() async {
@@ -216,7 +234,7 @@ String time = DateFormat('HH:mm:ss').format(currentDate);
      markers[markerId] = marker2;
 
      final distance =
-     toolkit.SphericalUtil.computeDistanceBetween(currentLocation, companyLocation) ;
+     toolkit.SphericalUtil.computeDistanceBetween(currentLocation, testLocation) ;
 
      if(distance<200){
          inCompany  = true ;
