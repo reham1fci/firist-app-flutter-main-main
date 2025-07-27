@@ -46,14 +46,18 @@ class BannersView extends StatelessWidget {
                                             BorderRadius.circular(10)),
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(10),
-                                      child: FadeInImage.assetNetwork(
-                                        placeholder: Images.placeholder,
-                                        fit: BoxFit.cover,
-                                        image: a.mainBannerList[index],
-                                        imageErrorBuilder: (c, o, s) =>
-                                            Image.asset(Images.placeholder_3x1,
-                                                fit: BoxFit.cover),
-                                      ),
+                                      // child: FadeInImage.assetNetwork(
+                                      //   placeholder: Images.placeholder,
+                                      //   fit: BoxFit.cover,
+                                      //   image: a.mainBannerList[index],
+                                      //   imageErrorBuilder: (c, o, s) =>
+                                      //       Image.asset(Images.placeholder_3x1,
+                                      //           fit: BoxFit.cover),
+                                      // ),
+                                       child:Image.asset(
+                                         a.mainBannerList[index], // المسار الخاص بالصورة من الـ assets
+                                         fit: BoxFit.cover,
+                                       ),
                                     ),
                                   ),
                                 );

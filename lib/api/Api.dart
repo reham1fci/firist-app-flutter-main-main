@@ -2,8 +2,10 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:betakety_app/model/requests_permissions_model.dart';
+import 'package:file_picker/file_picker.dart';
 //import 'package:connectivity/connectivity.dart';
 import 'package:http/http.dart'  as http ;
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart';
 
@@ -45,3 +47,15 @@ class Api {
 
 
    }
+
+class MultipartBody {
+  String key;
+  XFile? file;
+  MultipartBody(this.key, this.file);
+}
+
+class MultipartDocument {
+  String key;
+  PlatformFile? file;
+  MultipartDocument(this.key, this.file);
+}

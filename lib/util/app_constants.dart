@@ -2,10 +2,13 @@
 class AppConstants {
   static const String appName = 'HR Marsa';
   static const double appVersion = 2.2;
+  static const String company_name = 'Marsa Company';
+  static const String hr_system = 'HR System';
   static const String baseUrl = "https://marsalogistics.com/new/hr_marsa_system/ar/api_hr_apps";
   static const String loginUri = '/Login_Api.php';
   static const String signupUrl= '/insert_user_api.php';
   static const String addPermissionReq = '/insert_request_permission_api.php';
+  static const String addMaintenanceReq = '/Maintenance_request_api.php';
   static const String showPermissionReq = '/show_request_permission_api.php';
   static const String showAskingReq = '/Show_Issues_api.php';
   static const String getAccountBalance = '/account_statement_api.php';
@@ -20,6 +23,7 @@ class AppConstants {
   static const String  getVacation= '/Show_Vacation_Rquest_api.php';
   static const String  getRequestTypes= '/hr_request_type_api.php';
   static const String  getAllRequests= '/Show_All_Request_api.php';
+  static const String  maintenanceRequest= '/show_Maintenance_request_api.php';
   static const String  AddAllRequests= '/hr_add_all_request_api.php';
   static const String employeeSalary = '/Employ_Salary_api.php';
   static const String attendanceFingerPrint = '/add_hoder_ensraf_api.php';

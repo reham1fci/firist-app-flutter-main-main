@@ -2,7 +2,9 @@ import 'package:betakety_app/view/screens/Requests/all_requests.dart';
 import 'package:betakety_app/view/screens/Requests/asking_view.dart';
 import 'package:betakety_app/view/screens/Requests/main_permissions.dart';
 import 'package:betakety_app/util/constant.dart';
+import 'package:betakety_app/view/screens/Requests/maintenance_requests.dart';
 import 'package:betakety_app/view/screens/Requests/vacation_request.dart';
+import 'package:betakety_app/view/screens/Requests/widget/requests_type_item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 // import 'package:maan_ui/Screens/Widgets/Animation/animation_list.dart';
@@ -69,159 +71,161 @@ class _WidgetListState extends State<WidgetList> {
               child: Column(
                 children: [
                   const SizedBox(height: 20.0),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 10.0),
-                    child: Container(
-                      padding: const EdgeInsets.all(10.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20.0),
-                        color: const Color.fromARGB(255, 220, 217, 217),
-                      ),
-                      child: ListTile(
-                        onTap: () {
-                          Get.to(MainPermissions());
-                          //const AppTopBar().launch(context);
-                        },
-                        leading: CircleAvatar(
-                          backgroundColor: Colors.white,
-                          radius: 25.0,
-                          child: Center(
-                            child: Image.asset('images/apptopbar.png'),
-                          ),
-                        ),
-                        title: Text(
-                          'permission_requests'.tr,
-                          style: fontSizeMedium,
-                        ),
-                        trailing: const CircleAvatar(
-                          backgroundColor: kFirstFullColor,
-                          radius: 15.0,
-                          child: Center(
-                            child: Icon(
-                              Icons.arrow_forward_ios,
-                              color: Colors.white,
-                              size: 15.0,
-                            ),
-                          ),
-                        ),
-                      ),
 
-                    ),
-                  ),Padding(
-                    padding: const EdgeInsets.only(bottom: 10.0),
-                    child: Container(
-                      padding: const EdgeInsets.all(10.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20.0),
-                        color: const Color.fromARGB(255, 220, 217, 217),
-                      ),
-                      child: ListTile(
-                        onTap: () {
-                          Get.to(AskingView());
-                          //const AppTopBar().launch(context);
-                        },
-                        leading: CircleAvatar(
-                          backgroundColor: Colors.white,
-                          radius: 25.0,
-                          child: Center(
-                            child: Image.asset('images/apptopbar.png'),
-                          ),
-                        ),
-                        title: Text(
-                          'asking'.tr,
-                          style: fontSizeMedium,
-                        ),
-                        trailing: const CircleAvatar(
-                          backgroundColor: kFirstFullColor,
-                          radius: 15.0,
-                          child: Center(
-                            child: Icon(
-                              Icons.arrow_forward_ios,
-                              color: Colors.white,
-                              size: 15.0,
-                            ),
-                          ),
-                        ),
-                      ),
 
-                    ),
-                  ),Padding(
-                    padding: const EdgeInsets.only(bottom: 10.0),
-                    child: Container(
-                      padding: const EdgeInsets.all(10.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20.0),
-                        color: const Color.fromARGB(255, 220, 217, 217),
-                      ),
-                      child: ListTile(
-                        onTap: () {
-                          Get.to(VacationRequest());
-                          //const AppTopBar().launch(context);
-                        },
-                        leading: CircleAvatar(
-                          backgroundColor: Colors.white,
-                          radius: 25.0,
-                          child: Center(
-                            child: Image.asset('images/apptopbar.png'),
-                          ),
-                        ),
-                        title: Text(
-                          'vacation'.tr,
-                          style: fontSizeMedium,
-                        ),
-                        trailing: const CircleAvatar(
-                          backgroundColor: kFirstFullColor,
-                          radius: 15.0,
-                          child: Center(
-                            child: Icon(
-                              Icons.arrow_forward_ios,
-                              color: Colors.white,
-                              size: 15.0,
-                            ),
-                          ),
-                        ),
-                      ),
 
-                    ),
-                  ),Padding(
-                    padding: const EdgeInsets.only(bottom: 10.0),
-                    child: Container(
-                      padding: const EdgeInsets.all(10.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20.0),
-                        color: const Color.fromARGB(255, 220, 217, 217),
-                      ),
-                      child: ListTile(
-                        onTap: () {
+                      RequestsTypeItem(title:'permission_requests'.tr ,onTap: (){
+                           Get.to(MainPermissions());
+
+                      },)
+
+                      //
+                      // ListTile(
+                      //   onTap: () {
+                      //     Get.to(MainPermissions());
+                      //     //const AppTopBar().launch(context);
+                      //   },
+                      //   leading: CircleAvatar(
+                      //     backgroundColor: Colors.transparent,
+                      //     radius: 25.0,
+                      //     child: Center(
+                      //       child: Image.asset('images/apptopbar.png' ,color: Colors.red,),
+                      //     ),
+                      //   ),
+                      //   title: Text(
+                      //     'permission_requests'.tr,
+                      //     style: fontSizeMedium,
+                      //   ),
+                      //   trailing: const CircleAvatar(
+                      //     backgroundColor: Colors.transparent,
+                      //     radius: 15.0,
+                      //     child: Center(
+                      //       child: Icon(
+                      //         Icons.arrow_forward_ios,
+                      //         color: Colors.red,
+                      //         size: 15.0,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+
+
+                      ,RequestsTypeItem(title:                 'asking'.tr
+                        ,onTap: (){
+                            Get.to(AskingView());
+
+                      },)
+                      // ListTile(
+                      //   onTap: () {
+                      //     Get.to(AskingView());
+                      //     //const AppTopBar().launch(context);
+                      //   },
+                      //   leading: CircleAvatar(
+                      //     backgroundColor: Colors.white,
+                      //     radius: 25.0,
+                      //     child: Center(
+                      //       child: Image.asset('images/apptopbar.png'),
+                      //     ),
+                      //   ),
+                      //   title: Text(
+                      //     'asking'.tr,
+                      //     style: fontSizeMedium,
+                      //   ),
+                      //   trailing: const CircleAvatar(
+                      //     backgroundColor: kFirstFullColor,
+                      //     radius: 15.0,
+                      //     child: Center(
+                      //       child: Icon(
+                      //         Icons.arrow_forward_ios,
+                      //         color: Colors.white,
+                      //         size: 15.0,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+
+                   ,
+                      RequestsTypeItem(title:                                   'vacation'.tr,
+
+                        onTap: (){
+                             Get.to(VacationRequest());
+
+                        },)
+                      // ListTile(
+                      //   onTap: () {
+                      //     Get.to(VacationRequest());
+                      //     //const AppTopBar().launch(context);
+                      //   },
+                      //   leading: CircleAvatar(
+                      //     backgroundColor: Colors.white,
+                      //     radius: 25.0,
+                      //     child: Center(
+                      //       child: Image.asset('images/apptopbar.png'),
+                      //     ),
+                      //   ),
+                      //   title: Text(
+                      //     'vacation'.tr,
+                      //     style: fontSizeMedium,
+                      //   ),
+                      //   trailing: const CircleAvatar(
+                      //     backgroundColor: kFirstFullColor,
+                      //     radius: 15.0,
+                      //     child: Center(
+                      //       child: Icon(
+                      //         Icons.arrow_forward_ios,
+                      //         color: Colors.white,
+                      //         size: 15.0,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+
+
+
+
+                      // ListTile(
+                      //   onTap: () {
+                      //     Get.to(AllRequests());
+                      //     //const AppTopBar().launch(context);
+                      //   },
+                      //   leading: CircleAvatar(
+                      //     backgroundColor: Colors.white,
+                      //     radius: 25.0,
+                      //     child: Center(
+                      //       child: Image.asset('images/apptopbar.png'),
+                      //     ),
+                      //   ),
+                      //   title: Text(
+                      //     'all_requests'.tr,
+                      //     style: fontSizeMedium,
+                      //   ),
+                      //   trailing: const CircleAvatar(
+                      //     backgroundColor: kFirstFullColor,
+                      //     radius: 15.0,
+                      //     child: Center(
+                      //       child: Icon(
+                      //         Icons.arrow_forward_ios,
+                      //         color: Colors.white,
+                      //         size: 15.0,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                    ,  RequestsTypeItem(title:
+                      'all_requests'.tr,
+
+                        onTap: (){
                           Get.to(AllRequests());
-                          //const AppTopBar().launch(context);
-                        },
-                        leading: CircleAvatar(
-                          backgroundColor: Colors.white,
-                          radius: 25.0,
-                          child: Center(
-                            child: Image.asset('images/apptopbar.png'),
-                          ),
-                        ),
-                        title: Text(
-                          'all_requests'.tr,
-                          style: fontSizeMedium,
-                        ),
-                        trailing: const CircleAvatar(
-                          backgroundColor: kFirstFullColor,
-                          radius: 15.0,
-                          child: Center(
-                            child: Icon(
-                              Icons.arrow_forward_ios,
-                              color: Colors.white,
-                              size: 15.0,
-                            ),
-                          ),
-                        ),
-                      ),
 
-                    ),
-                  ),
+                        },) ,
+                  RequestsTypeItem(title:
+                      'maintenance_request'.tr,
+
+                        onTap: (){
+                          Get.to(MaintenanceRequests());
+
+                        },)
+
 
                 ],
               ),

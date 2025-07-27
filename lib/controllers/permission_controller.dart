@@ -298,7 +298,9 @@ insertRequest(uri: AppConstants.AddAllRequests) ;
       print("Error: $e");
       return "error";
     }
-  }Future<dynamic> getTypes( String functionName) async {
+  }
+
+  Future<dynamic> getTypes( String functionName) async {
     vacationTypeList  = []  ;
     final Map<String, dynamic> data = <String, dynamic>{};
     LoginResponsModel user =  await AuthController().getLoginData()  ;

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:betakety_app/api/Api.dart';
 import 'package:betakety_app/controllers/auth_controller.dart';
 import 'package:betakety_app/model/login_model.dart';
+import 'package:betakety_app/util/constant.dart';
 import 'package:betakety_app/util/dimensions.dart';
 import 'package:betakety_app/util/images.dart';
 import 'package:betakety_app/util/styles.dart';
@@ -64,7 +65,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
         children: [
           Container(
             width: MediaQuery.of(context).size.width,
-            color: Theme.of(context).primaryColor,
+            color: lightgGreyBack,
             height: 250,
             child: Column(children: [
               SizedBox(height: MediaQuery.of(context).viewPadding.top),
@@ -76,7 +77,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   child: ClipRRect(
                       borderRadius: const BorderRadius.all(Radius.circular(50)),
                       child: Image.asset(
-                        Images.logo_with_name,
+                        Images.logo_hr,
                         height: 80,
                         width: 80,
                         fit: BoxFit.cover,
@@ -86,7 +87,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               Text(
                 name,
                 style: fontSizeRegular.copyWith(
-                  color: Theme.of(context).cardColor,
+                  color: Colors.black,
                   fontSize: Dimensions.fontSizeExtraLarge,
                 ),
               ),
@@ -95,7 +96,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 child: Text(
                   email,
                   style: fontSizeRegular.copyWith(
-                    color: Theme.of(context).cardColor,
+                    color: Colors.black,
                     fontSize: Dimensions.fontSizeSmall,
                   ),
                 ),

@@ -1,6 +1,7 @@
 import 'package:betakety_app/api/Api.dart';
 import 'package:betakety_app/controllers/language_controller.dart';
 import 'package:betakety_app/main.dart';
+import 'package:betakety_app/util/images.dart';
 import 'package:betakety_app/view/base/custom_snackbar.dart';
 import 'package:betakety_app/view/screens/account_statement/account_statement.dart';
 import 'package:betakety_app/view/screens/profile/profile_screen.dart';
@@ -56,9 +57,9 @@ class _NavBarScreenState extends State<NavBarScreen> {
                   child: CircleAvatar(
                     radius: 30.0,
                     backgroundImage: AssetImage(
-                      'images/lms.png',
+                     Images.logo_hr,
                     ),
-                    backgroundColor: Colors.white,
+                    backgroundColor: Colors.transparent,
                   ),
                 ),
                 // Icon(

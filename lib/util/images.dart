@@ -6,7 +6,11 @@ class Images {
   static const String apply_job = 'assets/image/apply_job.png';
   static const String successIcon = 'assets/image/success.gif';
   static const String logo_marsa = 'assets/image/logo_marsa_with_name.png';
+  static const String logo_hr = 'assets/image/hr_logo.png';
   static const String saudi = 'assets/image/saudi.png';
+  static const String panner1 = 'assets/image/panner1.png';
+  static const String panner2 = 'assets/image/panner2.png';
+  static const String panner3 = 'assets/image/panner3.png';
   static const String united_kingdom = 'assets/image/english.png';
   static const String placeholder = 'assets/image/placeholder.jpg';
   static const String empty_box = 'assets/image/empty_box.png';
@@ -25,7 +29,8 @@ class Images {
   static const String pie_chart = 'assets/image/pie_chart.png';
   static const String dollar = 'assets/image/dollar.png';
   static const String placeholder_3x1 = 'assets/images/placeholder_3x1.png';
-
+  static const String attendance = 'assets/image/attendance.png';
+  static const String requests = 'assets/image/requests.png';
   static const String revenue = 'assets/image/revenue.png';
   static const String drawer = 'assets/image/drawer.png';
   static const String cart_icon = 'assets/image/cart_icon.png';
@@ -40,6 +45,8 @@ class Images {
   static const String coupon = 'assets/image/coupon.png';
   static const String add_new_category = 'assets/image/add_new_category.png';
   static const String camera_thumbnail = 'assets/image/camera_thumbnail.png';
+  static const String camera_thumbnail2 = 'assets/image/camera_placeholder.png';
+
   static const String profile_place_holder =
       'assets/image/profile_place_holder.png';
   static const String shop_icon = 'assets/image/shop_icon.png';

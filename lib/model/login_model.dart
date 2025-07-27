@@ -72,7 +72,7 @@ class LoginResponsModel {
         this.companyId,
         this.appleDelete  ,
         this.passwordFingerprint ,
-        this.jobnameen});
+      this.jobnameen});
 
   LoginResponsModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
