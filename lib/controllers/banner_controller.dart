@@ -53,11 +53,9 @@ class BannersController extends GetxController {
   int currentIndex = 0;
 
   List<String> mainBannerList = [
-    'https://images.pexels.com/photos/3746957/pexels-photo-3746957.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    'https://images.pexels.com/photos/3747455/pexels-photo-3747455.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    'https://images.pexels.com/photos/5699475/pexels-photo-5699475.jpeg?auto=compress&cs=tinysrgb&h=650&w=940'
-  ];
-
+    Images.panner1,
+    Images.panner2,
+    Images.panner3  ];
   List<BillSearchType> searchQuery = [
     BillSearchType(queryName: "اليوم", queryType: 1),
     BillSearchType(queryName: "أمس", queryType: 2),

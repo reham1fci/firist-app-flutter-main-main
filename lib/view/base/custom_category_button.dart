@@ -49,7 +49,7 @@ class CustomCategoryButton extends StatelessWidget {
                   width: 30,
                   color: isSelected
                       ? Theme.of(context).secondaryHeaderColor
-                      : Colors.blue,
+                      :  Theme.of(context).primaryColor,
                 ),
                 Text(
                   buttonText,

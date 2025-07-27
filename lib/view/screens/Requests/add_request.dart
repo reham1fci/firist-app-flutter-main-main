@@ -78,6 +78,7 @@ class AddRequestState extends State<AddRequest> {
                         }).toList(),
                         onChanged: (value) {
                          // pController.vacationTypeTemp!.options!.clear() ;
+
                           pController.vacationTypeTemp = value;
                           pController.update();
                         },

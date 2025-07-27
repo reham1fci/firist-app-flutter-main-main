@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-const kMainColor = Color(0xFF744ACC);
+const kMainColor = Color(0xFFd3342c);
+const greyBack = Color(0xFFc2c2c2);
+const lightgGreyBack = Color(0xFFf2f2f2);
 const kGreyTextColor = Color(0xFF767C8F);
 const kBorderColorTextField = Color(0xFFC2C2C2);
 const kDarkWhite = Color(0xFFF1F7F7);
@@ -61,9 +63,9 @@ final otpInputDecoration = InputDecoration(
 
 BoxDecoration boxDecoration(
     {double radius = 2,
-    Color color = Colors.transparent,
-    Color? bgColor,
-    var showShadow = false}) {
+      Color color = Colors.transparent,
+      Color? bgColor,
+      var showShadow = false}) {
   return BoxDecoration(
     color: kFourthFullColor,
     border: Border.all(color: color),

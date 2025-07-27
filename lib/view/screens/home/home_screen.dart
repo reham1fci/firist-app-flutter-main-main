@@ -123,10 +123,10 @@ print("new update")  ;
         AppcastConfiguration(url: appcastURL, supportedOS: ['android']));*/
    // checkForUpdate();
 
-    getBestEmployee() ;
+   // getBestEmployee() ;
   }
   Future<void> _openStore() async {
-    String packageName = 'put your_package_name';
+    String packageName = 'com.marsa.marsa-hr';
     String appStoreUrl = 'https://apps.apple.com/app/$packageName';
     String playStoreUrl = 'https://play.google.com/store/apps/details?id=com.marsa.marsa_hr';
 
@@ -148,10 +148,10 @@ print("new update")  ;
         AppcastConfiguration(url: appcastURL, supportedOS: ['android' ,'ios']));
     return
      UpgradeAlert(
-       /* onIgnore: (){
+       onIgnore: (){
           SystemNavigator.pop();
           throw UnsupportedError('_');
-        } ,*/
+        } ,
         upgrader: upgrader,
          onUpdate: (){
 _openStore()  ;
@@ -191,23 +191,23 @@ return true;
                     Squermain(
                       title: 'requests'.tr,
                       //title: Text("PROFILE".tr)
-                      image: Images.request,
+                      image: Images.requests,
                       width: Get.width / 3.2,
-                      height: Get.width / 3.2,
+                      height: Get.width / 3,
                       screen: WidgetList(),
                     ),
                     Squermain(
                       title: 'salaries'.tr,
                       image: Images.salary,
                       width: Get.width / 3.2,
-                      height: Get.width / 3.2,
+                      height: Get.width / 3,
                       screen: salary_details_view(),
                     ),
                     Squermain(
                       title: 'Attendance_and_Departure'.tr,
-                      image: Images.att,
+                      image: Images.attendance,
                       width: Get.width / 3.2,
-                      height: Get.width / 3.2,
+                      height: Get.width / 3,
                       screen: FingerPrint(),
                     ),
                   ],

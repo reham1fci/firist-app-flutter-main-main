@@ -92,7 +92,9 @@ String time = DateFormat('HH:mm:ss').format(currentDate);
        }
        }
         else{
-         showOkDialog(context: Get.context!    ,message: "'Failed to load data!'", isCancelBtn: false  ) ;
+         String msg  = data["msg"]  ;
+
+         showOkDialog(context: Get.context!    ,message: msg, isCancelBtn: false  ) ;
 
        }
 
@@ -125,13 +127,26 @@ String time = DateFormat('HH:mm:ss').format(currentDate);
          _authorized = 'Authenticating';
          update();
      } on PlatformException catch (e) {
-       print(e);
-         isAuthenticating = false;
-         _authorized = 'Error - ${e.message}';
+       print('Error: ${e.message}, Code: ${e.code}');
+       isAuthenticating = false;
+       _authorized = 'Error - ${e.message}';
        update();
-       return;
-     }
-  /*   if (!mounted) {
+
+       // Handle specific iOS error code for user cancellation
+       if (e.code == 'auth_error_user_cancel' || e.code == 'auth_error_user_fallback') {
+         // Show password dialog here
+         showPasswordDialog(Get.context!, (String password) {
+           if (password == user!.passwordFingerprint) {
+             isAuthenticated = true;
+             _authorized = "Authorized";
+             registerFingerPrint();
+           } else {
+             showCustomSnackBar('PASSWORD_DID_NOT_MATCH'.tr);
+           }
+         });
+       } }
+
+       /*   if (!mounted) {
        return;
      }*/
 
@@ -185,40 +200,43 @@ String time = DateFormat('HH:mm:ss').format(currentDate);
   }) ;
 
    }
+    void checkPermission() async{
+      bool serviceEnabled;
+      LocationPermission permission;
+
+
+      // Test if location services are enabled.
+      serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        // Location services are not enabled don't continue
+        // accessing the position and request users of the
+        // App to enable the location services.
+        showCustomSnackBar('you_have_to_allow'.tr);
+        return Future.error('Location services are disabled.');
+      }
+
+      permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          // Permissions are denied, next time you could try
+          // requesting permissions again (this is also where
+          // Android's shouldShowRequestPermissionRationale
+          // returned true. According to Android guidelines
+          // your App should show an explanatory UI now.
+
+          return Future.error('Location permissions are denied');
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        // Permissions are denied forever, handle appropriately.
+        return Future.error(
+            'Location permissions are permanently denied, we cannot request permissions.');
+      }
+    }
    void _checkUserLocation() async {
-     bool serviceEnabled;
-     LocationPermission permission;
-
-
-     // Test if location services are enabled.
-     serviceEnabled = await Geolocator.isLocationServiceEnabled();
-     if (!serviceEnabled) {
-       // Location services are not enabled don't continue
-       // accessing the position and request users of the
-       // App to enable the location services.
-       showCustomSnackBar('you_have_to_allow'.tr);
-       return Future.error('Location services are disabled.');
-     }
-
-     permission = await Geolocator.checkPermission();
-     if (permission == LocationPermission.denied) {
-       permission = await Geolocator.requestPermission();
-       if (permission == LocationPermission.denied) {
-         // Permissions are denied, next time you could try
-         // requesting permissions again (this is also where
-         // Android's shouldShowRequestPermissionRationale
-         // returned true. According to Android guidelines
-         // your App should show an explanatory UI now.
-
-         return Future.error('Location permissions are denied');
-       }
-     }
-
-     if (permission == LocationPermission.deniedForever) {
-       // Permissions are denied forever, handle appropriately.
-       return Future.error(
-           'Location permissions are permanently denied, we cannot request permissions.');
-     }
+     checkPermission()  ;
      Position position = await Geolocator .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
      print(position);
       currentLocation = toolkit.LatLng(position.latitude, position.longitude);
@@ -234,7 +252,7 @@ String time = DateFormat('HH:mm:ss').format(currentDate);
      markers[markerId] = marker2;
 
      final distance =
-     toolkit.SphericalUtil.computeDistanceBetween(currentLocation, testLocation) ;
+     toolkit.SphericalUtil.computeDistanceBetween(currentLocation, companyLocation) ;
 
      if(distance<200){
          inCompany  = true ;

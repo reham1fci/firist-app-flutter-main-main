@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:betakety_app/controllers/account_controller.dart';
 import 'package:betakety_app/controllers/attendance_controller.dart';
 import 'package:betakety_app/controllers/fingerprint_controller.dart';
+import 'package:betakety_app/controllers/maintenance_controller.dart';
 import 'package:betakety_app/controllers/salary_controller.dart';
 import 'package:betakety_app/util/constant.dart';
 import 'package:betakety_app/view/screens/auth/auth_screen.dart';
@@ -49,7 +50,7 @@ class MyApp extends StatelessWidget {
         return GetMaterialApp(
           theme: ThemeData(
             // useMaterial3: true,
-            fontFamily: AppConstants.fontFamily,
+          //  fontFamily: AppConstants.fontFamily,
             primaryColor: kMainColor,
             secondaryHeaderColor: const Color(0xFF1ED7AA),
             disabledColor: const Color(0xFFBABFC4),
@@ -105,6 +106,7 @@ Future<Map<String, Map<String, String>>> init() async {
   Get.put(AccountController());
   Get.put(SalaryController());
   Get.put(AttendanceController());
+  Get.put(MaintenanceController());
   Map<String, Map<String, String>> languages = {};
   for (LanguageModel languageModel in AppConstants.languages) {
     String jsonStringValues = await rootBundle

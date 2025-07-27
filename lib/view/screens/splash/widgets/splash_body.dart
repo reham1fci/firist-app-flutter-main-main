@@ -50,30 +50,35 @@ class _SplashBodyState extends State<SplashBody> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return  Scaffold(
-    body:Center( child: Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    crossAxisAlignment: CrossAxisAlignment.center,
-    children: <Widget>[
-    const   Spacer(),
+        body:Center( child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              const   Spacer(),
 
-    Image.asset(Images.logo_with_name ,
-    fit: BoxFit.cover,
-    repeat: ImageRepeat.noRepeat,
-    ),
-    const   Spacer(),
-      const Text( AppConstants.appName ,style:   TextStyle(
-    fontWeight: FontWeight.bold,
-    fontSize: 30.0 ,
-    color: kMainColor
-    ),),
-    //  padding:const EdgeInsets.all(100),) ,
-    const   Spacer(),
+              Image.asset(Images.logo_hr ,
+                fit: BoxFit.cover,
+                repeat: ImageRepeat.noRepeat,
+              ),
+              // const   Spacer(),
+              const Text( AppConstants.company_name ,style:   TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30.0 ,
+                  color: kMainColor
+              ),),
+              const Text( AppConstants.hr_system ,style:   TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20.0 ,
+                  color: kMainColor
+              ),),
+              //  padding:const EdgeInsets.all(100),) ,
+              const   Spacer(),
 
-    const  CircularProgressIndicator(color: kMainColor,),
-    const   Spacer(),
+              const  CircularProgressIndicator(color: kMainColor,),
+              const   Spacer(),
 
 
-    ]),
-    ) );
+            ]),
+        ) );
   }
 }

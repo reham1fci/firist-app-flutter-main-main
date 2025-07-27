@@ -1,14 +1,18 @@
+import 'package:betakety_app/model/maintenance_attachment.dart';
+import 'package:betakety_app/util/constant.dart';
 import 'package:betakety_app/util/custom_app_theme.dart';
 import 'package:betakety_app/view/screens/Requests/widget/attach_view.dart';
+import 'package:betakety_app/view/screens/Requests/widget/attachment.dart';
 import 'package:betakety_app/view/screens/Requests/widget/justification.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class RequestItem extends StatelessWidget{
   int index ;
+  String? type ;
   List<dynamic>  filteredData ;
 
-  RequestItem(this.index, this.filteredData);
+  RequestItem(this.index, this.filteredData, {this.type});
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +50,7 @@ class RequestItem extends StatelessWidget{
                     padding: const EdgeInsets.only(
                         left: 4, bottom: 8, top: 16),
                     child: Text(
-                      "${filteredData[index]['request_id']} - ${filteredData[index]['type']}",
+                      "${filteredData[index]['request_id']} - ${type ?? filteredData[index]['type']}",
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         //  fontFamily: FitnessAppTheme.fontName,
@@ -150,10 +154,27 @@ class RequestItem extends StatelessWidget{
                             onPressed: () {
                               // Add the function to execute when the button is pressed
                               print(filteredData[index]['attach_link']);
-                              var attachList  = filteredData[index]['attach_link']as List  ;
-                              String attach_url  = attachList[0]["attach_link"] ;
-                              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) =>
-                                  AttachView(attach_url)));
+                              String attach_url =""  ;
+                              List<MaintenanceAttachment>  files = []  ;
+                              if(type!=null){
+                                var attachList  = filteredData[index]['files']as List  ;
+                                attachList.forEach((file) {
+                                  // نفذي اللي انتي عايزاه على كل عنصر
+                                 files.add(MaintenanceAttachment.fromJson(file)) ;// أو مثلاً: print(file['name']);
+                                });
+                                Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => AttachmentScreen(files)));
+
+                              }
+
+
+                              else{
+                                var attachList  = filteredData[index]['attach_link']as List  ;
+                                 attach_url  = attachList[0]["attach_link"] ;
+                                Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => AttachView(attach_url)));
+                              }
+
+
+
 
                             },
                             style: ElevatedButton.styleFrom(
@@ -174,11 +195,11 @@ class RequestItem extends StatelessWidget{
                             ),
                             child: Text(
                               'attachments'.tr,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 14,
                                 letterSpacing: 0.5,
-                                color: Color(0xFF744ACC),
+                                color: kMainColor,
                               ),
                             ),
                           ),

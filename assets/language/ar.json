@@ -548,6 +548,10 @@
   "login_finger_print": "اثبات دخول" ,
   "logout_finger_print": "اثبات انصراف",
   "login_confirmation": "تاكيد تريد  تسجيل حضور",
-  "logout_confirmation": "تاكيد تريد  تسجيل انصراف"
-
+  "logout_confirmation": "تاكيد تريد  تسجيل انصراف",
+  "maintenance_request": "طلب صيانة",
+  "car_images": "اضف صور السيارة ",
+  "invoice_images": "اضف صور للفاتورة",
+  "cost": "المبلغ",
+  "add_maintenance_request": "اضف طلب صيانة "
 }
