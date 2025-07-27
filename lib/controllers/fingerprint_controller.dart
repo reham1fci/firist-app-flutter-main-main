@@ -8,6 +8,7 @@ import 'package:betakety_app/util/app_constants.dart';
 import 'package:betakety_app/view/base/custom_lert_dialog.dart';
 import 'package:betakety_app/view/base/custom_snackbar.dart';
 import 'package:betakety_app/view/base/fingerprint_alert.dart';
+import 'package:betakety_app/view/base/password_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_udid/flutter_udid.dart';
@@ -124,12 +125,24 @@ String time = DateFormat('HH:mm:ss').format(currentDate);
          _authorized = 'Authenticating';
          update();
      } on PlatformException catch (e) {
-       print(e);
-         isAuthenticating = false;
-         _authorized = 'Error - ${e.message}';
+       print('Error: ${e.message}, Code: ${e.code}');
+       isAuthenticating = false;
+       _authorized = 'Error - ${e.message}';
        update();
-       return;
-     }
+
+       // Handle specific iOS error code for user cancellation
+       if (e.code == 'auth_error_user_cancel' || e.code == 'auth_error_user_fallback') {
+         // Show password dialog here
+         showPasswordDialog(Get.context!, (String password) {
+           if (password == user!.passwordFingerprint) {
+             isAuthenticated = true;
+             _authorized = "Authorized";
+             registerFingerPrint();
+           } else {
+             showCustomSnackBar('PASSWORD_DID_NOT_MATCH'.tr);
+           }
+         });
+       } }
   /*   if (!mounted) {
        return;
      }*/
@@ -139,6 +152,25 @@ String time = DateFormat('HH:mm:ss').format(currentDate);
        _authorized = message;
        if(isAuthenticated) {
          registerFingerPrint() ;
+       }
+
+
+       else{
+         showPasswordDialog(Get.context!, (String password) {
+           if(password == user!.passwordFingerprint) {
+             isAuthenticated  = true  ;
+             _authorized = "Authorized";
+             registerFingerPrint() ;
+
+           }
+           else{
+             showCustomSnackBar('PASSWORD_DID_NOT_MATCH'.tr);
+           }
+           // Handle the password entered by the user
+           print('Password entered: $password');
+           // You can add authentication logic here
+         });
+         // make password
        }
      update()
      ;}
