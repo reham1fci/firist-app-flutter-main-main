@@ -22,12 +22,16 @@ class _AddRequestItemState extends State<AddRequestItem> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    for (int i  = 0 ; i < widget.filteredData.length ; i ++) {
+  /*  for (int i  = 0 ; i < widget.filteredData.length ; i ++) {
       /// String key  = "controller"   +i .toString() ;
+      ///
+      if( widget.filteredData[i]["controller"]==null){
       TextEditingController controller = TextEditingController();
-      widget.filteredData[widget.index]["controller"] = controller;
+      widget.filteredData[i]["controller"] = controller;}
     }
     print(widget.filteredData)  ;
+    print("test")  ;*/
+
 
 }
 
@@ -83,7 +87,7 @@ class _AddRequestItemState extends State<AddRequestItem> {
           ),
           child: CustomTextField(
             onTap: () {
-             pController.selectSingleFile(widget.filteredData[widget.index]["controller"]   , widget.filteredData[widget.index]["options_id"] );
+             pController.selectSingleFile(widget.filteredData[widget.index]["controller"] ,"" );
             },
             maxLines: 2,
             readOnly: true,

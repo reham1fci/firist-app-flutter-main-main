@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
    showOkDialog({required BuildContext context   , required String message   ,
-    required  bool isCancelBtn ,Function? onOkClick , Function? onCancelClick})  {
+    required  bool isCancelBtn ,Function? onOkClick , Function? onCancelClick  ,String?okTitle})  {
     return showDialog(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -18,7 +18,7 @@ import 'package:flutter/material.dart';
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('Ok'),
+              child:  Text( okTitle ??'Ok'),
               onPressed: () {
                 Navigator.of(context).pop();
                 onOkClick!();

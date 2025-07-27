@@ -3,6 +3,7 @@
 class Images {
   static const String logo = 'assets/image/lms.png';
   static const String logo_with_name = 'assets/image/png_logo_with_name.png';
+  static const String apply_job = 'assets/image/apply_job.png';
   static const String successIcon = 'assets/image/success.gif';
   static const String logo_marsa = 'assets/image/logo_marsa_with_name.png';
   static const String saudi = 'assets/image/saudi.png';

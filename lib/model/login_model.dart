@@ -26,7 +26,11 @@ class LoginResponsModel {
   String? message;
   String? id;
   String? name;
+  String? userName;
+  String? nameAr;
+  String? nameEn;
   String? email;
+  String? password;
   String? mobilenumber;
   String? photo;
   String? nameen;
@@ -38,29 +42,37 @@ class LoginResponsModel {
   String? loginType;
   String? jobnameen;
   String? mobileMac;
+  String? passwordFingerprint;
   String? companyLat ;
   String? companyLng ;
   String? companyId ;
+  String? appleDelete ;
 
   LoginResponsModel(
       {this.success,
-      this.message,
-      this.id,
-      this.name,
-      this.email,
-      this.mobilenumber,
-      this.photo,
-      this.nameen,
-      this.companynamear,
-      this.companynameen,
-      this.deptname,
-      this.deptnameen,
-      this.jobname,
+        this.message,
+        this.id,
+        this.name,
+        this.password ,
+        this.nameAr,
+        this.nameEn,
+        this.userName ,
+        this.email,
+        this.mobilenumber,
+        this.photo,
+        this.nameen,
+        this.companynamear,
+        this.companynameen,
+        this.deptname,
+        this.deptnameen,
+        this.jobname,
         this.mobileMac ,
         this.companyLat ,
         this.companyLng,
         this.companyId,
-      this.jobnameen});
+        this.appleDelete  ,
+        this.passwordFingerprint ,
+        this.jobnameen});
 
   LoginResponsModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
@@ -82,6 +94,8 @@ class LoginResponsModel {
     companyLng = json['company_lng'];
     companyLat = json['company_lat'];
     companyId= json['company_id'];
+    passwordFingerprint= json['password_q'];
+    appleDelete= json['apple_delete'];
   }
 
   Map<String, dynamic> toJson() {
@@ -105,6 +119,20 @@ class LoginResponsModel {
     data['company_lng'] = companyLng;
     data['mac_address'] = mobileMac;
     data['company_id'] = companyId;
+    data['password_q'] = passwordFingerprint;
+    data['apple_delete'] = appleDelete;
+    return data;
+  }
+  Map<String, dynamic> signUpToJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+
+    data['employ_name_en'] = nameEn;
+    data['employ_name_ar'] = nameAr;
+    data['employ_email'] = email;
+    data['mobile_number'] = mobilenumber;
+    data['password'] =password ;
+    data['username'] = userName;
+
     return data;
   }
 }
