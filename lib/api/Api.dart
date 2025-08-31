@@ -25,7 +25,23 @@ class Api {
     body: json.encode(map),
     );
     return response;
+  } Future<Response> postData2({required String uri, required Map map}) async {
+    String url = AppConstants.baseUrl + uri;
+    print(url);
+    print(map);
+
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
+      },
+      body: map, // متبعتش json.encode(map)
+    );
+
+    return response;
   }
+
 
   Future <Response> getData({
     required String url })async{

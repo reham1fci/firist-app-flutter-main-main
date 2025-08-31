@@ -1,3 +1,4 @@
+import 'package:betakety_app/controllers/permission_controller.dart';
 import 'package:betakety_app/model/maintenance_attachment.dart';
 import 'package:betakety_app/util/constant.dart';
 import 'package:betakety_app/util/custom_app_theme.dart';
@@ -17,7 +18,9 @@ class RequestItem extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Padding(
+    return GetBuilder<PermissionController>(builder: (pController) {
+
+      return Padding(
       padding: const EdgeInsets.only(
           left: 24, right: 24, top: 8, bottom: 10),
       child: Container(
@@ -60,107 +63,83 @@ class RequestItem extends StatelessWidget{
                           color: CustomAppTheme.darkText),
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment:
-                    MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment:
-                    CrossAxisAlignment.center,
-                    children: <Widget>[
+
                       Row(
                         mainAxisAlignment:
-                        MainAxisAlignment.center,
+                        MainAxisAlignment.spaceBetween,
                         crossAxisAlignment:
                         CrossAxisAlignment.end,
                         children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 4, bottom: 3),
-                            child: Text(
-                              "${filteredData[index]['stat_ar'].toString().tr} ",
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                // fontFamily:FitnessAppTheme.fontName,
-                                fontWeight: FontWeight.w200,
-                                fontSize: 16,
-                                color:    Color.fromARGB(
-                                    255, 206, 217, 6) ,
-                              ),
-                            ),
-                          ),
-                          /*  Padding(
-                            // ignore: prefer_const_constructors
-                            padding: EdgeInsets.only(
-                                left: 8, bottom: 8),
-                            child: Text(
-                              'PENDING'.tr,
-                              textAlign: TextAlign.center,
-                              // ignore: prefer_const_constructors
-                              style: TextStyle(
-                                // fontFamily: FitnessAppTheme
-                                //     .fontName,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14,
-                                letterSpacing: -0.2,
-                                color: CustomAppTheme
-                                    .nearlyDarkBlue,
-                              ),
-                            ),
-                          ),*/
-                        ],
-                      ),
-                      Column(
-                        mainAxisAlignment:
-                        MainAxisAlignment.center,
-                        crossAxisAlignment:
-                        CrossAxisAlignment.end,
-                        children: <Widget>[
-                          Row(
+                          Column(
                             mainAxisAlignment:
                             MainAxisAlignment.center,
+                            crossAxisAlignment:
+                            CrossAxisAlignment.start,
                             children: <Widget>[
-                              Icon(
-                                Icons.access_time,
-                                color: CustomAppTheme.grey
-                                    .withOpacity(0.5),
-                                size: 16,
+                              Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.access_time,
+                                    color: CustomAppTheme.grey
+                                        .withOpacity(0.5),
+                                    size: 16,
+                                  ),
+                                  Padding(
+                                    padding:
+                                    const EdgeInsets.only(
+                                        left: 4.0),
+                                    child: Text(
+                                      textDirection:
+                                      TextDirection.ltr,
+                                      "${filteredData[index]['createdDate_time'].toString().tr} ",
+                                      textAlign:
+                                      TextAlign.center,
+                                      style: TextStyle(
+                                        fontFamily:
+                                        CustomAppTheme
+                                            .fontName,
+                                        fontWeight:
+                                        FontWeight.w500,
+                                        fontSize: 14,
+                                        letterSpacing: 0.0,
+                                        color: CustomAppTheme
+                                            .grey
+                                            .withOpacity(0.5),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                               Padding(
-                                padding:
-                                const EdgeInsets.only(
-                                    left: 4.0),
+                                padding: const EdgeInsets.only(
+                                    left: 4, bottom: 3),
                                 child: Text(
-                                  textDirection:
-                                  TextDirection.ltr,
-                                  "${filteredData[index]['createdDate_time'].toString().tr} ",
-                                  textAlign:
-                                  TextAlign.center,
-                                  style: TextStyle(
-                                    fontFamily:
-                                    CustomAppTheme
-                                        .fontName,
-                                    fontWeight:
-                                    FontWeight.w500,
-                                    fontSize: 14,
-                                    letterSpacing: 0.0,
-                                    color: CustomAppTheme
-                                        .grey
-                                        .withOpacity(0.5),
+                                  "${filteredData[index]['stat_ar'].toString().tr} ",
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    // fontFamily:FitnessAppTheme.fontName,
+                                    fontWeight: FontWeight.w200,
+                                    fontSize: 16,
+                                    color:    Color.fromARGB(
+                                        255, 206, 217, 6) ,
                                   ),
                                 ),
                               ),
                             ],
-                          ),
+                          ) ,
                           ElevatedButton(
                             onPressed: () {
                               // Add the function to execute when the button is pressed
                               print(filteredData[index]['attach_link']);
                               String attach_url =""  ;
                               List<MaintenanceAttachment>  files = []  ;
-                              if(type!=null){
+                              if(type== "maintenance_request".tr){
                                 var attachList  = filteredData[index]['files']as List  ;
                                 attachList.forEach((file) {
                                   // نفذي اللي انتي عايزاه على كل عنصر
-                                 files.add(MaintenanceAttachment.fromJson(file)) ;// أو مثلاً: print(file['name']);
+                                  files.add(MaintenanceAttachment.fromJson(file)) ;// أو مثلاً: print(file['name']);
                                 });
                                 Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => AttachmentScreen(files)));
 
@@ -169,7 +148,7 @@ class RequestItem extends StatelessWidget{
 
                               else{
                                 var attachList  = filteredData[index]['attach_link']as List  ;
-                                 attach_url  = attachList[0]["attach_link"] ;
+                                attach_url  = attachList[0]["attach_link"] ;
                                 Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => AttachView(attach_url)));
                               }
 
@@ -203,10 +182,30 @@ class RequestItem extends StatelessWidget{
                               ),
                             ),
                           ),
+
+                          /*  Padding(
+                            // ignore: prefer_const_constructors
+                            padding: EdgeInsets.only(
+                                left: 8, bottom: 8),
+                            child: Text(
+                              'PENDING'.tr,
+                              textAlign: TextAlign.center,
+                              // ignore: prefer_const_constructors
+                              style: TextStyle(
+                                // fontFamily: FitnessAppTheme
+                                //     .fontName,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14,
+                                letterSpacing: -0.2,
+                                color: CustomAppTheme
+                                    .nearlyDarkBlue,
+                              ),
+                            ),
+                          ),*/
                         ],
-                      )
-                    ],
-                  )
+                      ),
+
+
                 ],
               ),
             ),
@@ -222,6 +221,43 @@ class RequestItem extends StatelessWidget{
                 ),
               ),
             ),
+     Padding(
+              padding: const EdgeInsets.only(
+                  left: 24, right: 24, top: 4, bottom: 8),
+              child: Row(
+                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  filteredData[index]['amount'].toString().isNotEmpty ?     Row(
+              children: <Widget>[
+                  Text(
+                    'amount'.tr,
+                    textAlign: TextAlign.center,
+                    // ignore: prefer_const_constructors
+                    style: TextStyle(
+                      // fontFamily:
+                      //     FitnessAppTheme.fontName,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 12,
+                      letterSpacing: -0.2,
+                      color: CustomAppTheme.darkText,
+                    ),
+                  ),
+                  Text(
+                    "${filteredData[index]['amount'].toString().tr} ",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      // fontFamily:
+                      //     FitnessAppTheme.fontName,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
+                      color: Colors.red
+                          .withOpacity(0.5),
+                    ),
+                  ),]):SizedBox() ,
+
+
+                ],
+              )),
             Padding(
               padding: const EdgeInsets.only(
                   left: 24, right: 24, top: 4, bottom: 8),
@@ -266,6 +302,43 @@ class RequestItem extends StatelessWidget{
                       ],
                     ),
                   ),
+          if (filteredData[index]['arrival'] == "0" && filteredData[index]['vacation_id'] == "572222" )
+        (pController.loadingMap[filteredData[index]['id']] == true
+          ? const CircularProgressIndicator()
+          : ElevatedButton.icon(
+        onPressed: () async {
+          String itemId = filteredData[index]['id'];
+          pController.setLoading(itemId, true);
+
+          await Get.find<PermissionController>().resetLocation();
+          await Get.find<PermissionController>().setArrival(
+            id: filteredData[index]['id'],
+            requestId: filteredData[index]['request_id'],
+            vacationId: filteredData[index]['vacation_id'],
+          );
+
+          pController.setLoading(itemId, false);
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.green, // اللون الجديد
+          padding:
+          const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        icon: const Icon(Icons.check_circle,
+            color: Colors.white, size: 18),
+        label: Text(
+          'arrive'.tr,
+          style: const TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 14,
+            color: Colors.white,
+          ),
+        ),
+      ))
+
                 ],
               ),
             )
@@ -273,6 +346,7 @@ class RequestItem extends StatelessWidget{
         ),
       ),
     );
+    });
 
   }
 

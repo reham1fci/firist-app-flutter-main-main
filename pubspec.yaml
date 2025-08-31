@@ -52,12 +52,13 @@ dependencies:
   shared_preferences: ^2.5.3
   shimmer: ^3.0.0
   maps_toolkit: ^3.0.0
+  dropdown_button2: ^2.3.9
   local_auth:
   mac_address: ^1.0.0
   flutter_udid: ^3.0.0
   upgrader: ^9.0.0
   flutter_pdfview: ^1.2.7
-  connectivity:
+  #connectivity:
   url_launcher: ^6.2.5
   #platform_device_id: ^1.0.1
 dev_dependencies:
