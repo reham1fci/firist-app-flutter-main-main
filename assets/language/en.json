@@ -544,5 +544,9 @@
   "car_images": "add Car Images",
   "invoice_images": "add Invoice Images",
   "cost": "cost",
+  "add_request": "Add Request",
+  "amount": "Amount   :",
+  "arrive": "arrived",
+  "confirm_arrive": "confirm your arrival ",
   "add_maintenance_request": "add Maintenance Request"
 }

@@ -441,6 +441,7 @@
   "attendance_and_withdrawal": "حضور / انصراف",
   "attendance": "حضور",
   "withdrawal": "انصراف",
+  "add_request": "اضافة الطلب",
 
   "retry": "حاول مرة آخرى",
 
@@ -553,5 +554,9 @@
   "car_images": "اضف صور السيارة ",
   "invoice_images": "اضف صور للفاتورة",
   "cost": "المبلغ",
+  "amount": "المبلغ   :",
+  "arrive": "تم الوصول",
+  "confirm_arrive": "تم تاكيد وصولك بنجاح ",
+
   "add_maintenance_request": "اضف طلب صيانة "
 }

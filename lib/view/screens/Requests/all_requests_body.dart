@@ -1,3 +1,4 @@
+import 'package:betakety_app/controllers/localization_controller.dart';
 import 'package:betakety_app/controllers/permission_controller.dart';
 import 'package:betakety_app/util/app_constants.dart';
 import 'package:betakety_app/view/screens/Requests/widget/request_item.dart';
@@ -18,7 +19,7 @@ class AllRequestsBody extends StatefulWidget {
 class VacationRequestBodyState extends State<AllRequestsBody>  {
   // final AnimationController? animationController;
   bool loader = false;
-
+  Locale? myLocale  ;
 
   @override
   void initState() {
@@ -57,7 +58,8 @@ class VacationRequestBodyState extends State<AllRequestsBody>  {
 
   @override
   Widget build(BuildContext context) {
-
+    myLocale= Get.find<LocalizationController>().locale;
+print(myLocale!.languageCode) ;
     return GetBuilder<PermissionController>(builder: (co) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -68,7 +70,7 @@ class VacationRequestBodyState extends State<AllRequestsBody>  {
             child: ListView.separated(
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
-                  return RequestItem(index ,filteredData) ;
+                  return RequestItem(index ,filteredData ,type:  myLocale!.languageCode == "en"? filteredData[index]['type_title_en']:filteredData[index]['type_title_ar']) ;
                 },
                 separatorBuilder: (context, index) {
                   return const Divider();

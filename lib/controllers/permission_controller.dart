@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:betakety_app/api/Api.dart';
 import 'package:betakety_app/controllers/auth_controller.dart';
+import 'package:betakety_app/controllers/fingerprint_controller.dart';
 import 'package:betakety_app/model/File.dart';
 import 'package:betakety_app/model/login_model.dart';
 import 'package:betakety_app/model/request_options.dart';
@@ -15,6 +16,7 @@ import 'package:betakety_app/view/screens/Requests/vacation_request.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
@@ -30,14 +32,21 @@ class PermissionController extends GetxController {
   // PermissionController({
   //   required this.permissionRepo,
   // });
-
+  bool isLoading = false;
+  var loadingMap = <String, bool>{}.obs;
+  setLoading(String id, bool value) {
+    loadingMap[id] = value;
+    update();
+  }
   int _selectedIndex = 0;
   Api api = Api()  ;
   int get selectedIndex => _selectedIndex;
+  List<String> selectedIds =  [] ;
   changeSelected(int x) {
     _selectedIndex = x;
     update();
   }
+  List<VacationType> selectedItems = [];
 
   List<RequestTypeModel> requestTypeList = [
     RequestTypeModel(name: "late", id: 1),
@@ -53,11 +62,16 @@ class PermissionController extends GetxController {
     RequestTypeModel(name: "outside", id: 2),
   ];
   List<VacationType>? vacationTypeList;
+  List<VacationType>? apiList;
 
   RequestTypeModel? requestTypeTemp;
   PermissionTypeModel? permissionTypeTemp;
   RequestTypeModel? vacationPlaceTemp;
   VacationType? vacationTypeTemp;
+  VacationType? apiItemTemp;
+   String monthTemp = "1" ;
+  int? selectedYear =  2025;
+
   TextEditingController detailsController = TextEditingController();
   TextEditingController vacationPlaceController = TextEditingController();
   TextEditingController dateController = TextEditingController();
@@ -72,20 +86,32 @@ class PermissionController extends GetxController {
   var length ;
   List<SendFile> filesList  = [] ;
   resetData() {
+     selectedIds  .clear()  ;
+    selectedItems.clear()  ;
   detailsController.clear();
   dateController.clear();
   timeFromController.clear();
  timeToController.clear();
+     apiItemTemp = null ;
  requestTypeTemp = requestTypeList[0];
  permissionTypeTemp = permissionTypeList[0];
  vacationPlaceTemp = vacationPlaceList[0];
  vacationTypeTemp = VacationType(nameEn: "Extended sick leave 16", Id: "279916");
   addedFile = null;
    fileNameController.clear();
+   filesList.clear()  ;
   }
   String? filePath  ;
   RequestsPermissionsModel ? permissionsModel  ;
+  Position? currentLocation  ;
 
+  getCurrentLocation() async {
+    Get.put(FingerPrintController() );
+    Get.find<FingerPrintController>().checkPermission();
+    currentLocation = await Geolocator .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    print(currentLocation);
+
+  }
    selectFile() async {
     int selectFiles = 3;
    FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -105,33 +131,64 @@ class PermissionController extends GetxController {
     }
   }
  var fileBytes  ;
-  selectSingleFile(TextEditingController  controller  , String key ) async {
+//   selectSingleFile(TextEditingController  controller  , String key ) async {
+//     FilePickerResult? result = await FilePicker.platform.pickFiles();
+// if(key.isEmpty){
+//   key = controller.text  ;
+// }
+//     if (result != null) {
+//       if(kIsWeb){
+//       fileBytes = result.files.single.bytes;
+// print(fileBytes);
+//       controller.text = result.files.single.name;
+//
+//       }
+//       else{
+//          File file = File(result.files.single.path!);
+//
+//         stream =  http.ByteStream(file.openRead())..cast();
+//         // get file length
+//          length = await file.length();
+//          controller.text = result.files.single.path!;
+//       }
+//
+//
+//     } else {
+//       // User canceled the picker
+//     }
+//      filesList.add(SendFile(key: key, stream: stream, length: length)) ;
+//   }
+   Future<String?> selectSingleFile(TextEditingController controller, String key) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
-if(key.isEmpty){
-  key = controller.text  ;
-}
+
+    if (key.isEmpty) {
+      key = controller.text;
+    }
+
     if (result != null) {
-      if(kIsWeb){
-      fileBytes = result.files.single.bytes;
-print(fileBytes);
-      controller.text = result.files.single.name;
+      // Mobile
+      File file = File(result.files.single.path!);
 
-      }
-      else{
-         File file = File(result.files.single.path!);
+      var stream = http.ByteStream(file.openRead())..cast();
+      var length = await file.length();
 
-        stream =  http.ByteStream(file.openRead())..cast();
-        // get file length
-         length = await file.length();
-         controller.text = result.files.single.path!;
-      }
+      controller.text = result.files.single.path!.split('/').last;
+     // fileNameController.text = result.files.single.path!;
 
+      filesList.add(SendFile(
+        key: key,
+        stream: stream,
+        length: length,
+        fileName: result.files.single.path!.split('/').last, // يجيب الاسم بس من غير الباث
+      ));
+      update() ;
 
+      return result.files.single.path ;
     } else {
       // User canceled the picker
     }
-     filesList.add(SendFile(key: key, stream: stream, length: length)) ;
   }
+
 
   bool _isGetRequestsPermissions = false;
   bool get isGetRequestsPermissions => _isGetRequestsPermissions;
@@ -348,10 +405,100 @@ insertRequest(uri: AppConstants.AddAllRequests) ;
     }
   }
 
+  Future<dynamic> getApiList( String functionName) async {
+    apiList  = []  ;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    LoginResponsModel user =  await AuthController().getLoginData()  ;
+    data["company_id"] =user.companyId;
+ String url  =  AppConstants.getRequestApiList+"?company_id=" +user.companyId!+"&value_type_checkif="+functionName   ;
+ print(url) ;
+ try {
+    var response  = await  api.getData(url: url)  ;
+
+      if (response.statusCode == 200) {
+        print("vacations");
+        print(jsonDecode(response.body));
+        var jsonObj  =  jsonDecode(response.body)  ;
+        var jsonArr  =  jsonObj["data"] as List ;
+        print(jsonArr) ;
+        for(int i  =0  ; i< jsonArr.length ; i++  ){
+          VacationType item  =  VacationType.fromJsonApiList(jsonArr[i]) ;
+          print(item.nameAr)  ;
+           apiList!.add(item);
+        }
+
+        ////apiItemTemp =apiList![0];
+        update();
+        return jsonDecode(response.body);
+
+      } else {
+        return "error";
+      }
+    } catch (e) {
+      print("Error: $e");
+      return "error";
+    }
+  }
+
 /*addRequest  (){
     Api api = Api() ;
     api.postDataWithFile(uri: AppConstants.addPermissionReq, obj: permissionsModel!, path: filePath!);
 }*/
+
+  resetLocation() async {
+    currentLocation =null  ;
+   await  getCurrentLocation() ;
+  }
+
+  setArrival  ({ required  String  id  , required String requestId   ,  required String vacationId}) async {
+      setLoading(id, true) ;
+      update();
+      Api api = Api() ;
+      final Map<String, dynamic> data = <String, dynamic>{};
+      LoginResponsModel user =  await AuthController().getLoginData()  ;
+
+      data['vacation_id'] = vacationId;
+      data['employ_id'] = user.id;
+    //  data['company_id'] = user.companyId;
+      data['lat_arrive'] = currentLocation!.latitude.toString();
+      data['lng_arrive'] = currentLocation!.longitude.toString();
+      data['request_id'] =requestId ;
+      data['id'] = id;
+      final response = await api.postData2(uri: AppConstants.setArrival, map: data) ;
+      if(response.statusCode ==200){
+        print("return data  " +response.body) ;
+        var res  =jsonDecode(response.body) ;
+        bool success = res["success"] ;
+
+       // isLoading = false;
+        setLoading(id, false) ;
+
+        if(success)
+        {
+          showOkDialog(context: Get.context
+          !,message: 'confirm_arrive'.tr ,isCancelBtn: false ,onOkClick:(){
+            Navigator.of(Get.context!).pop();
+            Navigator.push(Get.context!, MaterialPageRoute(
+                builder: (BuildContext context) => AllRequests()));
+
+          }
+          );
+        }else{
+          showOkDialog(context: Get.context
+          !,message: 'try again' ,isCancelBtn: false ,onOkClick:(){
+          });}
+
+        update();
+      }
+      {
+      //  isLoading = false;
+        setLoading(id, false) ;
+
+        update();
+        print(response.statusCode) ;
+      }
+    }
+
   Future<void> postDataWithFile({ required String uri }) async {
     String url =AppConstants.baseUrl+uri;
     print(url) ;
@@ -462,7 +609,11 @@ var response  = await request.send() ;
     LoginResponsModel user =  await AuthController().getLoginData()  ;
     request.fields['employ_id'] = user.id!;
     request.fields['company_id'] = user.companyId!;
-    print(request.fields);
+    if(vacationTypeTemp!.Id  == "572222") {
+      request.fields['lat'] = currentLocation!.latitude.toString();
+      request.fields['lng'] = currentLocation!.longitude.toString();
+
+    }    print(request.fields);
     print(stream);
     print(length);
     List< Map<String, dynamic>> itemsMap = [];
@@ -470,30 +621,50 @@ var response  = await request.send() ;
     for (int i  = 0 ; i <vacationTypeTemp!. options!.length ; i ++) {
       TextEditingController  controller  = vacationTypeTemp!. options![i]["controller"] ;
 
-      Map<String, dynamic> map  =
-        {
-          "options_id" :vacationTypeTemp!. options![i]["options_id"],
-          "update_options_id": vacationTypeTemp!. options![i]["update_options_id"],
-          "value_type":  vacationTypeTemp!. options![i]["value_type"] ,
-          "var_name":  controller.text,
-        };
-      itemsMap.add(map) ;
+      // Map<String, dynamic> map  =
+      //   {
+      //     "options_id" :vacationTypeTemp!. options![i]["options_id"],
+      //     "update_options_id": vacationTypeTemp!. options![i]["update_options_id"],
+      //     "value_type":  vacationTypeTemp!. options![i]["value_type"] ,
+      //    "var_name":  controller.text ,
+      //   };
+      // itemsMap.add(map) ;
 
 
+      request.fields["options[$i][options_id]"] =
+      vacationTypeTemp!.options![i]["options_id"];
+      request.fields["options[$i][update_options_id]"] =
+      vacationTypeTemp!.options![i]["update_options_id"];
+      request.fields["options[$i][value_type]"] =
+      vacationTypeTemp!.options![i]["value_type"];
+      request.fields["options[$i][var_name]"] = controller.text;
     }
-    String itemsJson = jsonEncode(itemsMap);
-    request.fields["options"] = itemsJson;
-    if(fileNameController.text.isNotEmpty){
-      var multipartFile ;
-      for(int i =0 ; i < filesList.length  ; i++) {
-        if(kIsWeb){
-          multipartFile =  http.MultipartFile.fromBytes(filesList[i].key!, filesList[i].fileBytes! ,filename: fileNameController.text);
+    // String itemsJson = jsonEncode(itemsMap);
+    // request.fields["options"] = itemsJson;
+    if(filesList.isNotEmpty){
+     // var multipartFile ;
+      print( filesList.length);
 
-        }
-        else{
-          multipartFile = http.MultipartFile(filesList[i].key!, filesList[i].stream!, filesList[i].length!,
-              filename:fileNameController.text);
-        }
+      for(int i =0 ; i < filesList.length  ; i++) {
+        // if(kIsWeb){
+        //   multipartFile =  http.MultipartFile.fromBytes(filesList[i].key!, filesList[i].fileBytes! ,filename: fileNameController.text);
+        //    print(filesList[i].key!) ;
+        //
+        // }
+        var file = filesList[i];
+
+        var multipartFile = http.MultipartFile(
+          file.key!,
+          file.stream,
+          file.length,
+          filename: file.fileName, // كل ملف باسمه
+        );
+print(file.fileName) ;
+print(file.stream) ;
+print(file.length) ;
+print(file.key) ;
+
+        //   }
         request.files.add(multipartFile);
 
       }
@@ -505,9 +676,10 @@ var response  = await request.send() ;
     print(response.statusCode) ;
     print(request.fields);
     print(request.files);
+    var responseBody = await response.stream.bytesToString();
+    print("Response Body: $responseBody");
 
     if (response.statusCode == 200) {
-      print(response);
       print("Uploaded!");
       showOkDialog(context: Get.context
       !,
@@ -582,6 +754,15 @@ var response  = await request.send() ;
     print("11111111111111111111111111111111111111111111111111111111222");
     print(data);
   }*/
+  bool isImage(String path) {
+    final ext = path.toLowerCase();
+    return ext.endsWith(".jpg") ||
+        ext.endsWith(".jpeg") ||
+        ext.endsWith(".png") ||
+        ext.endsWith(".gif") ||
+        ext.endsWith(".bmp") ||
+        ext.endsWith(".webp");
+  }
 }
 
 class PermissionTypeModel {
@@ -600,4 +781,5 @@ class RequestTypeModel {
     required this.name,
     required this.id,
   });
+
 }
