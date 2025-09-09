@@ -275,15 +275,18 @@ class AddRequestState extends State<AddRequest> {
                   ],
                 )
                 ,
-          pController.isLoading? CircularProgressIndicator():    Padding(
+          if (pController.isLoading) CircularProgressIndicator() else Padding(
                 padding: const EdgeInsets.all(Dimensions.PADDING_SIZE_LARGE),
                 child: CustomButton(
                   buttonText: "save".tr,
-                  onPressed: () {
+                  onPressed: () async {
                      if(pController.vacationTypeTemp!.Id  == "572222") {
-                       pController.getCurrentLocation() ;
+             Position currentLocation  =     await     pController.getCurrentLocation() ;
+               pController.validateRequestsAndShowSnackbar(pController.vacationTypeTemp!.options! );
+
                      }
-                    pController.validateRequestsAndShowSnackbar(pController.vacationTypeTemp!.options! );
+                     else{
+                    pController.validateRequestsAndShowSnackbar(pController.vacationTypeTemp!.options! );}
                   },
                 ),
               )
