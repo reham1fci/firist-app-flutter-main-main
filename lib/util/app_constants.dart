@@ -17,6 +17,7 @@ class AppConstants {
    static const String insertJustification = '/Justification_api.php';
   static const String attendanceDetails = '/view_hodor_inseraf_api.php';
   static const String loginFingerPrint = '/add_hoder_api.php';
+  static const String fakeLocation = '/fack_location.php';
   static const String logoutFingerPrint = '/add_ensraf_api.php';
   static const String getShift = '/view_shift_api.php';
     static const String  vacationTypes= '/Show_Vacation_Type_api.php';

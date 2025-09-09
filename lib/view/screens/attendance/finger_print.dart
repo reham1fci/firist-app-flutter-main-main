@@ -82,14 +82,14 @@ Padding(padding: const EdgeInsets.all(10) , child:
            // height:130 ,
             padding: const EdgeInsets.only(top: 20),
             child:
-            co.currentLocation==null?
-            Center( child: Column(
-              children: [
-            const    CircularProgressIndicator(),
-                Container(margin: const EdgeInsets.only(left: 7),child:Text('loading_info'.tr ,
-                  style: TextStyle(color: Colors.red), ) ,),
-              ],))
-                :
+            // co.currentLocation==null?
+            // Center( child: Column(
+            //   children: [
+            // const    CircularProgressIndicator(),
+            //     Container(margin: const EdgeInsets.only(left: 7),child:Text('loading_info'.tr ,
+            //       style: TextStyle(color: Colors.red), ) ,),
+            //   ],))
+            //     :
             Padding(padding: const EdgeInsets.all(10)   ,child:    Row(
 
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -108,16 +108,11 @@ Padding(padding: const EdgeInsets.all(10) , child:
 
               onPressed:
               () {
-                showOkDialog(context: context,
-                    message: 'login_confirmation'.tr,
-                    isCancelBtn: true,
-                    onOkClick: () {
-                      setState(() {
-                        co.registerFingerPrintFunction =
-                            AppConstants.loginFingerPrint;
-                        co.validateFieldsAndShowSnackbar();
-                      });
-                    });
+                setState(()  {
+                  co.registerFingerPrintFunction = AppConstants.loginFingerPrint;
+                  co.checkLocationReady()  ;
+                });
+
               }
                   ,
 
@@ -144,13 +139,11 @@ Padding(padding: const EdgeInsets.all(10) , child:
 
                   onPressed:
                   (){
-
-                  showOkDialog(context: context, message: 'logout_confirmation'.tr, isCancelBtn: true  , onOkClick: (){
                     setState(() {
                       co.registerFingerPrintFunction =AppConstants.logoutFingerPrint ;
-                      co.validateFieldsAndShowSnackbar() ;
+                      co.checkLocationReady()  ;
                     });
-                  }) ;},
+                },
                   child:
                   Center(child:    Column(children: [
                   const  Padding (padding:EdgeInsets.only( bottom: 8) ,child:  Icon(Icons.fingerprint ,size: 30 ,color: Colors.white),) ,

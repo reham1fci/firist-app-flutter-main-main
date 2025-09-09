@@ -127,7 +127,7 @@ print("new update")  ;
   }
   Future<void> _openStore() async {
     String packageName = 'com.marsa.marsa-hr';
-    String appStoreUrl = 'https://apps.apple.com/app/$packageName';
+    String appStoreUrl = 'https://apps.apple.com/us/app/marsa-hr/id6504737193';
     String playStoreUrl = 'https://play.google.com/store/apps/details?id=com.marsa.marsa_hr';
 
     if (await canLaunchUrl(Uri.parse(appStoreUrl )) && !Platform.isAndroid) {

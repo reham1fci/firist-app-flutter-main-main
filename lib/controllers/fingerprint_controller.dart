@@ -9,6 +9,7 @@ import 'package:betakety_app/view/base/custom_lert_dialog.dart';
 import 'package:betakety_app/view/base/custom_snackbar.dart';
 import 'package:betakety_app/view/base/fingerprint_alert.dart';
 import 'package:betakety_app/view/base/password_dialog.dart';
+import 'package:betakety_app/view/screens/attendance/widgets/mock_location_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_udid/flutter_udid.dart';
@@ -32,18 +33,52 @@ class FingerPrintController extends GetxController {
   Api api  = Api() ;
   bool inCompany = false;
   var currentLocation  ;
+   Future<void> checkLocationReady() async {
+     // 1. Check if location service is enabled (GPS on/off)
+
+     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+
+     if (!serviceEnabled) {
+
+       print("Location service is disabled");
+       //1showCustomSnackBar('you have to'.tr);
+       showOkDialog(context: Get.context!    ,message: "you have to open  location first and try again ", isCancelBtn: false  ) ;
+
+
+       return;
+     }
+
+     // 2. Check permission
+     LocationPermission permission = await Geolocator.checkPermission();
+     if (permission == LocationPermission.denied) {
+       permission = await Geolocator.requestPermission();
+       if (permission == LocationPermission.denied) {
+         showOkDialog(context: Get.context!    ,message: "you have to allow location permission  and try again", isCancelBtn: false  ) ;
+         return;
+       }
+     }
+
+     if (permission == LocationPermission.deniedForever) {
+       showOkDialog(context: Get.context!    ,message: "you have to allow location permission  and try again", isCancelBtn: false  ) ;
+       return;
+     }
+
+     // ✅ Both service enabled & permission granted
+     print("Location service & permission are OK!");
+     checkUserLocation();
+   }
 
 @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-   StreamSubscription<ServiceStatus> serviceStatusStream = Geolocator.getServiceStatusStream().listen(
-            (ServiceStatus status) {
-          print(status);
-          if(status  ==ServiceStatus.enabled ) {
-            _checkUserLocation() ;
-          }
-        });
+  // StreamSubscription<ServiceStatus> serviceStatusStream = Geolocator.getServiceStatusStream().listen(
+  //           (ServiceStatus status) {
+  //         print(status);
+  //         if(status  ==ServiceStatus.enabled ) {
+  //           checkUserLocation() ;
+  //         }
+  //       });
     auth.isDeviceSupported().then(
           (bool isSupported) {
             _supportState = isSupported
@@ -176,7 +211,14 @@ String time = DateFormat('HH:mm:ss').format(currentDate);
      update()
      ;}
    Future<void> validateFieldsAndShowSnackbar() async {
-    if(!inCompany){
+     bool isMock = await MockLocationChecker.isMockLocation();
+     if (isMock) {
+       print("❌ Fake GPS detected!");
+       fakeLocationUser() ;
+       return ;
+       // هنا ترفضي تسجيل الحضور
+     }
+   else if(!inCompany){
        showCustomSnackBar("${'out_company'.tr} ${"log".tr}");
 
      }
@@ -235,8 +277,9 @@ String time = DateFormat('HH:mm:ss').format(currentDate);
             'Location permissions are permanently denied, we cannot request permissions.');
       }
     }
-   void _checkUserLocation() async {
-     checkPermission()  ;
+   void checkUserLocation() async {
+
+    // checkPermission()  ;
      Position position = await Geolocator .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
      print(position);
       currentLocation = toolkit.LatLng(position.latitude, position.longitude);
@@ -267,6 +310,18 @@ String time = DateFormat('HH:mm:ss').format(currentDate);
 
        update() ;
      }
+      String msg  =  "logout_confirmation" ;
+      if   (registerFingerPrintFunction == AppConstants.loginFingerPrint){
+        msg  = "login_confirmation" ;
+      }
+     showOkDialog(context: Get.context!,
+         message: msg.tr,
+         isCancelBtn: true,
+         onOkClick: () {
+           validateFieldsAndShowSnackbar();
+
+         });
+
      print('Distance between London and Paris is $distance km.');
 
    }
@@ -294,14 +349,29 @@ String time = DateFormat('HH:mm:ss').format(currentDate);
      markers[markerId] = marker;
 
      print(mobileMac) ;
-     _checkUserLocation() ;
+   // checkUserLocation() ;
 
    }
 
 
+   Future<dynamic> fakeLocationUser() async {
+     LoginResponsModel user =  await AuthController().getLoginData()  ;
+     String url  =  AppConstants.fakeLocation+"?employ_id=" +user.id!   ;
+     print(url) ;
+     var response  = await  api.getData(url: url)  ;
 
+     if (response.statusCode == 200) {
+       print(jsonDecode(response.body));
+       var data = jsonDecode(response.body) ;
+
+       if(data["success"]){
+         print(data["msg"]) ;
+       }
+     }
+   }
 
 }
+
 enum _SupportState {
   unknown,
   supported,
