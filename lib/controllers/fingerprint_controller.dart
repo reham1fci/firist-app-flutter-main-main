@@ -42,7 +42,7 @@ class FingerPrintController extends GetxController {
 
        print("Location service is disabled");
        //1showCustomSnackBar('you have to'.tr);
-       showOkDialog(context: Get.context!    ,message: "you have to open  location first and try again ", isCancelBtn: false  ) ;
+       showOkDialog(context: Get.context!    ,message: "enabled_services_location".tr, isCancelBtn: false  ) ;
 
 
        return;

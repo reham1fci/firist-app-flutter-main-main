@@ -425,7 +425,7 @@
   "save": "حفظ",
   "date": "التاريخ",
   "log_out": "خروج",
-  "enabled_services_location": "الرجاد فتح GPS من الاعدادت",
+  "enabled_services_location": "الرجاد فتح GPS من الاعدادت واعد المحاولة",
   "you_have_to_allow": "يجب عليك السماح بإذن الموقع   ",
   "request_permission": "طلب إذن",
   "add_request_permission": "إضافة طلب إذن",

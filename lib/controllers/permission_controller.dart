@@ -105,11 +105,12 @@ class PermissionController extends GetxController {
   RequestsPermissionsModel ? permissionsModel  ;
   Position? currentLocation  ;
 
-  getCurrentLocation() async {
+  Future<Position> getCurrentLocation() async {
     Get.put(FingerPrintController() );
     Get.find<FingerPrintController>().checkPermission();
     currentLocation = await Geolocator .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     print(currentLocation);
+    return currentLocation! ;
 
   }
    selectFile() async {
@@ -612,10 +613,18 @@ var response  = await request.send() ;
     request.fields['employ_id'] = user.id!;
     request.fields['company_id'] = user.companyId!;
     if(vacationTypeTemp!.Id  == "572222") {
+      if(currentLocation != null){
       request.fields['lat'] = currentLocation!.latitude.toString();
-      request.fields['lng'] = currentLocation!.longitude.toString();
+      request.fields['lng'] = currentLocation!.longitude.toString(); }
+      else{
+        showOkDialog(context: Get.context!    ,message: "you_have_to_allow".tr, isCancelBtn: false  ) ;
+         isLoading  = false  ;
+          return ;
 
-    }    print(request.fields);
+      }
+
+    }
+    print(request.fields);
     print(stream);
     print(length);
     List< Map<String, dynamic>> itemsMap = [];
