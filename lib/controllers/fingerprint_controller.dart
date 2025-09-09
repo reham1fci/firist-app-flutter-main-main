@@ -42,7 +42,7 @@ class FingerPrintController extends GetxController {
 
        print("Location service is disabled");
        //1showCustomSnackBar('you have to'.tr);
-       showOkDialog(context: Get.context!    ,message: "you have to open  location first and try again ", isCancelBtn: false  ) ;
+       showOkDialog(context: Get.context!    ,message: "enabled_services_location".tr, isCancelBtn: false  ) ;
 
 
        return;
@@ -53,13 +53,13 @@ class FingerPrintController extends GetxController {
      if (permission == LocationPermission.denied) {
        permission = await Geolocator.requestPermission();
        if (permission == LocationPermission.denied) {
-         showOkDialog(context: Get.context!    ,message: "you have to allow location permission  and try again", isCancelBtn: false  ) ;
+         showOkDialog(context: Get.context!    ,message: "you_have_to_allow".tr, isCancelBtn: false  ) ;
          return;
        }
      }
 
      if (permission == LocationPermission.deniedForever) {
-       showOkDialog(context: Get.context!    ,message: "you have to allow location permission  and try again", isCancelBtn: false  ) ;
+       showOkDialog(context: Get.context!    ,message: "you_have_to_allow".tr, isCancelBtn: false  ) ;
        return;
      }
 
@@ -211,14 +211,9 @@ String time = DateFormat('HH:mm:ss').format(currentDate);
      update()
      ;}
    Future<void> validateFieldsAndShowSnackbar() async {
-     bool isMock = await MockLocationChecker.isMockLocation();
-     if (isMock) {
-       print("❌ Fake GPS detected!");
-       fakeLocationUser() ;
-       return ;
-       // هنا ترفضي تسجيل الحضور
-     }
-   else if(!inCompany){
+   //
+     //
+     if(!inCompany){
        showCustomSnackBar("${'out_company'.tr} ${"log".tr}");
 
      }
