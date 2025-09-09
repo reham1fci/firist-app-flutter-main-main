@@ -600,6 +600,8 @@ var response  = await request.send() ;
     }}
 
   Future<void> insertRequest({ required String uri }) async {
+     isLoading  = true  ;
+     update() ;
     String url =AppConstants.baseUrl+uri;
     print(url) ;
     var request =  http.MultipartRequest("POST",   Uri.parse(url));
@@ -681,6 +683,7 @@ print(file.key) ;
 
     if (response.statusCode == 200) {
       print("Uploaded!");
+      isLoading=  false  ;
       showOkDialog(context: Get.context
       !,
           message: 'added_to_requests_permission'.tr,
@@ -690,8 +693,19 @@ print(file.key) ;
             Navigator.push(Get.context!, MaterialPageRoute(
                 builder: (BuildContext context) => AllRequests()));
 
-            update();
           });
+      update();
+
+    }
+  else{
+      isLoading=  false  ;
+      showOkDialog(context: Get.context
+      !,
+          message: 'try_again'.tr,
+          isCancelBtn: false,
+          onOkClick: () {
+          });
+      update();
     }}
       Future<void> insertJustification({ required String hr_question_id ,required  String hr_question_date }) async {
     String url =AppConstants.baseUrl+AppConstants.insertJustification;

@@ -2,6 +2,7 @@ import 'package:betakety_app/controllers/permission_controller.dart';
 import 'package:betakety_app/model/maintenance_attachment.dart';
 import 'package:betakety_app/util/constant.dart';
 import 'package:betakety_app/util/custom_app_theme.dart';
+import 'package:betakety_app/view/base/custom_lert_dialog.dart';
 import 'package:betakety_app/view/screens/Requests/widget/attach_view.dart';
 import 'package:betakety_app/view/screens/Requests/widget/attachment.dart';
 import 'package:betakety_app/view/screens/Requests/widget/justification.dart';
@@ -307,6 +308,11 @@ class RequestItem extends StatelessWidget{
           ? const CircularProgressIndicator()
           : ElevatedButton.icon(
         onPressed: () async {
+          showOkDialog(context: Get.context
+          !,
+              message: 'confirm_arrived'.tr,
+              isCancelBtn:true,
+              onOkClick: () async {
           String itemId = filteredData[index]['id'];
           pController.setLoading(itemId, true);
 
@@ -318,7 +324,8 @@ class RequestItem extends StatelessWidget{
           );
 
           pController.setLoading(itemId, false);
-        },
+              });
+          },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.green, // اللون الجديد
           padding:

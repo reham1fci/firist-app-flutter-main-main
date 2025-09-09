@@ -275,7 +275,7 @@ class AddRequestState extends State<AddRequest> {
                   ],
                 )
                 ,
-              Padding(
+          pController.isLoading? CircularProgressIndicator():    Padding(
                 padding: const EdgeInsets.all(Dimensions.PADDING_SIZE_LARGE),
                 child: CustomButton(
                   buttonText: "save".tr,

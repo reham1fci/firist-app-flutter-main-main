@@ -557,6 +557,6 @@
   "amount": "المبلغ   :",
   "arrive": "تم الوصول",
   "confirm_arrive": "تم تاكيد وصولك بنجاح ",
-
+  "confirm_arrived": "هل انت متأكد انك تريد تاكيد الوصول ?",
   "add_maintenance_request": "اضف طلب صيانة "
 }
