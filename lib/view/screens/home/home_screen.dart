@@ -8,7 +8,9 @@ import 'package:betakety_app/model/login_model.dart';
 import 'package:betakety_app/view/base/banners_view.dart';
 import 'package:betakety_app/view/base/custom_snackbar.dart';
 import 'package:betakety_app/view/screens/attendance/finger_print.dart';
+import 'package:betakety_app/view/screens/home/widget/shipments_type_list.dart';
 import 'package:betakety_app/view/screens/salary_details/salary_details_view.dart';
+import 'package:betakety_app/view/screens/shipments/shipments_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -213,20 +215,23 @@ return true;
                   ],
                 ),
                 SizedBox(height: 20.0),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => HelloWorldApp()),
-                    );
-                  },
-                  child: Container(
-                    child: const Text(''),
-                    color: Color.fromARGB(255, 255, 255, 255),
-                    height: 20,
-                    width: 100,
-                  ),
+
+                Wrap(
+                  alignment: WrapAlignment.spaceBetween,
+                  children: [
+                    Squermain(
+                      title: 'shipments'.tr,
+                      //title: Text("PROFILE".tr)
+                      image: Images.shipments,
+                      width: Get.width / 3.2,
+                      height: Get.width / 3,
+                      screen: ShipmentsTypeList(),
+                    ),
+                  ],
                 ),
+
+
+
 //notification_screen=========================================================
             /*   const SizedBox(
                   height: 20.0,

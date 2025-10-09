@@ -175,6 +175,7 @@
   "recommended_articles": "مقالات مقترحة",
   "contact_with_customer_care": "لا يمكن العثور على الحق؟ تواصل مع خدمة العملاء.",
   "processing": "تمت المعالجة",
+
   "pending": "قيد الانتظار",
   "sorry": "آسف !",
   "send_email": "ارسل بريد الكتروني",
@@ -450,6 +451,11 @@
 
   "late": "التاخر عن الدوام",
   "business_trip": "رحلة عمل",
+  "shipments": "الشحنات",
+  "received": "استلام",
+  "received2": "تم الاستلام",
+  "delivered2": "تم التسليم",
+  "finished": "تم الانهاء",
 
   "is_required": "مطلوب ",
   "files_allowed": "عدد الملفات المسموحة",
@@ -534,17 +540,19 @@
   "vacation_place": " مكان الاجازة",
   "days_num": "عدد الايام ",
   "all_requests": "كل الطلبات",
-  "USER_NAME_REQUIRED" :" اسم المستخدم مطلوب" , 
-
-
+  "USER_NAME_REQUIRED" :" اسم المستخدم مطلوب" ,
+  "policy": "البوليصه",
+  "port": "المنفذ",
+  "active": "قيد الانتظار",
+  "out_location": "انت خارج الموقع " ,
   "asking": "المسائلات" ,
 
   "Enter_full_name_en": "ادخل اسمك بالغه الانجليزية",
   "Enter_full_name_ar": "ادخل اسمك بالغه العربيه",
-
   "user_name": "اسم المستخدم ",
   "apply_job": "تقديم علي وظيفه",
-
+  "camera": "الكاميرا",
+  "gallery": "الهاتف ",
   "optional": "اختيارى",
   "login_finger_print": "اثبات دخول" ,
   "logout_finger_print": "اثبات انصراف",
@@ -558,5 +566,24 @@
   "arrive": "تم الوصول",
   "confirm_arrive": "تم تاكيد وصولك بنجاح ",
   "confirm_arrived": "هل انت متأكد انك تريد تاكيد الوصول ?",
-  "add_maintenance_request": "اضف طلب صيانة "
+  "add_maintenance_request": "اضف طلب صيانة ",
+  "shipment_type": "نوع الشحنة",
+  "shipment_state": "حالة الشحنة",
+  "shipment_date": "تاريخ الشحنة",
+  "shipment_num": "رقم الشحنة",
+  "request_state": "حالة الطلب",
+  "request_date": "تاريخ الطلب",
+  "request_num": "رقم الطلب",
+  "shipment_details": "تفاصيل الشحنة",
+  "from": "من",
+  "driver_shipments": "شحنات السائقين",
+  "select_shipment": "حدد الشحنات اولا",
+  "confirm_received": "هل تريد تاكيد استلام الشحنات  ؟",
+  "confirm_finished": "هل تريد تاكيد انهاء الشحنات  ؟",
+  "confirm_not_finished": "هل تريد تاكيد   عدم انهاء الشحنات  ؟",
+  "not_finished": "لم يتم الانتهاء",
+  "updates": "التحديثات",
+  "add_attachments": "اضافة مرفقات",
+
+  "customs_broker_shipments": "شحنات المخلصين"
 }
