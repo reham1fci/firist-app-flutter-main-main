@@ -33,7 +33,8 @@ class FingerPrintController extends GetxController {
   Api api  = Api() ;
   bool inCompany = false;
   var currentLocation  ;
-   Future<void> checkLocationReady() async {
+  Position? currentEmployeeLocation  ;
+   Future <bool?> checkLocationReady({String? from}) async {
      // 1. Check if location service is enabled (GPS on/off)
 
      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -45,7 +46,7 @@ class FingerPrintController extends GetxController {
        showOkDialog(context: Get.context!    ,message: "enabled_services_location".tr, isCancelBtn: false  ) ;
 
 
-       return;
+       return  null;
      }
 
      // 2. Check permission
@@ -54,18 +55,28 @@ class FingerPrintController extends GetxController {
        permission = await Geolocator.requestPermission();
        if (permission == LocationPermission.denied) {
          showOkDialog(context: Get.context!    ,message: "you have to allow location permission  and try again", isCancelBtn: false  ) ;
-         return;
+         return null;
        }
      }
 
      if (permission == LocationPermission.deniedForever) {
        showOkDialog(context: Get.context!    ,message: "you have to allow location permission  and try again", isCancelBtn: false  ) ;
-       return;
+       return null;
      }
 
      // ✅ Both service enabled & permission granted
      print("Location service & permission are OK!");
-     checkUserLocation();
+      if(from!= null ){
+     bool inLocation = await  checkUserLocation(key: from);
+
+return inLocation ;
+
+      }
+       else{
+        bool inLocation = await  checkUserLocation();
+
+        return inLocation ;
+       }
    }
 
 @override
@@ -277,11 +288,12 @@ String time = DateFormat('HH:mm:ss').format(currentDate);
             'Location permissions are permanently denied, we cannot request permissions.');
       }
     }
-   void checkUserLocation() async {
+   Future<bool> checkUserLocation({String? key}) async {
 
     // checkPermission()  ;
      Position position = await Geolocator .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
      print(position);
+      currentEmployeeLocation  =position ;
       currentLocation = toolkit.LatLng(position.latitude, position.longitude);
      final companyLocation = toolkit.LatLng(double.parse(user!.companyLat!), double.parse(user!.companyLng!));
     final testLocation = toolkit.LatLng(29.8765411,31.2921507 );
@@ -310,18 +322,19 @@ String time = DateFormat('HH:mm:ss').format(currentDate);
 
        update() ;
      }
-      String msg  =  "logout_confirmation" ;
-      if   (registerFingerPrintFunction == AppConstants.loginFingerPrint){
-        msg  = "login_confirmation" ;
+      if(key == null) {
+        String msg = "logout_confirmation";
+        if (registerFingerPrintFunction == AppConstants.loginFingerPrint) {
+          msg = "login_confirmation";
+        }
+        showOkDialog(context: Get.context!,
+            message: msg.tr,
+            isCancelBtn: true,
+            onOkClick: () {
+              validateFieldsAndShowSnackbar();
+            });
       }
-     showOkDialog(context: Get.context!,
-         message: msg.tr,
-         isCancelBtn: true,
-         onOkClick: () {
-           validateFieldsAndShowSnackbar();
-
-         });
-
+      return inCompany ;
      print('Distance between London and Paris is $distance km.');
 
    }

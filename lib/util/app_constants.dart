@@ -1,4 +1,7 @@
 
+import 'package:betakety_app/controllers/language_controller.dart';
+import 'package:betakety_app/util/images.dart';
+
 class AppConstants {
   static const String appName = 'HR Marsa';
   static const double appVersion = 2.2;
@@ -27,6 +30,12 @@ class AppConstants {
   static const String  getRequestApiList= '/api_list.php';
   static const String  getAllRequests= '/Show_All_Request_api.php';
   static const String  maintenanceRequest= '/show_Maintenance_request_api.php';
+  static const String  showShipmentsDriver= '/show_request_limit_new_api_receiving_driver.php';
+  static const String  details= '/hr_app_show_request_details.php';
+  static const String  showShipments= '/show_request_limit_new_api_receiving_custom_broker.php';
+  static const String  receivedShipment= '/api_insert_shipment_received_customs_broker.php';
+  static const String  receivedDriverShipment= '/api_insert_shipment_received_driver.php';
+  static const String  notFinishedShipment= '/api_insert_shipment_not_finished_customs_broker.php';
   static const String  AddAllRequests= '/hr_add_all_requestt_api.php';
   static const String employeeSalary = '/Employ_Salary_api.php';
   static const String attendanceFingerPrint = '/add_hoder_ensraf_api.php';
@@ -133,6 +142,10 @@ class AppConstants {
   static const String searchConversationListUri = '/api/v1/customer/message/search-list';
   static const String messageListUri = '/api/v1/customer/message/details';
   static const String sendMessageUri = '/api/v1/customer/message/send';
+  static const String waiting = 'waiting';
+  static const String processing = 'processing';
+  static const String finished = 'finished';
+  static const String all = 'all';
 
   // Shared Key
   static const String theme = '6ammart_theme';
@@ -162,7 +175,20 @@ class AppConstants {
   static const String longitude = 'longitude';
   static const String cookiesManagement = 'cookies_management';
 
-
+  static const String COUNTRY_CODE = 'country_code';
+  static const String LANGUAGE_CODE = 'language_code';
+  static List<LanguageModel> languages = [
+    LanguageModel(
+        imageUrl: Images.saudi,
+        languageName: 'Arabic',
+        countryCode: 'SA',
+        languageCode: 'ar'),
+    LanguageModel(
+        imageUrl: Images.united_kingdom,
+        languageName: 'English',
+        countryCode: 'US',
+        languageCode: 'en'),
+  ];
   ///Refer & Earn work flow list..
   static const dataList = ['Invite your friends & businesses', 'They register eFood with special offer', 'You made your earning !'];
 
@@ -180,8 +206,7 @@ class AppConstants {
   /// order status..
   static const String pending = 'pending';
   static const String accepted = 'accepted';
-  static const String processing = 'processing';
-  static const String confirmed = 'confirmed';
+   static const String confirmed = 'confirmed';
   static const String handover = 'handover';
   static const String pickedUp = 'picked_up';
 

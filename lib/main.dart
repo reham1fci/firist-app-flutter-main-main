@@ -5,6 +5,7 @@ import 'package:betakety_app/controllers/attendance_controller.dart';
 import 'package:betakety_app/controllers/fingerprint_controller.dart';
 import 'package:betakety_app/controllers/maintenance_controller.dart';
 import 'package:betakety_app/controllers/salary_controller.dart';
+import 'package:betakety_app/controllers/shipment_controller.dart';
 import 'package:betakety_app/util/constant.dart';
 import 'package:betakety_app/view/screens/auth/auth_screen.dart';
 import 'package:betakety_app/controllers/banner_controller.dart';
@@ -100,6 +101,7 @@ Future<Map<String, Map<String, String>>> init() async {
   Get.put(LanguageController(sharedPreferences: Get.find()));
 
   Get.put(NavbarController());
+  Get.put(ShipmentController());
   Get.put(BannersController());
   Get.put(AuthController());
   Get.put(PermissionController());

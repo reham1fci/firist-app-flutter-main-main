@@ -30,11 +30,13 @@ class Images {
   static const String dollar = 'assets/image/dollar.png';
   static const String placeholder_3x1 = 'assets/images/placeholder_3x1.png';
   static const String attendance = 'assets/image/attendance.png';
+  static const String shipments = 'assets/image/ship.png';
   static const String requests = 'assets/image/requests.png';
   static const String revenue = 'assets/image/revenue.png';
   static const String drawer = 'assets/image/drawer.png';
   static const String cart_icon = 'assets/image/cart_icon.png';
   static const String image_upload_logo = 'assets/image/image_upload_logo.png';
+  static const String dot_icon = 'assets/image/dot.png';
   static const String shop_setting_image =
       'assets/image/shop_setting_image.png';
   static const String add_icon = 'assets/image/add_icon.png';
