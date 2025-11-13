@@ -57,6 +57,7 @@ class Images {
   static const String filter_icon = 'assets/image/filter_icon.png';
   static const String delete_icon = 'assets/image/delete_icon.png';
   static const String edit_icon = 'assets/image/edit_icon.png';
+  static const String edit_icon_red = 'assets/image/edit_icon_red.png';
   static const String people_icon = 'assets/image/people_icon.png';
   static const String language_logo = 'assets/image/Language.png';
   static const String lock = 'assets/image/lock.png';

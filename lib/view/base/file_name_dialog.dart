@@ -5,18 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
    FileNameDialog({required BuildContext context   ,
-    required  bool isCancelBtn ,Function? onOkClick , Function? onCancelClick })  {
+    required  bool isCancelBtn ,Function? onOkClick , Function? onCancelClick , TextEditingController ? controller })  {
     return showDialog(
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
-        return     GetBuilder<ShipmentController>(builder: (shipController) {
       return    AlertDialog(
         title:  Text("enter_file_name".tr),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                CustomTextField( controller: shipController.fileName,hintText:"write_some_thing".tr ,)
+                CustomTextField( controller: controller,hintText:"write_some_thing".tr ,)
               ],
             ),
           ),
@@ -38,8 +37,8 @@ import 'package:get/get.dart';
           ],
         );
       },
-    );}
-     );
+    );
+
   }
 
 

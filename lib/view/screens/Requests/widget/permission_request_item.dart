@@ -329,7 +329,7 @@ PermissionRequestItem(
                               const EdgeInsets.only(
                                   top: 6),
                               child: Text(
-                                "${filteredData[index]['request_per_date'].toString().tr} ",
+                                "${filteredData[index]['request_per_date'].toString()} ",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontFamily:

@@ -66,7 +66,12 @@ Widget getCustomFont(String text, double fontSize, Color fontColor, int maxLine,
             BoxShadow(
                 color: Colors.black12, blurRadius: 10, offset: Offset(0.0, 4.0)),
           ],
-          borderRadius: BorderRadius.circular(12)),
+          borderRadius: BorderRadius.circular(12) ,
+          border: Border.all(
+              color: Theme.of(context).primaryColor,
+              width: 2,
+            ),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,

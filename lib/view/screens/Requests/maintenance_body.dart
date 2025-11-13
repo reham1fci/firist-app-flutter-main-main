@@ -1,6 +1,7 @@
 import 'package:betakety_app/controllers/maintenance_controller.dart';
 import 'package:betakety_app/controllers/permission_controller.dart';
 import 'package:betakety_app/util/app_constants.dart';
+import 'package:betakety_app/util/widget_utils.dart';
 import 'package:betakety_app/view/screens/Requests/widget/request_item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,7 +20,7 @@ class MaintenanceBody extends StatefulWidget {
 class MaintenanceBodyState extends State<MaintenanceBody>  {
   // final AnimationController? animationController;
   bool loader = false;
-
+  TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
@@ -31,8 +32,9 @@ class MaintenanceBodyState extends State<MaintenanceBody>  {
 
 
   int slectedTab = 0;
+  List<dynamic> filteredData = [];
 
-  List<dynamic> get filteredData => _Data.where((request) =>
+  List<dynamic> get originalData => _Data.where((request) =>
   widget.selectIndex == 0
       ? request["stat"] == "0"
       : widget.selectIndex == 1 ? request["stat"] =="1":
@@ -47,6 +49,7 @@ class MaintenanceBodyState extends State<MaintenanceBody>  {
     if (data != 'error') {
       setState(() {
         _Data = (data['data'] as List);
+        filteredData = originalData;
       });
     }
     print(data);
@@ -63,11 +66,20 @@ class MaintenanceBodyState extends State<MaintenanceBody>  {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          loader
-              ? const CircularProgressIndicator()
-              : Expanded(
-            child: ListView.separated(
-                shrinkWrap: true,
+          getSearchWidget(
+
+            context, searchController,
+                () {},
+                (value) {
+              filterSearch(value);
+            },
+            onSubmit: (submit) {
+              filterSearch(submit);
+            },),
+          Expanded(
+            child:loader? const Center(child: CircularProgressIndicator()): ListView.separated(
+
+            shrinkWrap: true,
                 itemBuilder: (context, index) {
                   return RequestItem(index ,filteredData , type: "maintenance_request".tr,) ;
                 },
@@ -82,5 +94,21 @@ class MaintenanceBodyState extends State<MaintenanceBody>  {
         ],
       );
     });
+  }
+  void filterSearch(String query) {
+    if (query.isEmpty) {
+      setState(() {
+        filteredData = List.from(originalData);
+      });
+    } else {
+      setState(() {
+        filteredData = originalData.where((item) {
+          final searchLower = query.toLowerCase();
+          final id = item["request_id"]?.toString().toLowerCase() ?? "";
+          final name =item['details'].toLowerCase() ?? "";
+          return id.contains(searchLower) || name.contains(searchLower);
+        }).toList();
+      });
+    }
   }
 }

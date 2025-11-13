@@ -448,8 +448,9 @@
 
   "leave_before": "المغادرة قبل انتهاء الدوام",
   "emergency": "ضرف طارئ",
+  "minutes": "عدد الدقايق",
 
-  "late": "التاخر عن الدوام",
+  "Late": "التاخر عن الدوام",
   "business_trip": "رحلة عمل",
   "shipments": "الشحنات",
   "received": "استلام",
@@ -584,6 +585,23 @@
   "not_finished": "لم يتم الانتهاء",
   "updates": "التحديثات",
   "add_attachments": "اضافة مرفقات",
+  "important_alert": "تنبيه مهم ",
+  "update_info": "تحديث بيانات",
+  "requests_list": "الطلبات",
+  "edit_profile": "تحديث البيانات الشخصية",
+  "edit_profile_request":"طلب تحديث بيانات موظف" ,
+  "arabic_name":"اسم الموظف بالعربي" ,
+  "english_name":"اسم الموظف بالانجليزية." ,
+  "change_profile_photo":" تغير الصورة شخصية" ,
+  "update_data_message": "لا يمكنك استخدام التطبيق حالياً.\n يرجى تحديث البيانات المطلوبة اولا ",
+  "hours_allow": "الساعات المسموحة",
+  "hours_required": "الساعات المطلوبة",
+  "hours_remaining": "الساعات المتبقية ",
+  "loading_time": "جارى تحميل الوقت ",
+  "customs_broker_shipments": "شحنات المخلصين",
+  "hodoor_bdoon_ensraf": "حضور بدون انصراف",
+  "ghyab": "غياب",
+  "insert_justification": "ادخل تبريرك"
 
-  "customs_broker_shipments": "شحنات المخلصين"
+
 }
