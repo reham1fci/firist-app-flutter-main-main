@@ -451,7 +451,8 @@
   "to_time": "to time",
   "leave_before": "Leaving before work ends",
   "emergency": "Emergency",
-  "late": "Being late for work",
+  "Late": "Being late for work",
+  "minutes": " Minutes",
   "business_trip": "Business Trip",
   "retry": "Retry",
   "is_required": "is Required",
@@ -576,6 +577,22 @@
   "select_shipment": "Select Shipments",
   "camera": "Camera",
   "gallery": "Gallery",
-  "customs_broker_shipments": "Customs Broker Shipments"
+  "important_alert": "Important Alert",
+  "update_info": "Update Data",
+  "edit_profile": "Edit Profile",
+  "requests_list": "Requests List",
+  "update_data_message": "You cannot use the application .\n Please update the required data first.",
+  "edit_profile_request":"Edit Profile Request" ,
+  "change_profile_photo":" Change Personal Photo",
+  "arabic_name":"Arabic Name" ,
+  "english_name":"English Name",
+  "hours_allow": "Hours Allow",
+  "hours_required": "Hours Required",
+  "hours_remaining": "Hours Remaining",
+  "loading_time": "Loading Time",
+  "hodoor_bdoon_ensraf": "Attend without leaving",
+  "ghyab": "Absence",
+  "customs_broker_shipments": "Customs Broker Shipments" ,
+  "insert_justification": "Insert Justification"
 
 }

@@ -1,4 +1,5 @@
 
+import 'package:betakety_app/controllers/auth_controller.dart';
 import 'package:betakety_app/util/app_constants.dart';
 import 'package:betakety_app/util/constant.dart';
 import 'package:betakety_app/util/images.dart';
@@ -6,7 +7,10 @@ import 'package:betakety_app/view/base/color_resources.dart';
 import 'package:betakety_app/view/screens/auth/auth_screen.dart';
 import 'package:betakety_app/view/screens/home/nav_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../../model/personal_data.dart';
 
 class SplashBody extends StatefulWidget{
   const SplashBody({Key? key}) : super(key: key);
@@ -26,6 +30,7 @@ class _SplashBodyState extends State<SplashBody> {
         const Duration(seconds: 3),
             () => checkUser()
     );
+    //mandatoryData() ;
   }
   checkUser() async {
     sharedPrefs = await SharedPreferences.getInstance();
@@ -46,6 +51,12 @@ class _SplashBodyState extends State<SplashBody> {
         MaterialPageRoute(builder: (context) => AuthScreen()),
       ) ; }
   }
+
+  // Future<void>  mandatoryData() async {
+  //   personalDataList  = await Get.find<AuthController>().getRequiredData();
+  //
+  //
+  // }
   @override
   Widget build(BuildContext context) {
     // TODO: implement build

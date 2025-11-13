@@ -1,6 +1,8 @@
 import 'package:betakety_app/api/Api.dart';
+import 'package:betakety_app/controllers/auth_controller.dart';
 import 'package:betakety_app/controllers/language_controller.dart';
 import 'package:betakety_app/main.dart';
+import 'package:betakety_app/model/personal_data.dart';
 import 'package:betakety_app/util/images.dart';
 import 'package:betakety_app/view/base/custom_snackbar.dart';
 import 'package:betakety_app/view/screens/account_statement/account_statement.dart';
@@ -11,6 +13,7 @@ import 'package:get/get.dart';
 
 import '../../../controllers/permission_controller.dart';
 import '../../../util/constant.dart';
+import 'widget/home_notification_dialog.dart';
 import 'home_screen.dart';
 import '../../../util/styles.dart';
 import 'widget/custom_drawer.dart';
@@ -24,8 +27,21 @@ class NavBarScreen extends StatefulWidget {
 
 class _NavBarScreenState extends State<NavBarScreen> {
   final PageStorageBucket bucket = PageStorageBucket();
+  bool mustDialog = true ;
+  void _loadData() {
 
-  void _loadData() {}
+  }
+  List<PersonalData> personalDataList = [] ;
+  bool isLoading = true;
+  Future<void>  mandatoryData() async {
+    personalDataList  = await Get.find<AuthController>().getRequiredData();
+  }
+  Future<void> _initData() async {
+    await mandatoryData(); // ✅ ننتظر انتهاء تحميل البيانات
+    setState(() {
+      isLoading = false; // ✅ انتهى التحميل
+    });
+  }
   Future<void> checkInternet() async {
     Api api = Api() ;
 
@@ -39,8 +55,9 @@ class _NavBarScreenState extends State<NavBarScreen> {
   @override
   void initState() {
     super.initState();
-    _loadData();
-    checkInternet();
+   //_loadData();
+    //checkInternet();
+    _initData()  ;
   }
 
   @override
@@ -86,10 +103,15 @@ class _NavBarScreenState extends State<NavBarScreen> {
             ],
           ),
           resizeToAvoidBottomInset: false,
-          body: PageStorage(
+          body:  isLoading
+              ? const Center(
+            child: CircularProgressIndicator(
+              color: kMainColor,
+            ),
+          ):PageStorage(
               bucket: bucket,
               child: navbarController.screen[navbarController.currentTab]),
-          bottomNavigationBar: SalomonBottomBar(
+          bottomNavigationBar: isLoading?SizedBox():SalomonBottomBar(
             backgroundColor: const Color.fromARGB(255, 250, 247, 247),
             currentIndex: navbarController.currentTab,
             onTap: (i) {

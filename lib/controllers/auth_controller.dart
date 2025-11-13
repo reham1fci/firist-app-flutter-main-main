@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:betakety_app/api/Api.dart';
 import 'package:betakety_app/api/api_services.dart';
 import 'package:betakety_app/model/login_model.dart';
+import 'package:betakety_app/model/personal_data.dart';
 import 'package:betakety_app/util/app_constants.dart';
 import 'package:betakety_app/view/base/custom_lert_dialog.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,8 @@ class AuthController extends GetxController {
 
   int _selectedIndex = 0;
   int get selectedIndex => _selectedIndex;
-
+  Api api = Api()  ;
+ List<PersonalData> personalDataList = [] ;
   void logout() {
     // authRepo.logout()
  clearUserLogin() ;
@@ -55,6 +57,29 @@ print(mobileMac) ;
     }
     _isLoading = false;
      update();
+  }
+  Future<dynamic>getRequiredData() async {
+    personalDataList.clear();
+    LoginResponsModel user = await getLoginData();
+    String url = "${AppConstants.requiredFiles}?id=${user.id!}";
+    print(url);
+    var response = await api.getData(url: url);
+    if (response.statusCode == 200) {
+      print(jsonDecode(response.body));
+      var data = jsonDecode(response.body);
+      print(data["status"]);
+      if (data["status"] =="success") {
+        var dataArr = data["data"] as List;
+          personalDataList .addAll(dataArr.map((e) => PersonalData.fromJson(e)));
+          return personalDataList;
+        }
+      else{
+        showCustomSnackBar("try_again".tr);
+        }
+      update();
+    } else {
+      showCustomSnackBar("try_again".tr);
+    }
   }
  saveUserData(LoginResponsModel user )async{
    SharedPreferences prefs = await SharedPreferences.getInstance();

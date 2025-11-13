@@ -3,6 +3,7 @@ import 'package:betakety_app/view/screens/Requests/asking_body.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nb_utils/nb_utils.dart';
+import '../../../util/app_constants.dart';
 import 'permission_request_body.dart';
 import '../../../controllers/permission_controller.dart';
 import '../../../util/constant.dart';
@@ -63,38 +64,38 @@ class _AskingViewState extends State<AskingView> {
           children: [
             const SizedBox(height: 10.0),
             // const SizedBox(height: 10.0),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 8),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF7F5F2),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: Theme.of(context).primaryColor,
-                  width: 2,
-                ),
-              ),
-              child: AppTextField(
-                textFieldType: TextFieldType.NAME,
-                decoration: const InputDecoration(
-                  suffixIcon: Icon(
-                    Icons.search,
-                    color: kTitleColor,
-                  ),
-                  border: InputBorder.none,
-                  fillColor: Color(0xFFF7F5F2),
-                  contentPadding: EdgeInsets.all(10.0),
-                  hintText: 'Search',
-                ),
-              ),
-            ),
+            // Container(
+            //   margin: const EdgeInsets.symmetric(horizontal: 8),
+            //   decoration: BoxDecoration(
+            //     color: const Color(0xFFF7F5F2),
+            //     borderRadius: BorderRadius.circular(12),
+            //     border: Border.all(
+            //       color: Theme.of(context).primaryColor,
+            //       width: 2,
+            //     ),
+            //   ),
+            //   child: AppTextField(
+            //     textFieldType: TextFieldType.NAME,
+            //     decoration: const InputDecoration(
+            //       suffixIcon: Icon(
+            //         Icons.search,
+            //         color: kTitleColor,
+            //       ),
+            //       border: InputBorder.none,
+            //       fillColor: Color(0xFFF7F5F2),
+            //       contentPadding: EdgeInsets.all(10.0),
+            //       hintText: 'Search',
+            //     ),
+            //   ),
+            // ),
             Expanded(
               child: TabBarView(
                 children: [
                   // Center(
                   //   child: Text("It's cloudy here"),
                   // ),
-                  AskingBody(selectIndex: 0 ),
-                  AskingBody(selectIndex: 1 ),
+                  AskingBody(selectIndex: 0  , requestName: AppConstants.showAskingPendingReq,),
+                  AskingBody(selectIndex: 1 , requestName: AppConstants.showAskingReq, ),
                 ],
               ),
             ),

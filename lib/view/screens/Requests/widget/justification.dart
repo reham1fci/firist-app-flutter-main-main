@@ -59,7 +59,7 @@ showJustificationDialog({ required BuildContext context  , required String hr_qu
                 showCustomSnackBar('Enter_your_justification'.tr) ;
               }
               else{
-                pController.insertJustification( hr_question_id: hr_question_id, hr_question_date: hr_question_date);
+               // pController.insertJustification( hr_question_id: hr_question_id, hr_question_date: hr_question_date);
                 Navigator.of(context).pop();
 
               }

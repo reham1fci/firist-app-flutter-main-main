@@ -48,6 +48,7 @@ class LoginResponsModel {
   String? companyId ;
   String? employeeType ;
   String? appleDelete ;
+  String? mustDialog ;
 
   LoginResponsModel(
       {this.success,
@@ -74,6 +75,7 @@ class LoginResponsModel {
         this.appleDelete  ,
         this.passwordFingerprint ,
          this.employeeType ,
+         this.mustDialog ,
       this.jobnameen});
 
   LoginResponsModel.fromJson(Map<String, dynamic> json) {
@@ -99,6 +101,10 @@ class LoginResponsModel {
      employeeType = json ["employ_type_shipments"] ;
     passwordFingerprint= json['password_q'];
     appleDelete= json['apple_delete'];
+
+    mustDialog= json['edit_requiard'] ;
+    print("mustDialog login") ;
+    print(mustDialog) ;
   }
 
   Map<String, dynamic> toJson() {
@@ -125,6 +131,7 @@ class LoginResponsModel {
     data['password_q'] = passwordFingerprint;
     data['apple_delete'] = appleDelete;
     data['employ_type_shipments'] = employeeType;
+    data['edit_requiard'] = mustDialog;
     return data;
   }
   Map<String, dynamic> signUpToJson() {

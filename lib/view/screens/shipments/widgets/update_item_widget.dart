@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'update_option_screen.dart';
+
 class UpdateItemWidget extends StatelessWidget {
    Updates? updates  ;
 
@@ -56,7 +58,7 @@ class UpdateItemWidget extends StatelessWidget {
           TextButton(child: Text('details'.tr , style: TextStyle(color:Theme.of(context).primaryColor),),onPressed: (){
 
 
-      //      Get.to(() => UpdateOptionScreen(updates!.optionUpdatesList!)) ;
+          Get.to(() => UpdateOptionScreen(updates!.optionUpdatesList!)) ;
 
           },)
         ],

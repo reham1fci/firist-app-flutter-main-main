@@ -16,10 +16,11 @@ import '../../../../util/app_constants.dart';
 
 class AddRequestItem extends StatefulWidget {
   int index ;
+  String? fromScreen ;
   List<dynamic>  filteredData ;
 
 
-   AddRequestItem({super.key, required this.index, required this.filteredData});
+   AddRequestItem({super.key, required this.index, required this.filteredData , this.fromScreen});
 
   @override
   State<AddRequestItem> createState() => _AddRequestItemState();
@@ -74,7 +75,11 @@ class _AddRequestItemState extends State<AddRequestItem> {
   @override
   Widget build(BuildContext context) {
     String type = widget.filteredData[widget.index]["value_type"];
+    String value = widget.filteredData[widget.index]["value"] == null
+        ? ""
+        : widget.filteredData[widget.index]["value"];
     String typeName = widget.filteredData[widget.index]["option_name_ar"];
+    String id = widget.filteredData[widget.index]["options_id"];
     String apiFunctionName = widget.filteredData[widget
         .index]["value_type_checkif"];
 
@@ -94,7 +99,7 @@ class _AddRequestItemState extends State<AddRequestItem> {
               ),
               child: CustomTextField(
                 maxLines: 2,
-                hintText: typeName,
+                hintText: value,
                 inputType: TextInputType.text,
                 controller: widget.filteredData[widget.index]["controller"],
               )),
@@ -119,7 +124,7 @@ class _AddRequestItemState extends State<AddRequestItem> {
         )
             : type == "file"?
             addFile(widget.filteredData[widget.index]["controller"]
-                , pController ,typeName)
+                , pController ,typeName , id)
       //   CustomFieldWithTitle(
       //   requiredField: false,
       //   title: typeName,
@@ -412,7 +417,7 @@ class _AddRequestItemState extends State<AddRequestItem> {
     );
   }
 
-  Widget addFile( TextEditingController controller  , PermissionController pController , String title) {
+  Widget addFile( TextEditingController controller  , PermissionController pController , String title ,String id ) {
     return
       Column(children: [
         //Text( index==0? "identity_front".tr: index == 1 ?"identity_back".tr :"medical_image".tr,),
@@ -423,9 +428,17 @@ class _AddRequestItemState extends State<AddRequestItem> {
             ? Padding(padding: EdgeInsets.only(left: 10, right: 10),
             child: GestureDetector(
               onTap: () async {
-                path = await pController.selectSingleFile(
-                    controller, "options_files[]" );
-                print("path" + path!);
+                 if( widget.fromScreen !=null && widget.fromScreen == "profile"){
+                   path = await pController.selectSingleFile(
+                       controller, "options_files["+id+"]" );
+                   print("path" + path!);
+                 }
+                 else{
+                   path = await pController.selectSingleFile(
+                       controller, "options_files[]" );
+                   print("path" + path!);
+                 }
+
                 setState(() {
 
                 });
@@ -515,13 +528,13 @@ class _AddRequestItemState extends State<AddRequestItem> {
                                     .of(context)
                                     .primaryColor),
                             const SizedBox(height: 6),
-                            Text(
-                              pController.fileNameController.text,
-                              style: const TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.w500),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                            // Text(
+                            //   pController.fileNameController.text,
+                            //   style: const TextStyle(
+                            //       fontSize: 14, fontWeight: FontWeight.w500),
+                            //   maxLines: 1,
+                            //   overflow: TextOverflow.ellipsis,
+                            // ),
                           ],
                         ),
                       ),
@@ -543,7 +556,8 @@ class _AddRequestItemState extends State<AddRequestItem> {
                 onTap: () {
                   setState(() {
                     path = null;
-                    pController.fileNameController.clear();
+                   // pController.fileNameController.clear();
+                    controller.clear();
                   });
                 },
                 child: Container(

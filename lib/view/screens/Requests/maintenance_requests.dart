@@ -72,30 +72,30 @@ class MaintenanceRequestsState extends State<MaintenanceRequests> {
           children: [
             const SizedBox(height: 10.0),
             // const SizedBox(height: 10.0),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 8),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF7F5F2),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: Theme.of(context).primaryColor,
-                  width: 2,
-                ),
-              ),
-              child: AppTextField(
-                textFieldType: TextFieldType.NAME,
-                decoration: const InputDecoration(
-                  suffixIcon: Icon(
-                    Icons.search,
-                    color: kTitleColor,
-                  ),
-                  border: InputBorder.none,
-                  fillColor: Color(0xFFF7F5F2),
-                  contentPadding: EdgeInsets.all(10.0),
-                  hintText: 'Search',
-                ),
-              ),
-            ),
+            // Container(
+            //   margin: const EdgeInsets.symmetric(horizontal: 8),
+            //   decoration: BoxDecoration(
+            //     color: const Color(0xFFF7F5F2),
+            //     borderRadius: BorderRadius.circular(12),
+            //     border: Border.all(
+            //       color: Theme.of(context).primaryColor,
+            //       width: 2,
+            //     ),
+            //   ),
+            //   child: AppTextField(
+            //     textFieldType: TextFieldType.NAME,
+            //     decoration: const InputDecoration(
+            //       suffixIcon: Icon(
+            //         Icons.search,
+            //         color: kTitleColor,
+            //       ),
+            //       border: InputBorder.none,
+            //       fillColor: Color(0xFFF7F5F2),
+            //       contentPadding: EdgeInsets.all(10.0),
+            //       hintText: 'Search',
+            //     ),
+            //   ),
+            // ),
             Expanded(
               child: TabBarView(
                 children: [
