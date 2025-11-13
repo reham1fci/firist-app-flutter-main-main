@@ -426,8 +426,8 @@
   "save": "حفظ",
   "date": "التاريخ",
   "log_out": "خروج",
-  "enabled_services_location": "الرجاد فتح GPS واعد المحاولة ",
-  "you_have_to_allow": "يجب عليك السماح بإذن الموقع واعد المحاولة ",
+  "enabled_services_location": "الرجاد فتح GPS من الاعدادت واعد المحاولة",
+  "you_have_to_allow": "يجب عليك السماح بإذن الموقع   ",
   "request_permission": "طلب إذن",
   "add_request_permission": "إضافة طلب إذن",
   "add": "أضف",
@@ -477,7 +477,7 @@
   "view_salary_details": " عرض تفاصيل الراتب",
   "date_from": "التأريخ من ",
   "load_data": "تحميل البيانات",
- 
+
   "date_to": "التأريخ الى ",
   "salary_with_allowances": "الراتب مع البدلات",
   "basic_salary": "الراتب الأساسي",

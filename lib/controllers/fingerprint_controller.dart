@@ -222,14 +222,14 @@ String time = DateFormat('HH:mm:ss').format(currentDate);
      update()
      ;}
    Future<void> validateFieldsAndShowSnackbar() async {
-     bool isMock = await MockLocationChecker.isMockLocation();
-     if (isMock) {
-       print("❌ Fake GPS detected!");
-       fakeLocationUser() ;
-       return ;
-       // هنا ترفضي تسجيل الحضور
-     }
-   else if(!inCompany){
+     // bool isMock = await MockLocationChecker.isMockLocation();
+     // if (isMock) {
+     //   print("❌ Fake GPS detected!");
+     //   fakeLocationUser() ;
+     //   return ;
+     //   // هنا ترفضي تسجيل الحضور
+     // }
+    if(!inCompany){
        showCustomSnackBar("${'out_company'.tr} ${"log".tr}");
 
      }

@@ -33,9 +33,13 @@
 	<key>NSFaceIDUsageDescription</key>
 	<string> this app Authentication with TouchId or FaceID to allow attendance functionality. </string>
 	<key>NSLocationWhenInUseUsageDescription</key>
+    <string>This app needs access to location to specify your location inside  or outside company to allow fingerprint functionality.</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>This app needs access to location to specify your location inside  or outside company to allow fingerprint functionality.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>We need access to your photo library to upload and share photos within the app.</string>
+    <key>NSCameraUsageDescription</key>
+    <string>We need access to your camera to take photos and upload them within the app.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
