@@ -15,6 +15,7 @@ class AttachView extends StatefulWidget {
 
 class _AttachViewState extends State<AttachView> {
   String? s="" ;
+  bool isPdf =false  ;
   @override
   void initState() {
     // TODO: implement initState
@@ -23,6 +24,8 @@ class _AttachViewState extends State<AttachView> {
       int start   = (widget.url!.length )-3 ;
       String s  =widget.url!.substring( start)  ;
       print(s);
+       isPdf = widget.url!.toLowerCase().endsWith(".pdf");
+
     }
   }
   @override
@@ -46,7 +49,7 @@ class _AttachViewState extends State<AttachView> {
             backgroundColor: Colors.white,
             elevation: 2.0,
           ),
-          body:s=="pdf" ?
+          body:isPdf?
 
           PDFView(
             filePath: widget.url,

@@ -9,16 +9,16 @@ import 'package:betakety_app/view/base/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class InsertJustificationView extends StatefulWidget{
-  Questions? questions  ;
+class InsertExceptionView extends StatefulWidget{
+  String? date  ;
 
-  InsertJustificationView({this.questions});
+  InsertExceptionView({this.date});
 
   @override
-  State<InsertJustificationView> createState() => _InsertJustificationViewState();
+  State<InsertExceptionView> createState() => _InsertExceptionViewState();
 }
 
-class _InsertJustificationViewState extends State<InsertJustificationView> {
+class _InsertExceptionViewState extends State<InsertExceptionView> {
 
   String? path  ;
 @override
@@ -34,7 +34,7 @@ class _InsertJustificationViewState extends State<InsertJustificationView> {
     return GetBuilder<PermissionController>(builder: (pController) {
         //  title: Text(title!),
         return Scaffold(
-            appBar: AppBar(title: Text('insert_justification'.tr)),
+            appBar: AppBar(title: Text('exception_request'.tr)),
             body: SingleChildScrollView(
           child:  Padding(padding: EdgeInsets.all(20) , child:
           Column(
@@ -45,7 +45,7 @@ class _InsertJustificationViewState extends State<InsertJustificationView> {
                 margin: const EdgeInsets.only(
                     bottom: Dimensions.PADDING_SIZE_SMALL),
                 child:  CustomTextField(
-                  hintText: 'Enter_your_justification'.tr,
+                  hintText: 'enter_exception_reason'.tr,
                   inputType: TextInputType.emailAddress,
                   controller: pController.justificationController,
                 ),
@@ -173,14 +173,16 @@ class _InsertJustificationViewState extends State<InsertJustificationView> {
               ),
               SizedBox(height: 30) ,
 
-              CustomButton(
+              if (pController.isLoading) CircularProgressIndicator() else Padding(
+                padding: const EdgeInsets.all(Dimensions.PADDING_SIZE_LARGE),
+                child: CustomButton(
                 buttonText: "save".tr,
                 onPressed: () async {
-pController.insertJustification(question: widget.questions) ;
+pController.insertException(date: widget.date) ;
                      },
-              ),
+                )  ),
             ],
-          ),
+        ),
         )));
 
 

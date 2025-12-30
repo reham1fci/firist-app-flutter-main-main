@@ -1,8 +1,7 @@
 import 'package:betakety_app/view/base/custom_button.dart';
 import 'package:betakety_app/view/screens/Requests/widget/attach_view.dart';
-import 'package:betakety_app/view/screens/Requests/widget/attachment.dart';
 import 'package:betakety_app/view/screens/Requests/widget/insert_justification_view.dart';
-import 'package:betakety_app/view/screens/Requests/widget/justification.dart';
+import 'package:betakety_app/view/screens/shipments/widgets/attachment_view_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:betakety_app/model/Questions.dart';
@@ -12,9 +11,7 @@ import 'package:betakety_app/util/app_constants.dart';
 class AskingItem extends StatelessWidget {
   final int index;
   final List<dynamic> filteredData;
-
   const AskingItem(this.index, this.filteredData, {super.key});
-
   @override
   Widget build(BuildContext context) {
     final Questions item = filteredData[index];
@@ -257,14 +254,14 @@ Column(
   children: [
 
                   if (isPending)
-                    CustomButton(buttonText: 'justification'.tr , width: 70,height: 40, onPressed: () {
-             Navigator.push(context, MaterialPageRoute(builder: (context) => InsertJustificationView(item)))      ;
+                    CustomButton(buttonText: 'justification'.tr , width: 90,height: 40, onPressed: () {
+             Navigator.push(context, MaterialPageRoute(builder: (context) => InsertJustificationView(questions: item)))      ;
                        },
 
                     ),
                   if(!isPending)
-                  CustomButton(buttonText: 'attachments'.tr , width: 70,height: 40,onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => AttachView(item.attachment)))      ;
+                  CustomButton(buttonText: 'attachments'.tr , width: 90,height: 40,onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AttahmentViewScreen( url: item.attachment,)))      ;
 
 
                   },

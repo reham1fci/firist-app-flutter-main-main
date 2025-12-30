@@ -31,6 +31,7 @@ class Images {
   static const String placeholder_3x1 = 'assets/images/placeholder_3x1.png';
   static const String attendance = 'assets/image/attendance.png';
   static const String shipments = 'assets/image/ship.png';
+  static const String target = 'assets/image/target.png';
   static const String requests = 'assets/image/requests.png';
   static const String revenue = 'assets/image/revenue.png';
   static const String drawer = 'assets/image/drawer.png';
