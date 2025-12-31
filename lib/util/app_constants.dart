@@ -31,8 +31,9 @@ class AppConstants {
     static const String  editProfile= '/hr_add_all_requestt_api_update_emp_data.php';
     static const String  showMandatoryData= '/hr_request_type_update_emp_data_api_req.php';
     static const String  editMandatoryData= '/hr_add_all_requestt_api_update_emp_data_required.php';
-  static const String  insertVacation= '/Insert_Vacaton_Request_api.php';
+  static const String  insertVacation= '/Insert_Vacaton_Request_api_gz.php';
   static const String  getVacation= '/Show_Vacation_Rquest_api.php';
+  static const String  getVacationData= '/get_vacation_info.php';
   static const String  getRequestTypes= '/hr_request_type_api.php';
   static const String  getRequestApiList= '/api_list.php';
   static const String  getAllRequests= '/Show_All_Request_api.php';
@@ -44,8 +45,12 @@ class AppConstants {
   static const String  receivedDriverShipment= '/api_insert_shipment_received_driver.php';
   static const String  notFinishedShipment= '/api_insert_shipment_not_finished_customs_broker.php';
   static const String  AddAllRequests= '/hr_add_all_requestt_api.php';
+  static const String  confirmDailyProject= '/Daily_Target_Confirmation_API.php';
+  static const String  insertException= '/request_delivery_exception_api.php';
   static const String  requiredFiles= '/show_required_files_employ_api.php';
   static const String employeeSalary = '/Employ_Salary_api.php';
+  static const String dailyProject = '/confirmation_driver_projects_api_daily.php';
+  static const String monthlyEvaluation = '/api_monthly_evaluation_deliveryy_gz.php';
   static const String attendanceFingerPrint = '/add_hoder_ensraf_api.php';
   static const String deleteAccount = '/delete_user_api.php';
   static const String bestEmployee = '/show_order_employee_depend_on_process_api.php';

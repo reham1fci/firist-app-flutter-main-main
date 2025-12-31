@@ -46,6 +46,7 @@ class LoginResponsModel {
   String? companyLat ;
   String? companyLng ;
   String? companyId ;
+  String? idenetityId ;
   String? employeeType ;
   String? appleDelete ;
   String? mustDialog ;
@@ -76,8 +77,17 @@ class LoginResponsModel {
         this.passwordFingerprint ,
          this.employeeType ,
          this.mustDialog ,
+         this.idenetityId ,
       this.jobnameen});
+   factory LoginResponsModel.employeeInfo(Map<String, dynamic> json){
+    return LoginResponsModel(
+      nameAr: json["employ_name_ar"],
+      nameEn: json["employ_name_en"],
+      id: json["employ_id"],
+     idenetityId : json["id_number"],
 
+    );
+  }
   LoginResponsModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     message = json['message'];

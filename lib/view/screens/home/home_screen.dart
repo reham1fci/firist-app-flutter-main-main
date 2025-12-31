@@ -9,9 +9,11 @@ import 'package:betakety_app/model/login_model.dart';
 import 'package:betakety_app/model/personal_data.dart';
 import 'package:betakety_app/view/base/banners_view.dart';
 import 'package:betakety_app/view/base/custom_snackbar.dart';
+import 'package:betakety_app/view/screens/agent_orders/agent_daily_order_screen.dart';
 import 'package:betakety_app/view/screens/home/widget/home_notification_dialog.dart';
 import 'package:betakety_app/view/screens/attendance/finger_print.dart';
 import 'package:betakety_app/view/screens/home/widget/shipments_type_list.dart';
+import 'package:betakety_app/view/screens/home/widget/target_type.dart';
 import 'package:betakety_app/view/screens/profile/widgets/edit_profile.dart';
 import 'package:betakety_app/view/screens/profile/widgets/requests_list.dart';
 import 'package:betakety_app/view/screens/salary_details/salary_details_view.dart';
@@ -129,7 +131,8 @@ showDialog();
   }
   Future<void> _openStore() async {
     String packageName = 'com.marsa.marsa-hr';
-    String appStoreUrl = 'https://apps.apple.com/us/app/marsa-hr/id6504737193';
+    String appStoreUrl = ''
+        '';
     String playStoreUrl = 'https://play.google.com/store/apps/details?id=com.marsa.marsa_hr';
 
     if (await canLaunchUrl(Uri.parse(appStoreUrl )) && !Platform.isAndroid) {
@@ -229,6 +232,15 @@ return true;
                       height: Get.width / 3,
                       screen: isMandatoryData? null:ShipmentsTypeList(),
                     ),
+                    Squermain(
+                      title: 'target'.tr,
+                      //title: Text("PROFILE".tr)
+                      image: Images.target,
+                      width: Get.width / 3.2,
+                      height: Get.width / 3,
+                      screen: isMandatoryData? null:TargetType(),
+                    ),
+                    SizedBox(width: Get.width / 3.2)
                   ],
                 ),
 

@@ -7,7 +7,9 @@ import 'package:betakety_app/controllers/fingerprint_controller.dart';
 import 'package:betakety_app/model/File.dart';
 import 'package:betakety_app/model/Questions.dart';
 import 'package:betakety_app/model/login_model.dart';
+import 'package:betakety_app/model/pending_check.dart';
 import 'package:betakety_app/model/request_options.dart';
+import 'package:betakety_app/model/vacation.dart';
 import 'package:betakety_app/model/vacation_type.dart';
 import 'package:betakety_app/util/app_constants.dart';
 import 'package:betakety_app/view/base/custom_lert_dialog.dart';
@@ -15,6 +17,8 @@ import 'package:betakety_app/view/base/file_name_dialog.dart';
 import 'package:betakety_app/view/screens/Requests/all_requests.dart';
 import 'package:betakety_app/view/screens/Requests/main_permissions.dart';
 import 'package:betakety_app/view/screens/Requests/vacation_request.dart';
+import 'package:betakety_app/view/screens/Requests/widget/pendingPopup.dart';
+import 'package:betakety_app/view/screens/Requests/widget/vaction_popup.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -36,7 +40,7 @@ class PermissionController extends GetxController {
   //   required this.permissionRepo,
   // });
   TextEditingController fileName = TextEditingController();
-
+  bool canApplyVacation = true;
   bool isLoading = false;
   var loadingMap = <String, bool>{}.obs;
   setLoading(String id, bool value) {
@@ -65,6 +69,7 @@ class PermissionController extends GetxController {
   List<RequestTypeModel> vacationPlaceList = [
     RequestTypeModel(name: "inside", id: 1),
     RequestTypeModel(name: "outside", id: 2),
+    RequestTypeModel(name: "financial_settlement", id: 3),
   ];
   List<VacationType>? vacationTypeList;
   List<VacationType>? apiList;
@@ -81,6 +86,8 @@ class PermissionController extends GetxController {
   TextEditingController vacationPlaceController = TextEditingController();
   TextEditingController dateController = TextEditingController();
   TextEditingController dateFromController = TextEditingController();
+  TextEditingController departureDateController = TextEditingController();
+  TextEditingController returnDateController = TextEditingController();
   TextEditingController dateToController = TextEditingController();
   TextEditingController timeFromController = TextEditingController();
   TextEditingController timeToController = TextEditingController();
@@ -92,14 +99,20 @@ class PermissionController extends GetxController {
   var length ;
   List<SendFile> filesList  = [] ;
   resetData() {
+    canApplyVacation  = true  ;
      selectedIds  .clear()  ;
     selectedItems.clear()  ;
   detailsController.clear();
   dateController.clear();
   minutesController.clear();
   timeFromController.clear();
+  dateFromController.clear();
+  dateToController.clear();
   justificationController.clear();
  timeToController.clear();
+ departureDateController.clear();
+ vacationPlaceController.clear();
+ returnDateController.clear();
      apiItemTemp = null ;
  requestTypeTemp = requestTypeList[0];
  permissionTypeTemp = permissionTypeList[0];
@@ -357,12 +370,17 @@ postDataWithFile(uri: AppConstants.addPermissionReq) ;
   } Future<void> validateVacationAndShowSnackbar() async {
     if (detailsController.text.isEmpty) {
       showCustomSnackBar("${'details'.tr} ${"is_required".tr}");
-    } else if (vacationPlaceTemp!.id ==2 && vacationPlaceController.text.isEmpty) {
+    } else if (vacationPlaceController.text.isEmpty) {
       showCustomSnackBar("${'vacation_place'.tr} ${"is_required".tr}");
     }else if (dateFromController.text.isEmpty) {
       showCustomSnackBar("${'date_from'.tr} ${"is_required".tr}");
     } else if (dateToController.text.isEmpty) {
-      showCustomSnackBar("${'date_to'.tr} ${"is_required".tr}");
+      showCustomSnackBar("${'date_to'.tr} ${"is_required".tr}");}
+    else if (vacationPlaceTemp!.id ==2 && departureDateController.text.isEmpty) {
+      showCustomSnackBar("${'departure_date'.tr} ${"is_required".tr}");
+    }
+    else if (vacationPlaceTemp!.id ==2 && returnDateController.text.isEmpty) {
+      showCustomSnackBar("${'return_date'.tr} ${"is_required".tr}");
     }
    else {
 insertVacationRequest(uri: AppConstants.insertVacation) ;
@@ -420,6 +438,8 @@ insertRequest(uri: AppConstants.AddAllRequests) ;
       if (response.statusCode == 200) {
         print("requests");
         var jsonObj  =  jsonDecode(response.body)  ;
+        print(jsonObj);
+
         var jsonArr  =  jsonObj["data"] as List ;
        List <Questions> questionsList = jsonArr.map((e) => Questions.fromJson(e ,)).toList();
         return questionsList;
@@ -452,6 +472,9 @@ insertRequest(uri: AppConstants.AddAllRequests) ;
         var jsonObj  =  jsonDecode(response.body)  ;
         var jsonArr  =  jsonObj["data"] as List ;
         print(jsonArr) ;
+         if(functionName == AppConstants.vacationTypes){
+          vacationTypeList!.add(VacationType(nameAr:"اختر نوع  الاجازة"  , Id: "000" , nameEn:"choose vacation type" )) ;
+        }
         for(int i  =0  ; i< jsonArr.length ; i++  ){
            if (functionName  == AppConstants.vacationTypes){
           VacationType v  =  VacationType.fromJson(jsonArr[i]) ;
@@ -705,7 +728,10 @@ else{
 
   }
   Future<void> insertVacationRequest({ required String uri }) async {
-    String url =AppConstants.baseUrl+uri;
+    isLoading  = true  ;
+    update() ;
+    LoginResponsModel user =  await AuthController().getLoginData()  ;
+    String url ="${AppConstants.baseUrl}$uri?employ_id=${user.id!}";
     print(url) ;
     var request =  http.MultipartRequest("POST",   Uri.parse(url));
     request.fields['vacation_typee'] =vacationTypeTemp!.Id!;
@@ -714,7 +740,9 @@ else{
     request.fields['where_travel'] =vacationPlaceController.text;
     request.fields['start_date_vacation'] = dateFromController.text;
     request.fields['end_date_vacation'] = dateToController.text;
-    LoginResponsModel user =  await AuthController().getLoginData()  ;
+    if(vacationPlaceTemp!.id==2){
+    request.fields['exit_date'] = departureDateController.text;
+    request.fields['return_date'] = returnDateController.text;}
     request.fields['employ_id'] = user.id!;
     request.fields['company_id'] = user.companyId!;
     print(request.fields);
@@ -735,24 +763,90 @@ else{
       request.files.add(multipartFile);
 
     }
-    var response  = await request.send() ;
+    var streamedResponse = await request.send() ;
+    var response = await http.Response.fromStream(streamedResponse);
+
     print(response.statusCode) ;
 
-    if (response.statusCode == 200) {
-      print(response);
+    if (response.statusCode == 200){
+      isLoading=  false  ;
+      var data = jsonDecode(response.body);
+      print(data.toString()) ;
+      update() ;
+      //print(data) ;
       print("Uploaded!");
       showOkDialog(context: Get.context
-      !,
-          message: 'added_to_requests_permission'.tr,
-          isCancelBtn: false,
-          onOkClick: () {
-            Navigator.of(Get.context!).pop();
-            Navigator.push(Get.context!, MaterialPageRoute(
-                builder: (BuildContext context) => VacationRequest()));
+      !,message: data["msg"] ,isCancelBtn: false ,onOkClick:(){
+        //  Navigator.of( Get.context!).pop();
+        Navigator.of( Get.context!).pop();
+          Navigator.push(Get.context!, MaterialPageRoute(builder: (BuildContext context) => VacationRequest()));
+      //  refreshCallback?.call() ;
+        update() ;
+      } );
 
-            update();
-          });
-    }}
+      //return "success" ;
+
+    }
+
+
+
+  }
+
+
+
+  Future<void> getVacationData( ) async {
+  //  String url =AppConstants.baseUrl+uri;
+
+    //var request =  http.MultipartRequest("POST",   Uri.parse(url));
+    Api api = Api() ;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    LoginResponsModel user =  await AuthController().getLoginData()  ;
+    data['vacation_typee'] =vacationTypeTemp!.Id!;
+   data['vacation_place'] = vacationPlaceTemp!.name;
+    data['start_date_vacation'] = dateFromController.text;
+    data['end_date_vacation'] = dateToController.text;
+    final response = await api.postData2(uri: "${AppConstants.getVacationData}?employ_id=${user.id!}", map: data) ;
+    if(response.statusCode ==200){
+      print("return data  " +response.body) ;
+      var res  =jsonDecode(response.body) ;
+      String status = res["status"] ;
+      if(status == "success")
+      {
+         var pendingCheck  =  res["pending_check"] ;
+         canApplyVacation  =  pendingCheck["can_apply_vacation"] ;
+        PendingCheck pendingCheckObj  =  PendingCheck.fromJson(pendingCheck) ;
+        print(pendingCheckObj.toString()) ;
+        Vacation vacationObj  =  Vacation.fromJson(res) ;
+        print(pendingCheckObj.toString()) ;
+update() ;
+if(canApplyVacation){
+  showDialog(
+    context: Get.context!,
+    builder: (_) =>
+        VacationPopup(
+    vacation: vacationObj, message: pendingCheck["message"]
+    ),
+  );
+}else{
+  showDialog(
+    context: Get.context!,
+    builder: (_) => PendingPopup(
+      pendingCheck: pendingCheckObj,
+    ),
+  );
+
+}
+
+
+
+    }
+       else if(status == "error"){
+        String msg = res["msg"] ;
+        canApplyVacation = false  ;
+        update();
+        showOkDialog(context: Get.context!, message: msg, isCancelBtn: false)  ;
+      }
+      }}
 
   Future<void> insertRequest({ required String uri }) async {
      isLoading  = true  ;
@@ -930,6 +1024,63 @@ print(file.key) ;
         Navigator.of( Get.context!).pop();
       //  Navigator.push(Get.context!, MaterialPageRoute(builder: (BuildContext context) => MainPermissions()));
 refreshCallback?.call() ;
+        update() ;
+      } );
+
+      //return "success" ;
+
+    }
+//return "error" ;
+
+  }
+Future<void> insertException({String? date }) async {
+    isLoading  = true  ;
+    update() ;
+  LoginResponsModel user =  await AuthController().getLoginData()  ;
+
+  String url ="${AppConstants.baseUrl}${AppConstants.insertException }?employ_id=${user.id!}";
+    print(url) ;
+    var request =  http.MultipartRequest("POST",   Uri.parse(url));
+    request.fields['employee_reply'] = justificationController.text;
+    request.fields['date_from'] = date!;
+    //request.fields['employ_id'] = user.id!;
+    request.fields['att_name'] = fileName.text;
+    print(request.fields);
+    print(stream);
+    print(length);
+    if(fileName.text.isNotEmpty){
+   /* var multipartFile = http.MultipartFile('files', stream, length,
+        filename:fileNameController.text);*/
+      var multipartFile ;
+      if(kIsWeb){
+        multipartFile =  http.MultipartFile.fromBytes('files', fileBytes ,filename: fileName.text);
+
+      }
+      else{
+        multipartFile = http.MultipartFile('files', stream, length,
+            filename:fileName.text);
+      }
+
+      request.files.add(multipartFile);
+
+    }
+
+    var streamedResponse = await request.send() ;
+    var response = await http.Response.fromStream(streamedResponse);
+
+    print(response.statusCode) ;
+
+    if (response.statusCode == 200){
+       isLoading=false  ;
+      var data = jsonDecode(response.body);
+      print(response) ;
+      print("Uploaded!");
+      showOkDialog(context: Get.context
+      !,message: data["msg"] ,isCancelBtn: false ,onOkClick:(){
+      //  Navigator.of( Get.context!).pop();
+        Navigator.of( Get.context!).pop();
+
+        refreshCallback?.call() ;
         update() ;
       } );
 

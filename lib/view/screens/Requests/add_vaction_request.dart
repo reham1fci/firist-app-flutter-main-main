@@ -1,5 +1,7 @@
+import 'package:betakety_app/controllers/localization_controller.dart';
 import 'package:betakety_app/model/vacation_type.dart';
 import 'package:betakety_app/util/app_constants.dart';
+import 'package:betakety_app/view/base/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -19,6 +21,8 @@ class AddVacationRequest extends StatefulWidget {
 }
 
 class AddVacationRequestState extends State<AddVacationRequest> {
+  Locale? myLocale  ;
+
   @override
   void initState() {
     Get.find<PermissionController>().resetData();
@@ -28,6 +32,8 @@ class AddVacationRequestState extends State<AddVacationRequest> {
 
   @override
   Widget build(BuildContext context) {
+    myLocale= Get.find<LocalizationController>().locale;
+
     return GetBuilder<PermissionController>(builder: (pController) {
       return Scaffold(
         backgroundColor: Theme.of(context).cardColor,
@@ -74,12 +80,13 @@ class AddVacationRequestState extends State<AddVacationRequest> {
                     child: Padding(
                       padding:
                       const EdgeInsets.symmetric(horizontal: 9),
-                      child: Text(value.nameEn!.tr),
+                      child: Text(myLocale!.countryCode =="en"?value.nameEn!:value.nameAr!),
                     ),
                   );
                 }).toList(),
                 onChanged: (value) {
                   pController.vacationTypeTemp = value;
+                  tryFetchLeaveData();
                   pController.update();
                 },
                 isExpanded: true,
@@ -118,6 +125,8 @@ class AddVacationRequestState extends State<AddVacationRequest> {
                         }).toList(),
                         onChanged: (value) {
                           pController.vacationPlaceTemp = value;
+                        //  tryFetchLeaveData();
+
                           pController.update();
                         },
                         isExpanded: true,
@@ -127,7 +136,7 @@ class AddVacationRequestState extends State<AddVacationRequest> {
                   ),
                 ],
               ),
-              pController.vacationPlaceTemp!.id== 2?
+           //   pController.vacationPlaceTemp!.id== 2?
               CustomFieldWithTitle(
                 requiredField: true,
                 title: "vacation_place".tr,
@@ -142,22 +151,8 @@ class AddVacationRequestState extends State<AddVacationRequest> {
                       inputType: TextInputType.text,
                       controller: pController.vacationPlaceController,
                     )),
-              ):SizedBox() ,
-              CustomFieldWithTitle(
-                requiredField: true,
-                title: "details".tr,
-                customTextField: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Theme.of(context).primaryColor),
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                    child: CustomTextField(
-                      maxLines: 2,
-                      hintText: 'details'.tr,
-                      inputType: TextInputType.text,
-                      controller: pController.detailsController,
-                    )),
               ),
+
               Row(
                 children: [
                   CustomFieldWithTitle(
@@ -174,10 +169,10 @@ class AddVacationRequestState extends State<AddVacationRequest> {
                         child: CustomTextField(
                           onTap: () async {
                             DateTime currentDate = DateTime.now();
-                            final DateTime firstDate = DateTime(2023);
+                            final DateTime firstDate = DateTime(2025);
 
                             final DateTime lastDate =
-                            currentDate.add(const Duration(days: 60));
+                            currentDate.add(const Duration(days: 360));
                             final DateTime? pickedDate = await showDatePicker(
                               context: context,
                               initialDate: currentDate,
@@ -188,6 +183,8 @@ class AddVacationRequestState extends State<AddVacationRequest> {
                               setState(() {
                                 pController.dateFromController.text =
                                     DateFormat('yyyy-MM-dd').format(pickedDate);
+                                tryFetchLeaveData();
+
                               });
                             }
                           },
@@ -211,9 +208,9 @@ class AddVacationRequestState extends State<AddVacationRequest> {
                         child: CustomTextField(
                           onTap: () async {
                             DateTime currentDate = DateTime.now();
-                            final DateTime firstDate = DateTime(2023);
+                            final DateTime firstDate = DateTime(2025);
                             final DateTime lastDate =
-                            currentDate.add(const Duration(days: 30));
+                            currentDate.add(const Duration(days: 360));
                             final DateTime? pickedDate = await showDatePicker(
                               context: context,
                               initialDate: currentDate,
@@ -224,6 +221,8 @@ class AddVacationRequestState extends State<AddVacationRequest> {
                               setState(() {
                                 pController.dateToController.text =
                                     DateFormat('yyyy-MM-dd').format(pickedDate);
+                                tryFetchLeaveData();
+
                               });
                             }
                           },
@@ -234,6 +233,103 @@ class AddVacationRequestState extends State<AddVacationRequest> {
                         )),
                   ),
                 ],
+              ),
+if(pController.vacationPlaceTemp!.id== 2)
+              Row(
+                children: [
+                  CustomFieldWithTitle(
+                    width: Get.width / 2,
+                    height: 50,
+                    requiredField: true,
+                    title: "departure_date".tr,
+                    customTextField: Container(
+                        decoration: BoxDecoration(
+                          border:
+                          Border.all(color: Theme.of(context).primaryColor),
+                          borderRadius: BorderRadius.circular(4.0),
+                        ),
+                        child: CustomTextField(
+                          onTap: () async {
+                            DateTime currentDate = DateTime.now();
+                            final DateTime firstDate = DateTime(2025);
+
+                            final DateTime lastDate =
+                            currentDate.add(const Duration(days: 360));
+                            final DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: currentDate,
+                              firstDate: firstDate,
+                              lastDate: lastDate,
+                            );
+                            if (pickedDate != null) {
+                              setState(() {
+                                pController.departureDateController.text =
+                                    DateFormat('yyyy-MM-dd').format(pickedDate);
+                             //   tryFetchLeaveData();
+
+                              });
+                            }
+                          },
+                          readOnly: true,
+                          hintText: 'departure_date'.tr,
+                          inputType: TextInputType.text,
+                          controller: pController.departureDateController,
+                        )),
+                  ),
+                  CustomFieldWithTitle(
+                    width: Get.width / 2,
+                    height: 50,
+                    requiredField: true,
+                    title: "return_date".tr,
+                    customTextField: Container(
+                        decoration: BoxDecoration(
+                          border:
+                          Border.all(color: Theme.of(context).primaryColor),
+                          borderRadius: BorderRadius.circular(4.0),
+                        ),
+                        child: CustomTextField(
+                          onTap: () async {
+                            DateTime currentDate = DateTime.now();
+                            final DateTime firstDate = DateTime(2025);
+                            final DateTime lastDate =
+                            currentDate.add(const Duration(days: 360));
+                            final DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: currentDate,
+                              firstDate: firstDate,
+                              lastDate: lastDate,
+                            );
+                            if (pickedDate != null) {
+                              setState(() {
+                                pController.returnDateController.text =
+                                    DateFormat('yyyy-MM-dd').format(pickedDate);
+                             //   tryFetchLeaveData();
+
+                              });
+                            }
+                          },
+                          readOnly: true,
+                          hintText: 'return_date'.tr,
+                          inputType: TextInputType.text,
+                          controller: pController.returnDateController,
+                        )),
+                  ),
+                ],
+              ),
+              CustomFieldWithTitle(
+                requiredField: true,
+                title: "details".tr,
+                customTextField: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Theme.of(context).primaryColor),
+                      borderRadius: BorderRadius.circular(4.0),
+                    ),
+                    child: CustomTextField(
+                      maxLines: 2,
+                      hintText: 'details'.tr,
+                      inputType: TextInputType.text,
+                      controller: pController.detailsController,
+                    )),
               ),
               CustomFieldWithTitle(
                 requiredField: false,
@@ -255,7 +351,7 @@ class AddVacationRequestState extends State<AddVacationRequest> {
                   ),
                 ),
               ),
-              Padding(
+              if (pController.isLoading) CircularProgressIndicator() else  if(pController.canApplyVacation) Padding(
                 padding: const EdgeInsets.all(Dimensions.PADDING_SIZE_LARGE),
                 child: CustomButton(
                   buttonText: "save".tr,
@@ -270,4 +366,16 @@ class AddVacationRequestState extends State<AddVacationRequest> {
       );
     });
   }
-}
+  void tryFetchLeaveData() {
+    if (Get.find<PermissionController>().vacationTypeTemp!.Id != "000" && Get.find<PermissionController>().dateFromController.text.isNotEmpty && Get.find<PermissionController>().dateToController.text.isNotEmpty ) {
+    //  fetchLeaveData();
+      print("makeAPi") ;
+      Get.find<PermissionController>().getVacationData() ;
+    }
+      else{
+     //   showCustomSnackBar("fill_all_fields".tr);
+    }
+    }
+  }
+
+

@@ -67,7 +67,7 @@ class _WebViewExampleState extends State<AttahmentViewScreen> {
         iconTheme: const IconThemeData(color: kTitleColor),
         centerTitle: true,
         title: Text(
-          'shipments'.tr,
+          'attachments'.tr,
           style: fontSizeMedium,
         ),
         actions: const [
