@@ -7,6 +7,7 @@ import 'package:betakety_app/model/login_model.dart';
 import 'package:betakety_app/model/personal_data.dart';
 import 'package:betakety_app/util/app_constants.dart';
 import 'package:betakety_app/view/base/custom_lert_dialog.dart';
+import 'package:betakety_app/view/screens/auth/widget/otp_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_udid/flutter_udid.dart';
 import 'package:geolocator/geolocator.dart';
@@ -21,44 +22,72 @@ import '../view/screens/home/nav_screen.dart';
 
 class AuthController extends GetxController {
 
-   
 
   bool _isLoading = false;
+
   bool get isLoading => _isLoading;
 
   int _selectedIndex = 0;
+
   int get selectedIndex => _selectedIndex;
-  Api api = Api()  ;
- List<PersonalData> personalDataList = [] ;
+  Api api = Api();
+  String employeeId  = "" ;
+  List<PersonalData> personalDataList = [];
+  bool hasMinLength = false;
+  bool hasUpperCase = false;
+  bool hasLowerCase = false;
+  bool hasSpecialChar = false;
+  TextEditingController? passwordController = TextEditingController();
+  TextEditingController? confirmPasswordController = TextEditingController();
+  bool get isPasswordValid =>
+      hasMinLength && hasUpperCase && hasLowerCase && hasSpecialChar;
   void logout() {
     // authRepo.logout()
- clearUserLogin() ;
+    clearUserLogin();
     Get.offAll(const AuthScreen());
+  }
+  void validatePassword(String password) {
+    hasMinLength = password.length >= 6;
+    hasUpperCase = RegExp(r'[A-Z]').hasMatch(password);
+    hasLowerCase = RegExp(r'[a-z]').hasMatch(password);
+    hasSpecialChar = RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(password);
+
+    update(); // علشان الـ UI يتحدث
   }
 
   void login({required String email, required String password}) async {
     _isLoading = true;
     update();
     APIService apiService = APIService();
-     String mobileMac = await FlutterUdid.udid;
+    String mobileMac = await FlutterUdid.udid;
 
-   // String? mobileMac = await PlatformDeviceId.getDeviceId;
+    // String? mobileMac = await PlatformDeviceId.getDeviceId;
 
 
-print(mobileMac) ;
-    LoginReqModel user1 =  LoginReqModel(password:password , username: email , mobileMac:mobileMac );
+    print(mobileMac);
+    LoginReqModel user1 = LoginReqModel(
+        password: password, username: email, mobileMac: mobileMac);
     LoginResponsModel res = await apiService.login(user1);
-        print(res);
-     if (res.success == true ) {
-       saveUserData(res);
-
-     } else {
+    print(res);
+    if (res.success == true) {
+      saveUserData(res);
+    } else {
       showCustomSnackBar(res.message!);
     }
     _isLoading = false;
+    update();
+  }
+resetData(){
+    passwordController!.clear();
+    confirmPasswordController!.clear();
+     hasMinLength = false;
+     hasUpperCase = false;
+     hasLowerCase = false;
+     hasSpecialChar = false;
+     _isLoading  =false  ;
      update();
   }
-  Future<dynamic>getRequiredData() async {
+  Future<dynamic> getRequiredData() async {
     personalDataList.clear();
     LoginResponsModel user = await getLoginData();
     String url = "${AppConstants.requiredFiles}?id=${user.id!}";
@@ -68,37 +97,38 @@ print(mobileMac) ;
       print(jsonDecode(response.body));
       var data = jsonDecode(response.body);
       print(data["status"]);
-      if (data["status"] =="success") {
+      if (data["status"] == "success") {
         var dataArr = data["data"] as List;
-          personalDataList .addAll(dataArr.map((e) => PersonalData.fromJson(e)));
-          return personalDataList;
-        }
-      else{
+        personalDataList.addAll(dataArr.map((e) => PersonalData.fromJson(e)));
+        return personalDataList;
+      }
+      else {
         showCustomSnackBar("try_again".tr);
-        }
+      }
       update();
     } else {
       showCustomSnackBar("try_again".tr);
     }
   }
- saveUserData(LoginResponsModel user )async{
-   SharedPreferences prefs = await SharedPreferences.getInstance();
-          await prefs.setString(
-              'response_data', json.encode(user.toJson()));
-   await prefs.setBool('is_logged_in', true);
 
-   await prefs.setString(
-              'user', json.encode(user.toJson())).then((value) {
-     Get.offAll(const NavBarScreen());
+  saveUserData(LoginResponsModel user) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(
+        'response_data', json.encode(user.toJson()));
+    await prefs.setBool('is_logged_in', true);
 
-
-   });
-
- }clearUserLogin( )async{
-   SharedPreferences prefs = await SharedPreferences.getInstance();
-          prefs.remove("user") ;
-          await prefs.setBool('is_logged_in', false);
+    await prefs.setString(
+        'user', json.encode(user.toJson())).then((value) {
+      Get.offAll(const NavBarScreen());
+    });
   }
+
+  clearUserLogin() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove("user");
+    await prefs.setBool('is_logged_in', false);
+  }
+
   saveHeader(String header) {
     // authRepo.saveHeader(header);
   }
@@ -116,54 +146,67 @@ print(mobileMac) ;
       return null;
     }
   }
-validateSignUpData(String nameEn , String userName , String nameAr , String email , String password ,String phone){
-  if (nameAr.isEmpty) {
-    showCustomSnackBar('NAME_FIELD_MUST_BE_REQUIRED'.tr);
-  }
-  else if (nameEn.isEmpty) {
-    showCustomSnackBar('NAME_FIELD_MUST_BE_REQUIRED'.tr);
-  }else if (userName.isEmpty) {
-    showCustomSnackBar('USER_NAME_REQUIRED'.tr);
-  }else if (email.isEmpty) {
-    showCustomSnackBar('EMAIL_MUST_BE_REQUIRED'.tr);
-  } else if (password.isEmpty) {
-    showCustomSnackBar('PASSWORD_MUST_BE_REQUIRED'.tr);
-  }
-  else{
-    signUp(nameEn, userName, nameAr, email, password, phone) ;
+
+  validateSignUpData(String nameEn, String userName, String nameAr,
+      String email, String password, String phone) {
+    if (nameAr.isEmpty) {
+      showCustomSnackBar('NAME_FIELD_MUST_BE_REQUIRED'.tr);
+    }
+    else if (nameEn.isEmpty) {
+      showCustomSnackBar('NAME_FIELD_MUST_BE_REQUIRED'.tr);
+    } else if (userName.isEmpty) {
+      showCustomSnackBar('USER_NAME_REQUIRED'.tr);
+    } else if (email.isEmpty) {
+      showCustomSnackBar('EMAIL_MUST_BE_REQUIRED'.tr);
+    } else if (password.isEmpty) {
+      showCustomSnackBar('PASSWORD_MUST_BE_REQUIRED'.tr);
+    }
+    else {
+      signUp(nameEn, userName, nameAr, email, password, phone);
+    }
   }
 
-}
-signUp(String nameEn , String userName , String nameAr , String email , String password ,String phone) async {
-  _isLoading = true;
-  update();
-  Api api = Api() ;
-  LoginResponsModel signup = LoginResponsModel(nameAr:nameAr ,nameEn: nameEn ,email:  email , mobilenumber: phone , password:  password , userName:  userName) ;
-  final response = await api.postData(uri: AppConstants.signupUrl, map: signup.signUpToJson()) ;
-  if(response.statusCode ==200){
-    print(response.body) ;
-     var res  =jsonDecode(response.body) ;
-     bool success = res["success"] ;
-
-    _isLoading = false;
-    if(success)
-      {
-    showOkDialog(context: Get.context
-    !,message: 'sign_up_successfully_now_login'.tr ,isCancelBtn: false ,onOkClick:(){
-      Navigator.of( Get.context!).pop();});
-      }else{
-      showOkDialog(context: Get.context
-      !,message: 'try again' ,isCancelBtn: false ,onOkClick:(){
-    });}
-
+  signUp(String nameEn, String userName, String nameAr, String email,
+      String password, String phone) async {
+    _isLoading = true;
     update();
+    Api api = Api();
+    LoginResponsModel signup = LoginResponsModel(nameAr: nameAr,
+        nameEn: nameEn,
+        email: email,
+        mobilenumber: phone,
+        password: password,
+        userName: userName);
+    final response = await api.postData(
+        uri: AppConstants.signupUrl, map: signup.signUpToJson());
+    if (response.statusCode == 200) {
+      print(response.body);
+      var res = jsonDecode(response.body);
+      bool success = res["success"];
+
+      _isLoading = false;
+      if (success) {
+        showOkDialog(context: Get.context
+        !,
+            message: 'sign_up_successfully_now_login'.tr,
+            isCancelBtn: false,
+            onOkClick: () {
+              Navigator.of(Get.context!).pop();
+            });
+      } else {
+        showOkDialog(context: Get.context
+        !, message: 'try again', isCancelBtn: false, onOkClick: () {});
+      }
+
+      update();
+    }
+    {
+      _isLoading = false;
+      update();
+      print(response.statusCode);
+    }
   }
-  {
-    _isLoading = false;
-    update();
-    print(response.statusCode) ;
-  }
-  }
+
   // String _getUserData() {
   //   return authRepo.getUserData();
   // }
@@ -181,9 +224,11 @@ signUp(String nameEn , String userName , String nameAr , String email , String p
   // }
   Future<LoginResponsModel> getLoginData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    LoginResponsModel user = LoginResponsModel.fromJson(json.decode(prefs.getString("user")!));
-return user ;
+    LoginResponsModel user = LoginResponsModel.fromJson(
+        json.decode(prefs.getString("user")!));
+    return user;
   }
+
   void getLocationPrediction() async {
     _checkPermission(() async {
       Position? p = await Geolocator.getCurrentPosition();
@@ -204,6 +249,65 @@ return user ;
       // Get.dialog(const PermissionDialog());
     } else {
       onTap();
+    }
+  }
+
+  Future<void> forgetPassword({required String phone}) async {
+    Api api = Api();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['mobile_number'] = phone;
+
+    final response = await api.postData(
+        uri: "${AppConstants.forgetPassword}", map: data);
+    if (response.statusCode == 200) {
+      print("return data  " + response.body);
+      var res = jsonDecode(response.body);
+      bool success = res["success"];
+       employeeId = res["employ_id"].toString();
+
+      if (success) {
+        print("done");
+        showDialog(
+          context: Get.context!,
+          builder: (_) => Directionality(
+            textDirection: TextDirection.ltr,
+            child: OtpDialog(res["otp_code"]),
+          ),
+        );
+      } else {
+        showCustomSnackBar(res["message"]);
+      }
+    }
+  }
+  Future<void> resetPassword() async {
+     _isLoading = true  ;
+     update() ;
+    Api api = Api();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['new_password '] = passwordController!.text;
+    data['employ_id '] = employeeId;
+
+    final response = await api.postData(
+        uri: "${AppConstants.resetPassword}", map: data);
+    if (response.statusCode == 200) {
+      print("return data  " + response.body);
+      var res = jsonDecode(response.body);
+      bool success = res["success"];
+_isLoading  = false  ;
+ update();
+      if (success) {
+        print("done");
+
+       //go to login with new password
+         showOkDialog(context: Get.context
+        !,
+            message: res["message_ar"],
+            isCancelBtn: false,
+            onOkClick: () {
+         Navigator.pushReplacement(Get.context!, MaterialPageRoute(builder: (context) => const AuthScreen()));});
+      } else {
+        showCustomSnackBar(res["message_ar"]);
+      }
     }
   }
 }

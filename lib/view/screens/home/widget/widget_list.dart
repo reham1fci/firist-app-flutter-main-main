@@ -224,6 +224,12 @@ class _WidgetListState extends State<WidgetList> {
                         onTap: (){
                           Get.to(MaintenanceRequests());
 
+                        },) ,
+                  RequestsTypeItem(title:
+                       "deduction_request".tr,
+                        onTap: (){
+                          Get.to(MaintenanceRequests());
+
                         },)
 
 

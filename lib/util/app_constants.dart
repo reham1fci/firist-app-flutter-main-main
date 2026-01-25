@@ -34,6 +34,8 @@ class AppConstants {
   static const String  insertVacation= '/Insert_Vacaton_Request_api_gz.php';
   static const String  getVacation= '/Show_Vacation_Rquest_api.php';
   static const String  getVacationData= '/get_vacation_info.php';
+  static const String  forgetPassword= '/api_password_send_otp.php';
+  static const String  resetPassword= '/api_password_reset.php';
   static const String  getRequestTypes= '/hr_request_type_api.php';
   static const String  getRequestApiList= '/api_list.php';
   static const String  getAllRequests= '/Show_All_Request_api.php';

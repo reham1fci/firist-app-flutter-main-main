@@ -58,6 +58,7 @@ dependencies:
   mac_address: ^1.0.0
   flutter_udid: ^3.0.0
   upgrader: ^9.0.0
+  intl_phone_field: ^3.2.0
   flutter_pdfview: ^1.2.7
   #connectivity:
   url_launcher: ^6.2.5
