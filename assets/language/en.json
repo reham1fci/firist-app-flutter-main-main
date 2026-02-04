@@ -677,6 +677,8 @@
   "yes": "Yes",
   "no": "No",
  "revision": "Revision" ,
+ "unseen": "Unseen" ,
+ "seen": "Seen" ,
  "deduction_request": "Deduction Request" ,
   "enter_register_phone": "Enter your phone have been register"
 

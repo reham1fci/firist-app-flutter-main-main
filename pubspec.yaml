@@ -60,6 +60,10 @@ dependencies:
   upgrader: ^9.0.0
   intl_phone_field: ^3.2.0
   flutter_pdfview: ^1.2.7
+  firebase_core:
+  firebase_messaging:
+  flutter_local_notifications: ^17.0.0
+
   #connectivity:
   url_launcher: ^6.2.5
   #platform_device_id: ^1.0.1

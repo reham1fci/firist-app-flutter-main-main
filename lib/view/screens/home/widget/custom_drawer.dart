@@ -65,7 +65,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
         children: [
           Container(
             width: MediaQuery.of(context).size.width,
-            color: lightgGreyBack,
+            color: kFourthColor,
             height: 250,
             child: Column(children: [
               SizedBox(height: MediaQuery.of(context).viewPadding.top),

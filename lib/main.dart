@@ -5,8 +5,11 @@ import 'package:betakety_app/controllers/attendance_controller.dart';
 import 'package:betakety_app/controllers/delivery_projects_controller.dart';
 import 'package:betakety_app/controllers/fingerprint_controller.dart';
 import 'package:betakety_app/controllers/maintenance_controller.dart';
+import 'package:betakety_app/controllers/notification_controller.dart';
 import 'package:betakety_app/controllers/salary_controller.dart';
 import 'package:betakety_app/controllers/shipment_controller.dart';
+import 'package:betakety_app/firebase_notification/local_notification_service.dart';
+import 'package:betakety_app/firebase_notification/push_notification_services.dart';
 import 'package:betakety_app/util/constant.dart';
 import 'package:betakety_app/view/screens/auth/auth_screen.dart';
 import 'package:betakety_app/controllers/banner_controller.dart';
@@ -18,21 +21,44 @@ import 'package:betakety_app/view/screens/home/widget/squer_screen.dart';
 import 'package:betakety_app/view/screens/home/widget/custom_drawer.dart';
 import 'package:betakety_app/view/screens/home/widget/widget_list.dart';
 import 'package:betakety_app/view/screens/splash/splash_view.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'controllers/language_controller.dart';
 import 'controllers/localization_controller.dart';
+import 'firebase_notification/firebase_background_handler.dart';
 import 'view/screens/home/home_screen.dart';
 import 'view/screens/profile/profile_screen.dart';
+
+// New imports for notifications
+import 'model/notification_model.dart';
+import 'view/screens/notifications/notifications_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    bool? isLoggedIn = prefs.getBool('is_logged_in');
+  bool? isLoggedIn = prefs.getBool('is_logged_in');
   Map<String, Map<String, String>> languages = await init();
+  await Firebase.initializeApp();
+
+  final pushService = PushNotificationService();
+
+  await LocalNotificationService.init(
+    onNotificationTap: pushService.handleLocalNotificationTap,
+  );
+ await pushService.init();
+
+  FirebaseMessaging.onBackgroundMessage(
+    firebaseMessagingBackgroundHandler,
+  );
+  RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+  if (initialMessage != null) {
+    pushService.initialData = initialMessage.data;
+  }
+
   runApp(MyApp(languages: languages, isLoggedIn: isLoggedIn));
 }
 
@@ -79,6 +105,9 @@ class MyApp extends StatelessWidget {
 
           defaultTransition: Transition.topLevel,
           transitionDuration: const Duration(milliseconds: 500),
+
+          // New: register routes (GetPages) for notifications
+
         );
       },
     );
@@ -100,17 +129,20 @@ Future<Map<String, Map<String, String>>> init() async {
 
   Get.put(LocalizationController(sharedPreferences: Get.find()));
   Get.put(LanguageController(sharedPreferences: Get.find()));
+  Get.put(AuthController());
+  Get.lazyPut(() => NotificationController(), fenix: true);
 
   Get.put(NavbarController());
   Get.put(ShipmentController());
   Get.put(BannersController());
-  Get.put(AuthController());
   Get.put(PermissionController());
   Get.put(AccountController());
   Get.put(SalaryController());
   Get.put(AttendanceController());
   Get.put(MaintenanceController());
   Get.put(DeliveryProjectController());
+  // Notification service (simple in-memory service)
+  //Get.put(NotificationController());
   Map<String, Map<String, String>> languages = {};
   for (LanguageModel languageModel in AppConstants.languages) {
     String jsonStringValues = await rootBundle

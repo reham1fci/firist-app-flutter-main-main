@@ -13,6 +13,7 @@ import 'package:get/get.dart';
 
 import '../../../controllers/permission_controller.dart';
 import '../../../util/constant.dart';
+import '../notifications/notifications_screen.dart';
 import 'widget/home_notification_dialog.dart';
 import 'home_screen.dart';
 import '../../../util/styles.dart';
@@ -160,7 +161,7 @@ class NavbarController extends GetxController implements GetxService {
   final List<Widget> screen = [
     const Myapp(),
     const AccountStatement(),
-    const Screen3(),
+    NotificationScreen(),
     const ProfileScreen()
   ];
 
@@ -175,15 +176,3 @@ class NavbarController extends GetxController implements GetxService {
   }
 }
 
-class Screen3 extends StatelessWidget {
-  const Screen3({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text("Screen 3"),
-      ),
-    );
-  }
-}

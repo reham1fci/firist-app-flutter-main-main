@@ -8,6 +8,7 @@ class AppConstants {
   static const String company_name = 'Marsa Company';
   static const String hr_system = 'HR System';
   static const String baseUrl = "https://marsalogistics.com/new/hr_marsa_system/ar/api_hr_apps";
+  static const String notificationBaseUrl = "https://www.marsalogistics.com/new/hr_marsa_system/ar/app_setting/api";
   static const String loginUri = '/Login_Api.php';
   static const String signupUrl= '/insert_user_api.php';
   static const String setArrival= '/driver_arrival_api.php';
@@ -26,6 +27,7 @@ class AppConstants {
   static const String fakeLocation = '/fack_location.php';
   static const String logoutFingerPrint = '/add_ensraf_api.php';
   static const String getShift = '/view_shift_api.php';
+  static const String showNotification  = '/view_notifications_api.php';
     static const String  vacationTypes= '/Show_Vacation_Type_api.php';
     static const String  empData= '/hr_request_type_update_emp_data_api.php';
     static const String  editProfile= '/hr_add_all_requestt_api_update_emp_data.php';
@@ -35,6 +37,7 @@ class AppConstants {
   static const String  getVacation= '/Show_Vacation_Rquest_api.php';
   static const String  getVacationData= '/get_vacation_info.php';
   static const String  forgetPassword= '/api_password_send_otp.php';
+  static const String  saveNotificationToken= '/save-fcm-token.php';
   static const String  resetPassword= '/api_password_reset.php';
   static const String  getRequestTypes= '/hr_request_type_api.php';
   static const String  getRequestApiList= '/api_list.php';

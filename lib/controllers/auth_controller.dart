@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:betakety_app/api/Api.dart';
 import 'package:betakety_app/api/api_services.dart';
+import 'package:betakety_app/firebase_notification/push_notification_services.dart';
 import 'package:betakety_app/model/login_model.dart';
 import 'package:betakety_app/model/personal_data.dart';
 import 'package:betakety_app/util/app_constants.dart';
@@ -118,9 +119,10 @@ resetData(){
     await prefs.setBool('is_logged_in', true);
 
     await prefs.setString(
-        'user', json.encode(user.toJson())).then((value) {
+        'user', json.encode(user.toJson()));
+      await PushNotificationService().init();
       Get.offAll(const NavBarScreen());
-    });
+
   }
 
   clearUserLogin() async {
@@ -279,6 +281,7 @@ resetData(){
       }
     }
   }
+
   Future<void> resetPassword() async {
      _isLoading = true  ;
      update() ;
@@ -308,6 +311,22 @@ _isLoading  = false  ;
       } else {
         showCustomSnackBar(res["message_ar"]);
       }
+    }
+  }
+  Future<void> saveToken({required String token}) async {
+    Api api = Api();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    LoginResponsModel user =  await AuthController().getLoginData()  ;
+
+    data['user_id'] = user.id;
+    data['fcm_token'] = token;
+
+    final response = await api.postData(
+        uri: AppConstants.saveNotificationToken, map: data , isNotification: true);
+    if (response.statusCode == 200) {
+      print("return data  " + response.body);
+      var res = jsonDecode(response.body);
+     print(res["message"]) ;
     }
   }
 }

@@ -682,5 +682,7 @@
   "close": "إغلاق",
   "enter_register_phone": "أدخل رقم الهاتف  الذي تستخدمه لحسابك أدناه لاعادة تعيين كلمة المرور",
   "deduction_request": "طلب خصم" ,
+  "unseen": "جديدة" ,
+  "seen": "تمت المشاهدة" ,
   "financial_settlement": "طلب تسوية مستحقات"
 }
