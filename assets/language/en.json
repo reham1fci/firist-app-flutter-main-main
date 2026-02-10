@@ -266,6 +266,7 @@
   "password_reset_successfully": "Password Reset Successfully",
   "input_valid_phone_number": "Input valid phone number",
   "input_valid_otp": "Input valid Otp",
+  "otp_incorrect": "Otp incorrect",
   "discounted_product": "Discounted Products",
   "add_the_location_correctly": "Add the location correctly",
   "label_us": "Label As",

@@ -200,7 +200,7 @@ return true;
                       width: Get.width / 3.2,
                       height: Get.width / 3,
                       screen:
-                      isMandatoryData? null:
+                 //     isMandatoryData? null:
                       WidgetList(),
                     ),
                     Squermain(

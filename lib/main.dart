@@ -45,11 +45,13 @@ Future<void> main() async {
   await Firebase.initializeApp();
 
   final pushService = PushNotificationService();
+  // Register the created PushNotificationService instance with GetX
+  Get.put<PushNotificationService>(pushService, permanent: true);
 
   await LocalNotificationService.init(
     onNotificationTap: pushService.handleLocalNotificationTap,
   );
- await pushService.init();
+  await pushService.init();
 
   FirebaseMessaging.onBackgroundMessage(
     firebaseMessagingBackgroundHandler,
@@ -131,7 +133,7 @@ Future<Map<String, Map<String, String>>> init() async {
   Get.put(LanguageController(sharedPreferences: Get.find()));
   Get.put(AuthController());
   Get.lazyPut(() => NotificationController(), fenix: true);
-
+  //Get.put(PushNotificationService(), permanent: true);
   Get.put(NavbarController());
   Get.put(ShipmentController());
   Get.put(BannersController());

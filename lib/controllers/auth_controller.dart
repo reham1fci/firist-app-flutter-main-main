@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_udid/flutter_udid.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mac_address/mac_address.dart';
 //import 'package:platform_device_id/platform_device_id.dart';
@@ -256,6 +257,10 @@ resetData(){
 
   Future<void> forgetPassword({required String phone}) async {
     Api api = Api();
+    SharedPreferences sharedPreferences = Get.find();
+
+    String languageCode =
+        sharedPreferences.getString(AppConstants.LANGUAGE_CODE) ?? 'ar';
     final Map<String, dynamic> data = <String, dynamic>{};
     data['mobile_number'] = phone;
 
@@ -277,7 +282,8 @@ resetData(){
           ),
         );
       } else {
-        showCustomSnackBar(res["message"]);
+
+        showCustomSnackBar(languageCode=="en" ? res["message_en"]:res["message_ar"]);
       }
     }
   }
