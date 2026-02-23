@@ -57,10 +57,17 @@ dependencies:
   local_auth:
   flutter_udid: ^3.0.0
   upgrader: ^9.0.0
+  intl_phone_field: ^3.2.0
   flutter_pdfview: ^1.2.7
   url_launcher: ^6.2.6
   url_launcher_android: ^6.2.6
   url_launcher_ios: 6.3.2 #platform_device_id: ^1.0.1
+  firebase_core:
+  firebase_messaging:
+  flutter_local_notifications: ^17.0.0
+
+  #connectivity:
+  #platform_device_id: ^1.0.1
 dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:

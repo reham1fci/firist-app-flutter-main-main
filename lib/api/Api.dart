@@ -13,8 +13,14 @@ import '../util/app_constants.dart';
 
 class Api {
 
-  Future<Response> postData({ required String uri ,  required Map map}) async {
+  Future<Response> postData({ required String uri ,  required Map map ,  bool isNotification = false}) async {
+
     String url =AppConstants.baseUrl+uri;
+     if(isNotification){
+        url =AppConstants.notificationBaseUrl+uri;
+     }
+
+
     print(url);
     print(map);
     final response = await http.post(
@@ -25,7 +31,9 @@ class Api {
     body: json.encode(map),
     );
     return response;
-  } Future<Response> postData2({required String uri, required Map map}) async {
+  }
+
+  Future<Response> postData2({required String uri, required Map map}) async {
     String url = AppConstants.baseUrl + uri;
     print(url);
     print(map);

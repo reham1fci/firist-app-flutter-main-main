@@ -10,6 +10,7 @@ class CustomPasswordTextField extends StatefulWidget {
   final FocusNode? focusNode;
   final FocusNode? nextNode;
   final TextInputAction? textInputAction;
+  final Function(String)? onChanged; // 👈 الجديد
 
   const CustomPasswordTextField(
       {Key? key,
@@ -17,6 +18,7 @@ class CustomPasswordTextField extends StatefulWidget {
       this.hintTxt,
       this.focusNode,
       this.nextNode,
+         this.onChanged,
       this.textInputAction})
       : super(key: key);
 
@@ -48,6 +50,8 @@ class CustomPasswordTextFieldState extends State<CustomPasswordTextField> {
           obscureText: _obscureText,
           focusNode: widget.focusNode,
           textInputAction: widget.textInputAction ?? TextInputAction.next,
+          onChanged: widget.onChanged, // 👈 هنا
+
           onFieldSubmitted: (v) {
             setState(() {
               widget.textInputAction == TextInputAction.done
@@ -58,6 +62,7 @@ class CustomPasswordTextFieldState extends State<CustomPasswordTextField> {
           validator: (value) {
             return null;
           },
+
           decoration: InputDecoration(
               enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),

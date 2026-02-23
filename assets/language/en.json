@@ -266,6 +266,7 @@
   "password_reset_successfully": "Password Reset Successfully",
   "input_valid_phone_number": "Input valid phone number",
   "input_valid_otp": "Input valid Otp",
+  "otp_incorrect": "Otp incorrect",
   "discounted_product": "Discounted Products",
   "add_the_location_correctly": "Add the location correctly",
   "label_us": "Label As",
@@ -676,6 +677,14 @@
   "restart_work": "Return to Work",
   "yes": "Yes",
   "no": "No",
- "revision": "Revision"
+ "revision": "Revision" ,
+ "unseen": "Unseen" ,
+ "seen": "Seen" ,
+  "objection": "Objection" ,
+  "deduction_request": "Deduction Request" ,
+  "objection_reason": "Objection Reason" ,
+  "write_objection_reason": "Write your Objection Reason" ,
+  "enter_register_phone": "Enter your phone have been register",
+  "accept_deduction": "are you sure you want to accept this deduction ?"
 
 }

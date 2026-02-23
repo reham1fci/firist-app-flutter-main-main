@@ -1,5 +1,6 @@
 
 import 'package:betakety_app/controllers/auth_controller.dart';
+import 'package:betakety_app/firebase_notification/push_notification_services.dart';
 import 'package:betakety_app/util/app_constants.dart';
 import 'package:betakety_app/util/constant.dart';
 import 'package:betakety_app/util/images.dart';
@@ -50,6 +51,12 @@ class _SplashBodyState extends State<SplashBody> {
         context,
         MaterialPageRoute(builder: (context) => AuthScreen()),
       ) ; }
+    final pushService = Get.find<PushNotificationService>();
+
+    if (pushService.initialData != null) {
+      pushService.handleLocalNotificationTap(pushService.initialData!);
+      pushService.initialData = null;
+    }
   }
 
   // Future<void>  mandatoryData() async {

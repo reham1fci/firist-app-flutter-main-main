@@ -15,6 +15,7 @@ import 'package:betakety_app/util/app_constants.dart';
 import 'package:betakety_app/view/base/custom_lert_dialog.dart';
 import 'package:betakety_app/view/base/file_name_dialog.dart';
 import 'package:betakety_app/view/screens/Requests/all_requests.dart';
+import 'package:betakety_app/view/screens/Requests/deduction_requests.dart';
 import 'package:betakety_app/view/screens/Requests/main_permissions.dart';
 import 'package:betakety_app/view/screens/Requests/vacation_request.dart';
 import 'package:betakety_app/view/screens/Requests/widget/pendingPopup.dart';
@@ -609,6 +610,48 @@ insertRequest(uri: AppConstants.AddAllRequests) ;
           showOkDialog(context: Get.context
           !,message: 'try again' ,isCancelBtn: false ,onOkClick:(){
           });}
+
+        update();
+      }
+      {
+      //  isLoading = false;
+        setLoading(id, false) ;
+
+        update();
+        print(response.statusCode) ;
+      }
+    }
+    objectionReason ({ required  String  id  ,  String? objectionReason  , String? requestName }) async {
+      update();
+      Api api = Api() ;
+      final Map<String, dynamic> data = <String, dynamic>{};
+      LoginResponsModel user =  await AuthController().getLoginData()  ;
+      data['employ_id'] = user.id;
+      if(requestName == AppConstants.objectionReason){
+      data['objection_reason'] =objectionReason ;
+      }
+      data['id'] = id;
+      final response = await api.postData2(uri: requestName!, map: data) ;
+      if(response.statusCode ==200){
+        print("return data  " +response.body) ;
+        var res  =jsonDecode(response.body) ;
+        bool success = res["success"] ;
+       // isLoading = false;
+        if(success)
+        {
+          showOkDialog(context: Get.context
+          !,message: res["msg"] ,isCancelBtn: false ,onOkClick:(){
+            Navigator.of(Get.context!).pop();
+            Navigator.push(Get.context!, MaterialPageRoute(
+             builder: (BuildContext context) => DeductionRequests()));
+
+          }
+          );
+        }else{
+          showOkDialog(context: Get.context
+          !,message: 'try again' ,isCancelBtn: false ,onOkClick:(){
+          });
+        }
 
         update();
       }
