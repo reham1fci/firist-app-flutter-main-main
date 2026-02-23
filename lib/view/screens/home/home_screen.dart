@@ -131,8 +131,7 @@ showDialog();
   }
   Future<void> _openStore() async {
     String packageName = 'com.marsa.marsa-hr';
-    String appStoreUrl = ''
-        '';
+    String appStoreUrl = 'https://apps.apple.com/us/app/marsa-hr/id6504737193';
     String playStoreUrl = 'https://play.google.com/store/apps/details?id=com.marsa.marsa_hr';
 
     if (await canLaunchUrl(Uri.parse(appStoreUrl )) && !Platform.isAndroid) {
@@ -200,7 +199,7 @@ return true;
                       width: Get.width / 3.2,
                       height: Get.width / 3,
                       screen:
-                 //     isMandatoryData? null:
+                  isMandatoryData? null:
                       WidgetList(),
                     ),
                     Squermain(

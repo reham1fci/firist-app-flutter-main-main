@@ -23,6 +23,7 @@ import 'package:nb_utils/nb_utils.dart';
 
 import '../../../../requests/permissions_requests/view_request_per2.dart';
 import '../../../../util/styles.dart';
+import '../../Requests/deduction_requests.dart';
 
 //import 'Navigation Bar/navigation_list.dart';
 
@@ -228,7 +229,7 @@ class _WidgetListState extends State<WidgetList> {
                   RequestsTypeItem(title:
                        "deduction_request".tr,
                         onTap: (){
-                          Get.to(MaintenanceRequests());
+                          Get.to(DeductionRequests());
 
                         },)
 

@@ -9,6 +9,7 @@ import 'package:betakety_app/model/personal_data.dart';
 import 'package:betakety_app/util/app_constants.dart';
 import 'package:betakety_app/view/base/custom_lert_dialog.dart';
 import 'package:betakety_app/view/screens/auth/widget/otp_dialog.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_udid/flutter_udid.dart';
 import 'package:geolocator/geolocator.dart';
@@ -127,6 +128,8 @@ resetData(){
   }
 
   clearUserLogin() async {
+    await deactivateToken() ;
+    await FirebaseMessaging.instance.deleteToken();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove("user");
     await prefs.setBool('is_logged_in', false);
@@ -321,14 +324,32 @@ _isLoading  = false  ;
   }
   Future<void> saveToken({required String token}) async {
     Api api = Api();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
     final Map<String, dynamic> data = <String, dynamic>{};
     LoginResponsModel user =  await AuthController().getLoginData()  ;
-
+    await prefs.setString('fcm_token', token);
     data['user_id'] = user.id;
     data['fcm_token'] = token;
 
     final response = await api.postData(
         uri: AppConstants.saveNotificationToken, map: data , isNotification: true);
+    if (response.statusCode == 200) {
+      print("return data  " + response.body);
+      var res = jsonDecode(response.body);
+     print(res["message"]) ;
+    }
+  }  Future<void> deactivateToken() async {
+    Api api = Api();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    LoginResponsModel user =  await AuthController().getLoginData()  ;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    data['user_id'] = user.id;
+    data['fcm_token'] =  prefs.getString("fcm_token");
+
+    final response = await api.postData(
+        uri: AppConstants.deactivateToken, map: data , isNotification: true);
     if (response.statusCode == 200) {
       print("return data  " + response.body);
       var res = jsonDecode(response.body);

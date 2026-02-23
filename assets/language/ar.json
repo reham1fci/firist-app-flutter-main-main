@@ -446,7 +446,8 @@
   "add_request": "اضافة الطلب",
 
   "retry": "حاول مرة آخرى",
-
+  "objection_reason": "سبب الاعتراض" ,
+  "write_objection_reason": "اكتب سبب اعتراضك ",
   "leave_before": "المغادرة قبل انتهاء الدوام",
   "emergency": "ضرف طارئ",
   "minutes": "عدد الدقايق",
@@ -685,5 +686,7 @@
   "deduction_request": "طلب خصم" ,
   "unseen": "جديدة" ,
   "seen": "تمت المشاهدة" ,
-  "financial_settlement": "طلب تسوية مستحقات"
+  "objection": "اعتراض" ,
+  "financial_settlement": "طلب تسوية مستحقات",
+  "accept_deduction": "هل انت متأكد من الموافقة علي تطبيق الخصم ؟"
 }

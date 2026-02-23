@@ -12,6 +12,8 @@ class AppConstants {
   static const String loginUri = '/Login_Api.php';
   static const String signupUrl= '/insert_user_api.php';
   static const String setArrival= '/driver_arrival_api.php';
+  static const String objectionReason= '/api_deduction_request_objection.php';
+  static const String acceptDeduction= '/api_approve_deduction_request.php';
   static const String addPermissionReq = '/insert_request_permission_api.php';
   static const String addMaintenanceReq = '/Maintenance_request_api.php';
   static const String showPermissionReq = '/show_request_permission_api.php';
@@ -38,11 +40,13 @@ class AppConstants {
   static const String  getVacationData= '/get_vacation_info.php';
   static const String  forgetPassword= '/api_password_send_otp.php';
   static const String  saveNotificationToken= '/save-fcm-token.php';
+  static const String  deactivateToken= '/deactivate-fcm-token.php';
   static const String  resetPassword= '/api_password_reset.php';
   static const String  getRequestTypes= '/hr_request_type_api.php';
   static const String  getRequestApiList= '/api_list.php';
   static const String  getAllRequests= '/Show_All_Request_api.php';
   static const String  maintenanceRequest= '/show_Maintenance_request_api.php';
+  static const String  showDeductionRequest= '/Show_discount_Rquest_api.php';
   static const String  showShipmentsDriver= '/show_request_limit_new_api_receiving_driver.php';
   static const String  details= '/hr_app_show_request_details.php';
   static const String  showShipments= '/show_request_limit_new_api_receiving_custom_broker.php';
