@@ -23,6 +23,7 @@ import 'package:betakety_app/view/screens/home/widget/widget_list.dart';
 import 'package:betakety_app/view/screens/splash/splash_view.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -37,32 +38,77 @@ import 'view/screens/profile/profile_screen.dart';
 import 'model/notification_model.dart';
 import 'view/screens/notifications/notifications_screen.dart';
 
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // SharedPreferences قبل أي حاجة
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool? isLoggedIn = prefs.getBool('is_logged_in');
-  Map<String, Map<String, String>> languages = await init();
-  await Firebase.initializeApp();
 
+  // إعداد اللغات (لو عندك init)
+  Map<String, Map<String, String>> languages = await init();
+
+  // Firebase initialization
+  await Firebase.initializeApp(
+    options: kIsWeb
+        ? throw UnsupportedError('Web not supported')
+        : FirebaseOptions(
+      apiKey: 'AIzaSyCXNWG95tMBd0cMt3pH87EFC-3GBEazs0c',
+      appId: '1:206102003007:ios:d4862ddce17eea412c278a',
+      messagingSenderId: '206102003007',
+      projectId: 'marsa-hr',
+      storageBucket: 'marsa-hr.firebasestorage.app',
+      iosBundleId: 'com.marsa.marsa-hr', // لازم يكون زي Xcode
+    ),
+  );
+
+  // Push notification service
   final pushService = PushNotificationService();
-  // Register the created PushNotificationService instance with GetX
   Get.put<PushNotificationService>(pushService, permanent: true);
 
+  // Local notifications (مهم تمرري إعدادات iOS)
   await LocalNotificationService.init(
     onNotificationTap: pushService.handleLocalNotificationTap,
-  );
-  await pushService.init();
 
-  FirebaseMessaging.onBackgroundMessage(
-    firebaseMessagingBackgroundHandler,
   );
-  RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+
+  // Firebase messaging
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  // طلب إذن الإشعارات على iOS
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+  print('User granted permission: ${settings.authorizationStatus}');
+
+  // Background message handler
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
+  // Initial message (لو التطبيق فتح من notification)
+  RemoteMessage? initialMessage =
+  await FirebaseMessaging.instance.getInitialMessage();
   if (initialMessage != null) {
     pushService.initialData = initialMessage.data;
   }
 
-  runApp(MyApp(languages: languages, isLoggedIn: isLoggedIn));
+  // Initializing Push Service
+  await pushService.init();
+
+  // Run the app
+  runApp(MyApp(
+    languages: languages,
+    isLoggedIn: isLoggedIn,
+  ));
 }
+
+
+
+
+
+
 
 class MyApp extends StatelessWidget {
   final Map<String, Map<String, String>> languages;

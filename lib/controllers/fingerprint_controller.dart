@@ -18,6 +18,8 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:local_auth_android/local_auth_android.dart';
+import 'package:local_auth_ios/local_auth_ios.dart';
 import 'package:maps_toolkit/maps_toolkit.dart' as toolkit;
 //import 'package:platform_device_id/platform_device_id.dart';
 
@@ -161,14 +163,12 @@ String time = DateFormat('HH:mm:ss').format(currentDate);
          isAuthenticating = true;
          _authorized = 'Authenticating';
          update() ;
-       authenticated = await auth.authenticate(
-         localizedReason:
-         'Scan your fingerprint (or face or whatever) to authenticate',
-         options: const AuthenticationOptions(
-           stickyAuth: true,
-           biometricOnly: true,
-         ),
+       authenticated =  await auth.authenticate(
+         localizedReason: 'Scan your fingerprint to authenticate',
+         biometricOnly: true,     // 👈 بدل options
+       //  stickyAuth: true,        // 👈 بدل options
        );
+
          isAuthenticating = false;
          _authorized = 'Authenticating';
          update();

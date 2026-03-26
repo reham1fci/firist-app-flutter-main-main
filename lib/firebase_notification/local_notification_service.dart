@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class LocalNotificationService {
@@ -13,8 +12,26 @@ class LocalNotificationService {
   }) async {
     onTap = onNotificationTap;
 
-    const settings = InitializationSettings(
-      android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+    // Android settings
+    const AndroidInitializationSettings androidSettings =
+    AndroidInitializationSettings('@mipmap/ic_launcher');
+
+    // iOS settings
+    final DarwinInitializationSettings iosSettings = DarwinInitializationSettings(
+      requestSoundPermission: true,
+      requestBadgePermission: true,
+      requestAlertPermission: true,
+      onDidReceiveLocalNotification: (id, title, body, payload) async {
+        if (payload != null) {
+          onTap(jsonDecode(payload));
+        }
+      },
+    );
+
+    // Combined settings
+    final InitializationSettings settings = InitializationSettings(
+      android: androidSettings,
+      iOS: iosSettings,
     );
 
     await _notifications.initialize(
@@ -32,18 +49,25 @@ class LocalNotificationService {
     required String body,
     required Map<String, dynamic> payload,
   }) async {
+    const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+      'default_channel',
+      'Default',
+      importance: Importance.high,
+      priority: Priority.high,
+    );
+
+    const DarwinNotificationDetails iosDetails = DarwinNotificationDetails();
+
+    const NotificationDetails details = NotificationDetails(
+      android: androidDetails,
+      iOS: iosDetails,
+    );
+
     await _notifications.show(
       DateTime.now().millisecondsSinceEpoch ~/ 1000,
       title,
       body,
-      const NotificationDetails(
-        android: AndroidNotificationDetails(
-          'default_channel',
-          'Default',
-          importance: Importance.high,
-          priority: Priority.high,
-        ),
-      ),
+      details,
       payload: jsonEncode(payload),
     );
   }
