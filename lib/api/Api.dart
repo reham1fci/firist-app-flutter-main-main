@@ -2,8 +2,10 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:betakety_app/model/requests_permissions_model.dart';
-import 'package:connectivity/connectivity.dart';
+import 'package:file_picker/file_picker.dart';
+//import 'package:connectivity/connectivity.dart';
 import 'package:http/http.dart'  as http ;
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart';
 
@@ -11,16 +13,43 @@ import '../util/app_constants.dart';
 
 class Api {
 
-  Future<Response> postData({ required String uri ,  required Map map}) async {
+  Future<Response> postData({ required String uri ,  required Map map ,  bool isNotification = false}) async {
+
     String url =AppConstants.baseUrl+uri;
+     if(isNotification){
+        url =AppConstants.notificationBaseUrl+uri;
+     }
+
+
     print(url);
     print(map);
     final response = await http.post(
       Uri.parse(url),
+      headers:{
+        'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin':"*"},
     body: json.encode(map),
     );
     return response;
   }
+
+  Future<Response> postData2({required String uri, required Map map}) async {
+    String url = AppConstants.baseUrl + uri;
+    print(url);
+    print(map);
+
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
+      },
+      body: map, // متبعتش json.encode(map)
+    );
+
+    return response;
+  }
+
 
   Future <Response> getData({
     required String url })async{
@@ -30,7 +59,7 @@ class Api {
     return response ;
   }
 
-  Future<bool> checkInternet() async {
+  /*Future<bool> checkInternet() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile) {
       return true;
@@ -38,7 +67,19 @@ class Api {
 
       return true;
     }
-    return false;}
+    return false;}*/
 
 
    }
+
+class MultipartBody {
+  String key;
+  XFile? file;
+  MultipartBody(this.key, this.file);
+}
+
+class MultipartDocument {
+  String key;
+  PlatformFile? file;
+  MultipartDocument(this.key, this.file);
+}

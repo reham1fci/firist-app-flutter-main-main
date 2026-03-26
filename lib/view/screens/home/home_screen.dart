@@ -3,12 +3,21 @@ import 'dart:io';
 
 import 'package:betakety_app/api/Api.dart';
 import 'package:betakety_app/controllers/auth_controller.dart';
+import 'package:betakety_app/controllers/permission_controller.dart';
 import 'package:betakety_app/model/instructor_model.dart';
 import 'package:betakety_app/model/login_model.dart';
+import 'package:betakety_app/model/personal_data.dart';
 import 'package:betakety_app/view/base/banners_view.dart';
 import 'package:betakety_app/view/base/custom_snackbar.dart';
+import 'package:betakety_app/view/screens/agent_orders/agent_daily_order_screen.dart';
+import 'package:betakety_app/view/screens/home/widget/home_notification_dialog.dart';
 import 'package:betakety_app/view/screens/attendance/finger_print.dart';
+import 'package:betakety_app/view/screens/home/widget/shipments_type_list.dart';
+import 'package:betakety_app/view/screens/home/widget/target_type.dart';
+import 'package:betakety_app/view/screens/profile/widgets/edit_profile.dart';
+import 'package:betakety_app/view/screens/profile/widgets/requests_list.dart';
 import 'package:betakety_app/view/screens/salary_details/salary_details_view.dart';
+import 'package:betakety_app/view/screens/shipments/shipments_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -44,90 +53,85 @@ class _MyappState extends State<Myapp> {
   List<InstructorItem> instructorsList = [];
   bool loader   = false  ;
   final appcastURL = 'https://www.marsalogistics.com/new/marsadelivery/appcast.xml';
-  getBestEmployee() async{
-     setState(() {
-       loader =  true  ;
-     });
-    final Map<String, dynamic> data = <String, dynamic>{};
-    LoginResponsModel user =  await AuthController().getLoginData()  ;
-    data["employ_id"] =user.id;
-    String url  =  AppConstants.bestEmployee+"?"+"employ_id=" +user.id!   ;
-    print(url) ;
-    try {
-      var response  = await  api.getData(url: url)  ;
 
-      if (response.statusCode == 200) {
-        print("employee");
-        print(jsonDecode(response.body));
-        var result = jsonDecode(response.body) ;
-        _Data = (result['data'] as List);
-        for (int i = 0 ; i < _Data.length ; i ++) {
-          var jsonObj = _Data [i];
-          InstructorItem item = InstructorItem.fromJsonEmployee(jsonObj);
-          print(item.instructorName) ;
-
-          instructorsList.add(item) ;
-        }
-        setState(() {
-          loader  = false  ;
-        });
-        return response.body;
-
-      } else {
-        return "error";
-      }
-    } catch (e) {
-      print("Error: $e");
-      return "error";
-    }
-  }
   AppUpdateInfo? _updateInfo;
 
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
 
- /* Future<void> checkForUpdate() async {
-   // InAppUpdate.
-    InAppUpdate.checkForUpdate().then((info) {
-      setState(() {
-        _updateInfo = info;
-        if( _updateInfo?.updateAvailability ==
-            UpdateAvailability.updateAvailable
-        ) {
-print("new update")  ;
-          InAppUpdate.performImmediateUpdate()
-              .catchError((e) {
-            showCustomSnackBar(e.toString());
-
-            return AppUpdateResult.inAppUpdateFailed;
-          });
-        }
-        else{
-          print("no update")  ;
-
-          showCustomSnackBar("no update");
-
-        }
-      });
-
-    }).catchError((e) {
-      showCustomSnackBar(e.toString());
-    });
-  }*/
   var cfg ;
+   bool mustDialog = false ;
+  List<PersonalData> personalDataList = [] ;
+
+  getUserData() async {
+     LoginResponsModel user =  await AuthController().getLoginData()  ;
+      if(user.mustDialog !=null ){
+        mustDialog =user.mustDialog!  =="1" ? false : true;
+      }
+      print(user.mustDialog);
+   }
+  Future<bool>  mandatoryDataFound() async {
+    personalDataList  = await Get.find<AuthController>().getRequiredData();
+     if(personalDataList.isNotEmpty) {
+       return true ;
+     } else {
+       return false ;
+     }
+
+  }
+  bool  mandatoryData()  {
+      personalDataList  =  Get.find<AuthController>().personalDataList;
+       if(personalDataList.isNotEmpty){
+         return true ;
+       }
+        else{
+          return false ;
+       }
+
+    }
+     bool isMandatoryData   = true  ;
+   showDialog()  async {
+
+     bool result = await mandatoryDataFound();
+
+     setState(() {
+       isMandatoryData = result;
+     });
+
+print("man"+ isMandatoryData.toString()) ;
+     if( isMandatoryData){
+     print(mustDialog) ;
+     showOkDialog(context: context,  isCancelBtn: true, onOkClick: (){
+     Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfile(from: "home",))).then((value) async {
+if( isMandatoryData){
+
+     }
+else{
+Navigator.of(context).pop() ;
+}
+     });
+
+     }) ;
+     }
+   }
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_)  {
+
+showDialog();
+    });
   /*  Upgrader(
         appcastConfig:
         AppcastConfiguration(url: appcastURL, supportedOS: ['android']));*/
    // checkForUpdate();
 
-    getBestEmployee() ;
+   // getBestEmployee() ;
   }
   Future<void> _openStore() async {
-    String packageName = 'put your_package_name';
-    String appStoreUrl = 'https://apps.apple.com/app/$packageName';
+    String packageName = 'com.marsa.marsa-hr';
+    String appStoreUrl = 'https://apps.apple.com/us/app/marsa-hr/id6504737193';
     String playStoreUrl = 'https://play.google.com/store/apps/details?id=com.marsa.marsa_hr';
 
     if (await canLaunchUrl(Uri.parse(appStoreUrl )) && !Platform.isAndroid) {
@@ -148,10 +152,10 @@ print("new update")  ;
         AppcastConfiguration(url: appcastURL, supportedOS: ['android' ,'ios']));
     return
      UpgradeAlert(
-       /* onIgnore: (){
+       onIgnore: (){
           SystemNavigator.pop();
           throw UnsupportedError('_');
-        } ,*/
+        } ,
         upgrader: upgrader,
          onUpdate: (){
 _openStore()  ;
@@ -191,42 +195,56 @@ return true;
                     Squermain(
                       title: 'requests'.tr,
                       //title: Text("PROFILE".tr)
-                      image: Images.request,
+                      image: Images.requests,
                       width: Get.width / 3.2,
-                      height: Get.width / 3.2,
-                      screen: WidgetList(),
+                      height: Get.width / 3,
+                      screen:
+                  isMandatoryData? null:
+                      WidgetList(),
                     ),
                     Squermain(
                       title: 'salaries'.tr,
                       image: Images.salary,
                       width: Get.width / 3.2,
-                      height: Get.width / 3.2,
-                      screen: salary_details_view(),
+                      height: Get.width / 3,
+                      screen: isMandatoryData? null :salary_details_view(),
                     ),
                     Squermain(
                       title: 'Attendance_and_Departure'.tr,
-                      image: Images.att,
+                      image: Images.attendance,
                       width: Get.width / 3.2,
-                      height: Get.width / 3.2,
+                      height: Get.width / 3,
                       screen: FingerPrint(),
                     ),
                   ],
                 ),
                 SizedBox(height: 20.0),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => HelloWorldApp()),
-                    );
-                  },
-                  child: Container(
-                    child: const Text(''),
-                    color: Color.fromARGB(255, 255, 255, 255),
-                    height: 20,
-                    width: 100,
-                  ),
+
+                Wrap(
+                  alignment: WrapAlignment.spaceBetween,
+                  children: [
+                    Squermain(
+                      title: 'shipments'.tr,
+                      //title: Text("PROFILE".tr)
+                      image: Images.shipments,
+                      width: Get.width / 3.2,
+                      height: Get.width / 3,
+                      screen: isMandatoryData? null:ShipmentsTypeList(),
+                    ),
+                    Squermain(
+                      title: 'target'.tr,
+                      //title: Text("PROFILE".tr)
+                      image: Images.target,
+                      width: Get.width / 3.2,
+                      height: Get.width / 3,
+                      screen: isMandatoryData? null:TargetType(),
+                    ),
+                    SizedBox(width: Get.width / 3.2)
+                  ],
                 ),
+
+
+
 //notification_screen=========================================================
             /*   const SizedBox(
                   height: 20.0,

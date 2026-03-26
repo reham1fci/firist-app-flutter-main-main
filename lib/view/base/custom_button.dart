@@ -33,8 +33,9 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ButtonStyle flatButtonStyle = TextButton.styleFrom(
-      backgroundColor: onPressed == null ?
-        Theme.of(context).disabledColor : buttonColor ?? Theme.of(context).primaryColor,
+      backgroundColor:
+     //onPressed == null ? Theme.of(context).disabledColor :
+      buttonColor ?? Theme.of(context).primaryColor,
       minimumSize: Size(width ?? Dimensions.WEB_MAX_WIDTH, height ?? 50),
       padding: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
@@ -42,7 +43,7 @@ class CustomButton extends StatelessWidget {
       ),
     );
 
-    return Center(child: SizedBox(width: width ?? Dimensions.WEB_MAX_WIDTH, child: Padding(
+    return  SizedBox(width: width ?? Dimensions.WEB_MAX_WIDTH, child: Padding(
       padding: margin ?? const EdgeInsets.all(0),
       child: TextButton(
         onPressed: onPressed,
@@ -58,6 +59,6 @@ class CustomButton extends StatelessWidget {
           )),
         ]),
       ),
-    )));
+    ));
   }
 }

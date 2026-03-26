@@ -1,7 +1,11 @@
 import 'package:betakety_app/util/custom_app_theme.dart';
+import 'package:betakety_app/view/base/color_resources.dart';
 import 'package:betakety_app/view/screens/Requests/widget/attach_view.dart';
+import 'package:betakety_app/view/screens/shipments/widgets/attachment_view_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../../../util/constant.dart';
 
 class PermissionRequestItem extends StatelessWidget{
 int index ;
@@ -153,7 +157,7 @@ PermissionRequestItem(
                               var attachList  = filteredData[index]['attatchement']as List  ;
                              String attach_url  = attachList[0]["attach_link"] ;
                               Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) =>
-                                  AttachView(attach_url)));
+                                  AttahmentViewScreen(url: attach_url)));
 
                             },
                             style: ElevatedButton.styleFrom(
@@ -174,11 +178,11 @@ PermissionRequestItem(
                             ),
                             child: Text(
                               'attachments'.tr,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 14,
                                 letterSpacing: 0.5,
-                                color: Color(0xFF744ACC),
+                                color:kMainColor,
                               ),
                             ),
                           ),
@@ -326,7 +330,7 @@ PermissionRequestItem(
                               const EdgeInsets.only(
                                   top: 6),
                               child: Text(
-                                "${filteredData[index]['request_per_date'].toString().tr} ",
+                                "${filteredData[index]['request_per_date'].toString()} ",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontFamily:

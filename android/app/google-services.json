@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "206102003007",
+    "project_id": "marsa-hr",
+    "storage_bucket": "marsa-hr.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:206102003007:android:c29f65456019b3d42c278a",
+        "android_client_info": {
+          "package_name": "com.marsa.marsa_hr"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBnhhND8YXJyErp67cLyjpscpwtJ_aDSgQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

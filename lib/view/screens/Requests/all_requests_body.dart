@@ -1,5 +1,7 @@
+import 'package:betakety_app/controllers/localization_controller.dart';
 import 'package:betakety_app/controllers/permission_controller.dart';
 import 'package:betakety_app/util/app_constants.dart';
+import 'package:betakety_app/util/widget_utils.dart';
 import 'package:betakety_app/view/screens/Requests/widget/request_item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,7 +20,7 @@ class AllRequestsBody extends StatefulWidget {
 class VacationRequestBodyState extends State<AllRequestsBody>  {
   // final AnimationController? animationController;
   bool loader = false;
-
+  Locale? myLocale  ;
 
   @override
   void initState() {
@@ -28,10 +30,12 @@ class VacationRequestBodyState extends State<AllRequestsBody>  {
 
   }
 
+  TextEditingController searchController = TextEditingController();
 
   int slectedTab = 0;
+  List<dynamic> filteredData = [];
 
-  List<dynamic> get filteredData => _Data.where((request) =>
+  List<dynamic> get filteredData2 => _Data.where((request) =>
   widget.selectIndex == 0
       ? request["stat"] == "0"
       : widget.selectIndex == 1 ? request["stat"] =="1":
@@ -46,6 +50,7 @@ class VacationRequestBodyState extends State<AllRequestsBody>  {
     if (data != 'error') {
       setState(() {
         _Data = (data['data'] as List);
+        filteredData = filteredData2;
       });
     }
     print(data);
@@ -57,18 +62,30 @@ class VacationRequestBodyState extends State<AllRequestsBody>  {
 
   @override
   Widget build(BuildContext context) {
-
+    myLocale= Get.find<LocalizationController>().locale;
+print(myLocale!.languageCode) ;
     return GetBuilder<PermissionController>(builder: (co) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          loader
-              ? const CircularProgressIndicator()
-              : Expanded(
-            child: ListView.separated(
+
+
+
+          getSearchWidget(
+
+            context, searchController,
+                () {},
+                (value) {
+              filterSearch(value);
+            },
+            onSubmit: (submit) {
+              filterSearch(submit);
+            },),
+           Expanded(
+      child:loader? const Center(child: CircularProgressIndicator()): ListView.separated(
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
-                  return RequestItem(index ,filteredData) ;
+                  return RequestItem(index ,filteredData ,type:  myLocale!.languageCode == "en"? filteredData[index]['type_title_en']:filteredData[index]['type_title_ar']) ;
                 },
                 separatorBuilder: (context, index) {
                   return const Divider();
@@ -81,5 +98,21 @@ class VacationRequestBodyState extends State<AllRequestsBody>  {
         ],
       );
     });
+  }
+  void filterSearch(String query) {
+    if (query.isEmpty) {
+      setState(() {
+        filteredData = List.from(filteredData2);
+      });
+    } else {
+      setState(() {
+        filteredData = filteredData2.where((item) {
+          final searchLower = query.toLowerCase();
+          final id = item["request_id"]?.toString().toLowerCase() ?? "";
+          final name =  myLocale!.languageCode == "en"? item['type_title_en']:item['type_title_ar'].toLowerCase() ?? "";
+          return id.contains(searchLower) || name.contains(searchLower);
+        }).toList();
+      });
+    }
   }
 }

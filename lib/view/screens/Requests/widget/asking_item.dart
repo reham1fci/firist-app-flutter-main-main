@@ -1,201 +1,297 @@
-import 'package:betakety_app/util/custom_app_theme.dart';
+import 'package:betakety_app/view/base/custom_button.dart';
 import 'package:betakety_app/view/screens/Requests/widget/attach_view.dart';
-import 'package:betakety_app/view/screens/Requests/widget/justification.dart';
+import 'package:betakety_app/view/screens/Requests/widget/insert_justification_view.dart';
+import 'package:betakety_app/view/screens/shipments/widgets/attachment_view_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:betakety_app/model/Questions.dart';
+import 'package:betakety_app/util/custom_app_theme.dart';
+import 'package:betakety_app/util/app_constants.dart';
 
-class AskingItem extends StatelessWidget{
-  int index ;
-  List<dynamic>  filteredData ;
-
-  AskingItem(this.index, this.filteredData);
-
+class AskingItem extends StatelessWidget {
+  final int index;
+  final List<dynamic> filteredData;
+  const AskingItem(this.index, this.filteredData, {super.key});
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-   return
-     Padding(
-       padding: const EdgeInsets.only(
-           left: 24, right: 24, top: 8, bottom: 10),
-       child: Container(
-       decoration: BoxDecoration(
-       color: CustomAppTheme.white,
-       borderRadius: const BorderRadius.only(
-           topLeft: Radius.circular(8.0),
-           bottomLeft: Radius.circular(8.0),
-           bottomRight: Radius.circular(8.0),
-           topRight: Radius.circular(68.0)),
-       boxShadow: <BoxShadow>[
-         BoxShadow(
-             color:
-             CustomAppTheme.grey.withOpacity(0.2),
-             offset: const Offset(1.1, 1.1),
-             blurRadius: 10.0),
-       ],
-     ),
-    child:
-     Padding(
-     padding: const EdgeInsets.only(
-    top: 16, left: 16, right: 24),child:Column(
+    final Questions item = filteredData[index];
 
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment:
-        CrossAxisAlignment.start,
-    children: <Widget>[
+    final bool isPending = item.status == AppConstants.pending;
+    final bool isRejected = item.status == "Absence_was_rejected";
 
-
-      Padding(
-        padding: const EdgeInsets.only(
-            left: 4, bottom: 8, top: 16),
-        child: Text(
-          filteredData[index]["question_type"],
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            //  fontFamily: FitnessAppTheme.fontName,
-              fontWeight: FontWeight.w500,
-              fontSize: 16,
-              letterSpacing: -0.1,
-              color: CustomAppTheme.darkText),
-        ),
-      ),
-      Row(
-        mainAxisAlignment:
-        MainAxisAlignment.end,
-        children: <Widget>[
-          Icon(
-            Icons.access_time,
-            color: CustomAppTheme.grey
-                .withOpacity(0.5),
-            size: 16,
-          ),
-          Padding(
-            padding:
-            const EdgeInsets.only(
-                left: 4.0),
-            child: Text(
-              textDirection:
-              TextDirection.ltr,
-              "${filteredData[index]['hr_question_date'].toString().tr} ",
-              textAlign:
-              TextAlign.center,
-              style: TextStyle(
-                fontFamily:
-                CustomAppTheme
-                    .fontName,
-                fontWeight:
-                FontWeight.w500,
-                fontSize: 14,
-                letterSpacing: 0.0,
-                color: CustomAppTheme
-                    .grey
-                    .withOpacity(0.5),
-              ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: Container(
+        decoration: BoxDecoration(
+          color: CustomAppTheme.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: CustomAppTheme.grey.withOpacity(0.15),
+              blurRadius: 8,
+              offset: const Offset(2, 4),
             ),
-          ),
-        ],
-      ),
-      Row(
-        mainAxisAlignment:
-        MainAxisAlignment.spaceBetween,
-        children: [
-          filteredData[index] ["question_stat"]=="waiting_employee_response"? ElevatedButton(
-            onPressed: () {
-showJustificationDialog(context:context ,hr_question_id: filteredData[index]["hr_question_id"] ,hr_question_date: filteredData[index]["hr_question_date"]) ;
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor:
-              Color.fromARGB(
-                  255, 204, 210, 215),
-              // Background color
-              // onPrimary: Color.fromARGB(255,
-              //     23, 23, 23), // Text color
-              padding: EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 5), // Padding
-              shape: RoundedRectangleBorder(
-                borderRadius:
-                BorderRadius.circular(
-                    10), // Border radius
-              ),
-            ),
-            child: Text(
-              'justification'.tr,
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 14,
-                letterSpacing: 0.5,
-                color: Color(0xFF744ACC),
-              ),
-            ),
-          ):SizedBox(),
-          ElevatedButton(
-            onPressed: () {
-              // Add the function to execute when the button is pressed
-              String attach_url  = filteredData[index]['attach_link'] ;
-              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) =>
-                  AttachView(attach_url)));
-
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor:
-              Color.fromARGB(
-                  255, 204, 210, 215),
-              // Background color
-              // onPrimary: Color.fromARGB(255,
-              //     23, 23, 23), // Text color
-              padding: EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 5), // Padding
-              shape: RoundedRectangleBorder(
-                borderRadius:
-                BorderRadius.circular(
-                    10), // Border radius
-              ),
-            ),
-            child: Text(
-              'attachments'.tr,
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 14,
-                letterSpacing: 0.5,
-                color: Color(0xFF744ACC),
-              ),
-            ),
-          ),
-        ],
-      ) ,
-      Padding(
-        padding: const EdgeInsets.only(
-            left: 24, right: 24, top: 2, bottom: 2),
-        child: Container(
-          height: 2,
-          decoration: const BoxDecoration(
-            color: CustomAppTheme.background,
-            borderRadius: BorderRadius.all(
-                Radius.circular(4.0)),
+          ],
+          border: Border.all(
+            color: isRejected
+                ? Colors.redAccent.withOpacity(0.3)
+                : Colors.blueGrey.withOpacity(0.1),
           ),
         ),
-      ),
-      Text(filteredData[index]['employee_reply']) ,
-      Padding(
-        padding: const EdgeInsets.only(
-            left: 4, bottom: 8),
-        child: Text(
-          "${filteredData[index]['question_stat'].toString().tr} ",
-          textAlign: TextAlign.center,
-          style:  TextStyle(
-            // fontFamily:FitnessAppTheme.fontName,
-            fontWeight: FontWeight.w200,
-            fontSize: 16,
-            color:  filteredData[index]['question_stat'] =="Absence_was_rejected" ?Colors.red : const Color.fromARGB(
-                255, 206, 217, 6) ,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              /// Top Row — Title & Date
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    child: Text(
+                      item.type!.tr ?? '',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      const Icon(Icons.calendar_month, size: 16, color: Colors.grey),
+                      const SizedBox(width: 4),
+                      Text(
+                        item.date ?? '',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.grey.shade600,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 10),
+
+              /// Divider
+              Divider(
+                thickness: 1,
+                height: 16,
+                color: Colors.grey.shade200,
+              ),
+
+              /// Status Row
+              Row(
+                children: [
+                  const Icon(Icons.info_outline, size: 18, color: Colors.grey),
+                  const SizedBox(width: 6),
+                  Text(
+                    '${'Status'.tr}: ',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey.shade800,
+                    ),
+                  ),
+                  Text(
+                    item.status ?? '',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: isRejected
+                          ? Colors.red
+                          : (isPending
+                          ? Colors.orange
+                          : Colors.green),
+                    ),
+                  ),
+                ],
+              ),   item.reply != null?  Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(Icons.chat_bubble_outline, size: 18, color: Colors.grey),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.blueGrey.withOpacity(0.05),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: RichText(
+                          text: TextSpan(
+                            text: '${'reply'.tr}: ',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: Colors.grey.shade800,
+                              fontSize: 14,
+                            ),
+                            children: [
+                              TextSpan(
+                                text: item.reply!,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.black87,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                          softWrap: true,
+                          overflow: TextOverflow.visible,
+                          textDirection: TextDirection.rtl, // ← مهم للنص العربي
+                        ),
+                      ),
+                    ),
+                  ]):SizedBox(),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     Row(
+              //       children: [
+              //         const Icon(Icons.access_time, size: 16, color: Colors.grey),
+              //         const SizedBox(width: 4),
+              //         Text(
+              //           '${'attendance'.tr}: ',
+              //           style: TextStyle(
+              //             fontSize: 13,
+              //             color: Colors.grey.shade600,
+              //             fontWeight: FontWeight.w500,
+              //           ),
+              //         ),
+              //         Text(
+              //           item.attendance ?? '',
+              //           style: TextStyle(
+              //             fontSize: 13,
+              //             color: Colors.grey.shade600,
+              //             fontWeight: FontWeight.w500,
+              //           ),
+              //         ),
+              //       ],
+              //     ),
+              //     Row(
+              //       children: [
+              //         const Icon(Icons.access_time, size: 16, color: Colors.grey),
+              //         const SizedBox(width: 4),
+              //         Text(
+              //           '${'withdrawal'.tr}: ',
+              //           style: TextStyle(
+              //             fontSize: 13,
+              //             color: Colors.grey.shade600,
+              //             fontWeight: FontWeight.w500,
+              //           ),
+              //         ),
+              //         Text(
+              //           item.withdrawal ?? '',
+              //           style: TextStyle(
+              //             fontSize: 13,
+              //             color: Colors.grey.shade600,
+              //             fontWeight: FontWeight.w500,
+              //           ),
+              //         ),
+              //       ],
+              //     ),
+              //   ],
+              // ),
+              const SizedBox(height: 14),
+
+              /// Action Buttons
+              Row(
+                children: [
+                  if (isPending)
+
+               Expanded(child:  Column(
+                   // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                     Row(
+                        children: [
+                          const Icon(Icons.access_time, size: 16, color: Colors.grey),
+                          const SizedBox(width: 4),
+                          Text(
+                            '${'attendance'.tr}: ',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Colors.grey.shade600,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Text(
+                            item.attendance ?? '',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Colors.grey.shade600,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                  Row(
+                        children: [
+                          const Icon(Icons.access_time, size: 16, color: Colors.grey),
+                          const SizedBox(width: 4),
+                          Text(
+                            '${'withdrawal'.tr}: ',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Colors.grey.shade600,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Text(
+                            item.withdrawal ?? '',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Colors.grey.shade600,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                    ),
+                    ],
+                  )),
+Column(
+  children: [
+
+                  if (isPending)
+                    CustomButton(buttonText: 'justification'.tr , width: 90,height: 40, onPressed: () {
+             Navigator.push(context, MaterialPageRoute(builder: (context) => InsertJustificationView(questions: item)))      ;
+                       },
+
+                    ),
+                  if(!isPending)
+                  CustomButton(buttonText: 'attachments'.tr , width: 90,height: 40,onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AttahmentViewScreen( url: item.attachment,)))      ;
+
+
+                  },
+                  ),
+  ]
+)
+                    // ElevatedButton.icon(
+                    //   onPressed: () {
+                    //     // showJustificationDialog(...)
+                    //   },
+                    //   icon: const Icon(Icons.edit_note, size: 18),
+                    //   label: Text('justification'.tr),
+                    //   style: ElevatedButton.styleFrom(
+                    //     backgroundColor:
+                    //     Theme.of(context).colorScheme.secondaryContainer,
+                    //     foregroundColor:
+                    //     Theme.of(context).colorScheme.primary,
+                    //     padding: const EdgeInsets.symmetric(
+                    //         horizontal: 12, vertical: 6),
+                    //     shape: RoundedRectangleBorder(
+                    //       borderRadius: BorderRadius.circular(10),
+                    //     ),
+                    //   ),
+                    // ),
+                ],
+              ),
+            ],
           ),
         ),
-         ),
-
-  ]))
-    ));
-
-    }
-
+      ),
+    );
+  }
 }

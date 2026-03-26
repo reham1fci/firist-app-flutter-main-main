@@ -25,6 +25,15 @@ class VacationType{
 
     );
 
+  }  factory VacationType.fromJsonApiList(Map<String, dynamic> json){
+    return VacationType (
+        nameAr: json["nameAr"] ,
+        nameEn: json["nameEn"],
+        Id: json["id"] ,
+
+
+    );
+
   }
 
 

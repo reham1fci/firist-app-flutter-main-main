@@ -2,8 +2,14 @@ import 'dart:convert';
 
 import 'package:betakety_app/controllers/account_controller.dart';
 import 'package:betakety_app/controllers/attendance_controller.dart';
+import 'package:betakety_app/controllers/delivery_projects_controller.dart';
 import 'package:betakety_app/controllers/fingerprint_controller.dart';
+import 'package:betakety_app/controllers/maintenance_controller.dart';
+import 'package:betakety_app/controllers/notification_controller.dart';
 import 'package:betakety_app/controllers/salary_controller.dart';
+import 'package:betakety_app/controllers/shipment_controller.dart';
+import 'package:betakety_app/firebase_notification/local_notification_service.dart';
+import 'package:betakety_app/firebase_notification/push_notification_services.dart';
 import 'package:betakety_app/util/constant.dart';
 import 'package:betakety_app/view/screens/auth/auth_screen.dart';
 import 'package:betakety_app/controllers/banner_controller.dart';
@@ -15,23 +21,94 @@ import 'package:betakety_app/view/screens/home/widget/squer_screen.dart';
 import 'package:betakety_app/view/screens/home/widget/custom_drawer.dart';
 import 'package:betakety_app/view/screens/home/widget/widget_list.dart';
 import 'package:betakety_app/view/screens/splash/splash_view.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'controllers/language_controller.dart';
 import 'controllers/localization_controller.dart';
+import 'firebase_notification/firebase_background_handler.dart';
 import 'view/screens/home/home_screen.dart';
 import 'view/screens/profile/profile_screen.dart';
 
+// New imports for notifications
+import 'model/notification_model.dart';
+import 'view/screens/notifications/notifications_screen.dart';
+
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    bool? isLoggedIn = prefs.getBool('is_logged_in');
+  // SharedPreferences قبل أي حاجة
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  bool? isLoggedIn = prefs.getBool('is_logged_in');
+
+  // إعداد اللغات (لو عندك init)
   Map<String, Map<String, String>> languages = await init();
-  runApp(MyApp(languages: languages, isLoggedIn: isLoggedIn));
+
+  // Firebase initialization
+  await Firebase.initializeApp(
+    options: kIsWeb
+        ? throw UnsupportedError('Web not supported')
+        : FirebaseOptions(
+      apiKey: 'AIzaSyCXNWG95tMBd0cMt3pH87EFC-3GBEazs0c',
+      appId: '1:206102003007:ios:d4862ddce17eea412c278a',
+      messagingSenderId: '206102003007',
+      projectId: 'marsa-hr',
+      storageBucket: 'marsa-hr.firebasestorage.app',
+      iosBundleId: 'com.marsa.marsa-hr', // لازم يكون زي Xcode
+    ),
+  );
+
+  // Push notification service
+  final pushService = PushNotificationService();
+  Get.put<PushNotificationService>(pushService, permanent: true);
+
+  // Local notifications (مهم تمرري إعدادات iOS)
+  await LocalNotificationService.init(
+    onNotificationTap: pushService.handleLocalNotificationTap,
+
+  );
+
+  // Firebase messaging
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  // طلب إذن الإشعارات على iOS
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+  print('User granted permission: ${settings.authorizationStatus}');
+
+  // Background message handler
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
+  // Initial message (لو التطبيق فتح من notification)
+  RemoteMessage? initialMessage =
+  await FirebaseMessaging.instance.getInitialMessage();
+  if (initialMessage != null) {
+    pushService.initialData = initialMessage.data;
+  }
+
+  // Initializing Push Service
+  await pushService.init();
+
+  // Run the app
+  runApp(MyApp(
+    languages: languages,
+    isLoggedIn: isLoggedIn,
+  ));
 }
+
+
+
+
+
+
 
 class MyApp extends StatelessWidget {
   final Map<String, Map<String, String>> languages;
@@ -49,7 +126,7 @@ class MyApp extends StatelessWidget {
         return GetMaterialApp(
           theme: ThemeData(
             // useMaterial3: true,
-            fontFamily: AppConstants.fontFamily,
+          //  fontFamily: AppConstants.fontFamily,
             primaryColor: kMainColor,
             secondaryHeaderColor: const Color(0xFF1ED7AA),
             disabledColor: const Color(0xFFBABFC4),
@@ -76,6 +153,9 @@ class MyApp extends StatelessWidget {
 
           defaultTransition: Transition.topLevel,
           transitionDuration: const Duration(milliseconds: 500),
+
+          // New: register routes (GetPages) for notifications
+
         );
       },
     );
@@ -97,14 +177,20 @@ Future<Map<String, Map<String, String>>> init() async {
 
   Get.put(LocalizationController(sharedPreferences: Get.find()));
   Get.put(LanguageController(sharedPreferences: Get.find()));
-
-  Get.put(NavbarController());
-  Get.put(BannersController());
   Get.put(AuthController());
+  Get.lazyPut(() => NotificationController(), fenix: true);
+  //Get.put(PushNotificationService(), permanent: true);
+  Get.put(NavbarController());
+  Get.put(ShipmentController());
+  Get.put(BannersController());
   Get.put(PermissionController());
   Get.put(AccountController());
   Get.put(SalaryController());
   Get.put(AttendanceController());
+  Get.put(MaintenanceController());
+  Get.put(DeliveryProjectController());
+  // Notification service (simple in-memory service)
+  //Get.put(NotificationController());
   Map<String, Map<String, String>> languages = {};
   for (LanguageModel languageModel in AppConstants.languages) {
     String jsonStringValues = await rootBundle

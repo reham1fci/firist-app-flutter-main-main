@@ -1,7 +1,10 @@
 import 'package:betakety_app/util/dimensions.dart';
 import 'package:betakety_app/util/styles.dart';
+import 'package:betakety_app/view/screens/profile/widgets/edit_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import 'home_notification_dialog.dart';
 
 class Squermain extends StatelessWidget {
   final Widget? screen;
@@ -20,7 +23,13 @@ class Squermain extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        if (screen != null) Get.to(screen);
+        print(screen) ;
+        if (screen != null) {Get.to(screen) ;}
+        else{
+          showOkDialog(context: context,  isCancelBtn: true, onOkClick: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfile(from: "home",)));
+          }) ;
+        }
       },
       child: Container(
         decoration: BoxDecoration(
@@ -43,8 +52,8 @@ class Squermain extends StatelessWidget {
               children: [
                 Container(
                   width: (width! / 3) * 2,
-                  padding:
-                      const EdgeInsets.all(Dimensions.PADDING_SIZE_DEFAULT),
+                   padding:
+                      const EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
                   child: Image.asset(
                     image,
                   ),

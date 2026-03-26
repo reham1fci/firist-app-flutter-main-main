@@ -1,14 +1,22 @@
 import 'dart:convert';
 
+import 'package:betakety_app/api/Api.dart';
+import 'package:betakety_app/controllers/auth_controller.dart';
+import 'package:betakety_app/model/login_model.dart';
+import 'package:betakety_app/util/constant.dart';
 import 'package:betakety_app/util/dimensions.dart';
 import 'package:betakety_app/util/images.dart';
 import 'package:betakety_app/util/styles.dart';
 import 'package:betakety_app/view/base/custom_category_button.dart';
+import 'package:betakety_app/view/base/custom_lert_dialog.dart';
+import 'package:betakety_app/view/base/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../langulage/change_language.dart';
+import '../../../../util/app_constants.dart';
 import '../../../base/animated_custom_dialog.dart';
 import '../../../base/sign_out_confirmation_dialog.dart';
 
@@ -24,6 +32,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
   String name = "" ;
   String email = "" ;
   String photo = "" ;
+  String appleDelete = "1" ;
+   Api api = Api  () ;
+
   @override
   void initState() {
     super.initState();
@@ -39,6 +50,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
         name = responseJson['name'];
         email = responseJson['email'];
         photo = responseJson['photo'];
+        appleDelete =  responseJson['apple_delete'];
       });
     }
   }
@@ -53,7 +65,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
         children: [
           Container(
             width: MediaQuery.of(context).size.width,
-            color: Theme.of(context).primaryColor,
+            color: kFourthColor,
             height: 250,
             child: Column(children: [
               SizedBox(height: MediaQuery.of(context).viewPadding.top),
@@ -65,7 +77,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   child: ClipRRect(
                       borderRadius: const BorderRadius.all(Radius.circular(50)),
                       child: Image.asset(
-                        Images.logo_with_name,
+                        Images.logo_hr,
                         height: 80,
                         width: 80,
                         fit: BoxFit.cover,
@@ -75,7 +87,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               Text(
                 name,
                 style: fontSizeRegular.copyWith(
-                  color: Theme.of(context).cardColor,
+                  color: Colors.black,
                   fontSize: Dimensions.fontSizeExtraLarge,
                 ),
               ),
@@ -84,7 +96,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 child: Text(
                   email,
                   style: fontSizeRegular.copyWith(
-                    color: Theme.of(context).cardColor,
+                    color: Colors.black,
                     fontSize: Dimensions.fontSizeSmall,
                   ),
                 ),
@@ -100,6 +112,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   Get.back();
                   Get.to(const ChooseLanguageScreen());
                 },
+              ), CustomCategoryButton(
+                icon: Images.apply_job,
+                buttonText: 'apply_job'.tr,
+                onTap: () {
+                  Get.back();
+                 _launchURL() ;
+                },
               ),
               CustomCategoryButton(
                   icon: Images.logout,
@@ -112,10 +131,47 @@ class _CustomDrawerState extends State<CustomDrawer> {
                             isFlip: true),
                         // Get.find<AuthController>().logout()
                       }),
+               appleDelete == "0" ? CustomCategoryButton(
+                  icon: Images.delete_icon,
+                  buttonText: 'delete_Account'.tr,
+                  onTap: () => {
+                        Get.back(),
+                      showOkDialog(context: context, message: 'want_to_delete_account'.tr, isCancelBtn: true , okTitle: 'delete'.tr  ,
+                  onOkClick: () async {
+                        LoginResponsModel user =  await AuthController().getLoginData()  ;
+                        String url  =  "${AppConstants.deleteAccount}?employ_id=${user.id!}"   ;
+                         var response  = await api.getData(url: url)  ;
+                               print(response.body) ;
+                        var res  =jsonDecode(response.body) ;
+                        bool success = res["success"] ;
+                  if (success) {
+                  //  showOkDialog(context: context, message: "account deletetd", isCancelBtn: false , onOkClick: (){
+                      Get.find<AuthController>().logout();
+                      showCustomSnackBar("error try again") ;
+
+
+                  //  }) ;
+                  } else{
+                    showCustomSnackBar("error try again") ;
+                  }
+                      }
+
+                        // Get.find<AuthController>().logout()
+                      )}):SizedBox(),
             ]),
           ),
         ],
       ),
     );
+  }
+
+
+  _launchURL() async {
+    const url = 'https://www.marsalogistics.com/new/hr_marsa_system/ar/employ_dept/hr_Submit_employment_application.php?lang=ar';
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }

@@ -1,4 +1,6 @@
 
+import 'package:betakety_app/controllers/auth_controller.dart';
+import 'package:betakety_app/firebase_notification/push_notification_services.dart';
 import 'package:betakety_app/util/app_constants.dart';
 import 'package:betakety_app/util/constant.dart';
 import 'package:betakety_app/util/images.dart';
@@ -6,7 +8,10 @@ import 'package:betakety_app/view/base/color_resources.dart';
 import 'package:betakety_app/view/screens/auth/auth_screen.dart';
 import 'package:betakety_app/view/screens/home/nav_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../../model/personal_data.dart';
 
 class SplashBody extends StatefulWidget{
   const SplashBody({Key? key}) : super(key: key);
@@ -26,6 +31,7 @@ class _SplashBodyState extends State<SplashBody> {
         const Duration(seconds: 3),
             () => checkUser()
     );
+    //mandatoryData() ;
   }
   checkUser() async {
     sharedPrefs = await SharedPreferences.getInstance();
@@ -45,35 +51,52 @@ class _SplashBodyState extends State<SplashBody> {
         context,
         MaterialPageRoute(builder: (context) => AuthScreen()),
       ) ; }
+    final pushService = Get.find<PushNotificationService>();
+
+    if (pushService.initialData != null) {
+      pushService.handleLocalNotificationTap(pushService.initialData!);
+      pushService.initialData = null;
+    }
   }
+
+  // Future<void>  mandatoryData() async {
+  //   personalDataList  = await Get.find<AuthController>().getRequiredData();
+  //
+  //
+  // }
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return  Scaffold(
-    body:Center( child: Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    crossAxisAlignment: CrossAxisAlignment.center,
-    children: <Widget>[
-    const   Spacer(),
+        body:Center( child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              const   Spacer(),
 
-    Image.asset(Images.logo_with_name ,
-    fit: BoxFit.cover,
-    repeat: ImageRepeat.noRepeat,
-    ),
-    const   Spacer(),
-      const Text( AppConstants.appName ,style:   TextStyle(
-    fontWeight: FontWeight.bold,
-    fontSize: 30.0 ,
-    color: kMainColor
-    ),),
-    //  padding:const EdgeInsets.all(100),) ,
-    const   Spacer(),
+              Image.asset(Images.logo_hr ,
+                fit: BoxFit.cover,
+                repeat: ImageRepeat.noRepeat,
+              ),
+              // const   Spacer(),
+              const Text( AppConstants.company_name ,style:   TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30.0 ,
+                  color: kMainColor
+              ),),
+              const Text( AppConstants.hr_system ,style:   TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20.0 ,
+                  color: kMainColor
+              ),),
+              //  padding:const EdgeInsets.all(100),) ,
+              const   Spacer(),
 
-    const  CircularProgressIndicator(color: kMainColor,),
-    const   Spacer(),
+              const  CircularProgressIndicator(color: kMainColor,),
+              const   Spacer(),
 
 
-    ]),
-    ) );
+            ]),
+        ) );
   }
 }

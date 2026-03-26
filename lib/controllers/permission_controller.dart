@@ -3,18 +3,28 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:betakety_app/api/Api.dart';
 import 'package:betakety_app/controllers/auth_controller.dart';
+import 'package:betakety_app/controllers/fingerprint_controller.dart';
 import 'package:betakety_app/model/File.dart';
+import 'package:betakety_app/model/Questions.dart';
 import 'package:betakety_app/model/login_model.dart';
+import 'package:betakety_app/model/pending_check.dart';
 import 'package:betakety_app/model/request_options.dart';
+import 'package:betakety_app/model/vacation.dart';
 import 'package:betakety_app/model/vacation_type.dart';
 import 'package:betakety_app/util/app_constants.dart';
 import 'package:betakety_app/view/base/custom_lert_dialog.dart';
+import 'package:betakety_app/view/base/file_name_dialog.dart';
 import 'package:betakety_app/view/screens/Requests/all_requests.dart';
+import 'package:betakety_app/view/screens/Requests/deduction_requests.dart';
 import 'package:betakety_app/view/screens/Requests/main_permissions.dart';
 import 'package:betakety_app/view/screens/Requests/vacation_request.dart';
+import 'package:betakety_app/view/screens/Requests/widget/pendingPopup.dart';
+import 'package:betakety_app/view/screens/Requests/widget/vaction_popup.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
@@ -30,17 +40,26 @@ class PermissionController extends GetxController {
   // PermissionController({
   //   required this.permissionRepo,
   // });
-
+  TextEditingController fileName = TextEditingController();
+  bool canApplyVacation = true;
+  bool isLoading = false;
+  var loadingMap = <String, bool>{}.obs;
+  setLoading(String id, bool value) {
+    loadingMap[id] = value;
+    update();
+  }
   int _selectedIndex = 0;
   Api api = Api()  ;
   int get selectedIndex => _selectedIndex;
+  List<String> selectedIds =  [] ;
   changeSelected(int x) {
     _selectedIndex = x;
     update();
   }
+  List<VacationType> selectedItems = [];
 
   List<RequestTypeModel> requestTypeList = [
-    RequestTypeModel(name: "late", id: 1),
+    RequestTypeModel(name: "Late", id: 1),
     RequestTypeModel(name: "leave_before", id: 2),
   ];
 
@@ -51,20 +70,29 @@ class PermissionController extends GetxController {
   List<RequestTypeModel> vacationPlaceList = [
     RequestTypeModel(name: "inside", id: 1),
     RequestTypeModel(name: "outside", id: 2),
+    RequestTypeModel(name: "financial_settlement", id: 3),
   ];
   List<VacationType>? vacationTypeList;
+  List<VacationType>? apiList;
 
   RequestTypeModel? requestTypeTemp;
   PermissionTypeModel? permissionTypeTemp;
   RequestTypeModel? vacationPlaceTemp;
   VacationType? vacationTypeTemp;
+  VacationType? apiItemTemp;
+   String monthTemp = "1" ;
+  int? selectedYear =  2025;
+
   TextEditingController detailsController = TextEditingController();
   TextEditingController vacationPlaceController = TextEditingController();
   TextEditingController dateController = TextEditingController();
   TextEditingController dateFromController = TextEditingController();
+  TextEditingController departureDateController = TextEditingController();
+  TextEditingController returnDateController = TextEditingController();
   TextEditingController dateToController = TextEditingController();
   TextEditingController timeFromController = TextEditingController();
   TextEditingController timeToController = TextEditingController();
+  TextEditingController minutesController = TextEditingController();
   TextEditingController fileNameController = TextEditingController();
   TextEditingController justificationController = TextEditingController();
   FilePickerResult? addedFile;
@@ -72,20 +100,42 @@ class PermissionController extends GetxController {
   var length ;
   List<SendFile> filesList  = [] ;
   resetData() {
+    canApplyVacation  = true  ;
+     selectedIds  .clear()  ;
+    selectedItems.clear()  ;
   detailsController.clear();
   dateController.clear();
+  minutesController.clear();
   timeFromController.clear();
+  dateFromController.clear();
+  dateToController.clear();
+  justificationController.clear();
  timeToController.clear();
+ departureDateController.clear();
+ vacationPlaceController.clear();
+ returnDateController.clear();
+     apiItemTemp = null ;
  requestTypeTemp = requestTypeList[0];
  permissionTypeTemp = permissionTypeList[0];
  vacationPlaceTemp = vacationPlaceList[0];
  vacationTypeTemp = VacationType(nameEn: "Extended sick leave 16", Id: "279916");
   addedFile = null;
    fileNameController.clear();
+   fileName.clear();
+   filesList.clear()  ;
   }
   String? filePath  ;
   RequestsPermissionsModel ? permissionsModel  ;
+  Position? currentLocation  ;
 
+  Future<Position> getCurrentLocation() async {
+    Get.put(FingerPrintController() );
+    Get.find<FingerPrintController>().checkPermission();
+    currentLocation = await Geolocator .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    print(currentLocation);
+    return currentLocation! ;
+
+  }
    selectFile() async {
     int selectFiles = 3;
    FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -105,32 +155,109 @@ class PermissionController extends GetxController {
     }
   }
  var fileBytes  ;
-  selectSingleFile(TextEditingController  controller  , String key ) async {
+//   selectSingleFile(TextEditingController  controller  , String key ) async {
+//     FilePickerResult? result = await FilePicker.platform.pickFiles();
+// if(key.isEmpty){
+//   key = controller.text  ;
+// }
+//     if (result != null) {
+//       if(kIsWeb){
+//       fileBytes = result.files.single.bytes;
+// print(fileBytes);
+//       controller.text = result.files.single.name;
+//
+//       }
+//       else{
+//          File file = File(result.files.single.path!);
+//
+//         stream =  http.ByteStream(file.openRead())..cast();
+//         // get file length
+//          length = await file.length();
+//          controller.text = result.files.single.path!;
+//       }
+//
+//
+//     } else {
+//       // User canceled the picker
+//     }
+//      filesList.add(SendFile(key: key, stream: stream, length: length)) ;
+//   }
+   Future<String?> selectSingleFile(TextEditingController controller, String key ,) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
 
+    if (key.isEmpty) {
+      key = controller.text;
+    }
+
     if (result != null) {
-      if(kIsWeb){
-      fileBytes = result.files.single.bytes;
-print(fileBytes);
-      controller.text = result.files.single.name;
+      // Mobile
+      File file = File(result.files.single.path!);
 
-      }
-      else{
-         File file = File(result.files.single.path!);
+       stream = http.ByteStream(file.openRead())..cast();
+       length = await file.length();
 
-        stream =  http.ByteStream(file.openRead())..cast();
-        // get file length
-         length = await file.length();
-         controller.text = result.files.single.path!;
-      }
+      controller.text = result.files.single.path!.split('/').last;
+     // fileNameController.text = result.files.single.path!;
 
+      filesList.add(SendFile(
+        key: key,
+        stream: stream,
+        length: length,
+        fileName:  result.files.single.path!.split('/').last, // يجيب الاسم بس من غير الباث
+      ));
+      update() ;
 
+      return result.files.single.path ;
     } else {
       // User canceled the picker
     }
-     filesList.add(SendFile(key: key, stream: stream, length: length)) ;
   }
 
+  Future<String?> selectSingleFileWithName(TextEditingController controller, String key ,) async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    fileName.text = "";
+
+    if (key.isEmpty) {
+      key = controller.text;
+    }
+
+    if (result != null) {
+      // Mobile
+      File file = File(result.files.single.path!);
+
+      stream = http.ByteStream(file.openRead())..cast();
+      length = await file.length();
+
+      //controller.text = result.files.single.path!.split('/').last;
+      // fileNameController.text = result.files.single.path!;
+      FileNameDialog(
+          context: Get.context!,
+          isCancelBtn: true,
+          controller: controller,
+          onOkClick: () {
+            String name = fileName .text.trim() ;
+             print(name) ;
+            // identityImage.name  = fileNameText  ;
+            // imagesList.add(ImageData(file: identityImage, fileName: fileNameText));
+          //  filesNames.add(fileNameText);
+           // identityImages.add(identityImage);
+           // multipartList.add(MultipartBody('files[]', identityImage));
+            update();
+          });
+      filesList.add(SendFile(
+        key: key,
+        stream: stream,
+        length: length,
+        fileName:  result.files.single.path!.split('/').last, // يجيب الاسم بس من غير الباث
+      ));
+      update() ;
+
+      return result.files.single.path ;
+    }
+    else {
+      // User canceled the picker
+    }
+  }
   bool _isGetRequestsPermissions = false;
   bool get isGetRequestsPermissions => _isGetRequestsPermissions;
 
@@ -244,12 +371,17 @@ postDataWithFile(uri: AppConstants.addPermissionReq) ;
   } Future<void> validateVacationAndShowSnackbar() async {
     if (detailsController.text.isEmpty) {
       showCustomSnackBar("${'details'.tr} ${"is_required".tr}");
-    } else if (vacationPlaceTemp!.id ==2 && vacationPlaceController.text.isEmpty) {
+    } else if (vacationPlaceController.text.isEmpty) {
       showCustomSnackBar("${'vacation_place'.tr} ${"is_required".tr}");
     }else if (dateFromController.text.isEmpty) {
       showCustomSnackBar("${'date_from'.tr} ${"is_required".tr}");
     } else if (dateToController.text.isEmpty) {
-      showCustomSnackBar("${'date_to'.tr} ${"is_required".tr}");
+      showCustomSnackBar("${'date_to'.tr} ${"is_required".tr}");}
+    else if (vacationPlaceTemp!.id ==2 && departureDateController.text.isEmpty) {
+      showCustomSnackBar("${'departure_date'.tr} ${"is_required".tr}");
+    }
+    else if (vacationPlaceTemp!.id ==2 && returnDateController.text.isEmpty) {
+      showCustomSnackBar("${'return_date'.tr} ${"is_required".tr}");
     }
    else {
 insertVacationRequest(uri: AppConstants.insertVacation) ;
@@ -296,12 +428,41 @@ insertRequest(uri: AppConstants.AddAllRequests) ;
       print("Error: $e");
       return "error";
     }
-  }Future<dynamic> getTypes( String functionName) async {
+  }
+  Future<dynamic> getQuestionRequest(String functionName) async {
+    LoginResponsModel user =  await AuthController().getLoginData()  ;
+    String url  =  functionName+"?"+"employ_id=" +user.id!   ;
+    print(url) ;
+    try {
+      var response  = await  api.getData(url: url)  ;
+
+      if (response.statusCode == 200) {
+        print("requests");
+        var jsonObj  =  jsonDecode(response.body)  ;
+        print(jsonObj);
+
+        var jsonArr  =  jsonObj["data"] as List ;
+       List <Questions> questionsList = jsonArr.map((e) => Questions.fromJson(e ,)).toList();
+        return questionsList;
+
+      } else {
+        return "error";
+      }
+    } catch (e) {
+      print("Error: $e");
+      return "error";
+    }
+  }
+  Future<dynamic> getTypes( String functionName) async {
     vacationTypeList  = []  ;
     final Map<String, dynamic> data = <String, dynamic>{};
     LoginResponsModel user =  await AuthController().getLoginData()  ;
     data["company_id"] =user.companyId;
+
  String url  =  functionName+"?company_id=" +user.companyId!   ;
+ if(functionName == AppConstants.empData || functionName == AppConstants.showMandatoryData){
+   url  =  functionName+"?company_id=" +user.companyId! +"&id=" +user.id! ;
+ }
  print(url) ;
  try {
     var response  = await  api.getData(url: url)  ;
@@ -312,6 +473,9 @@ insertRequest(uri: AppConstants.AddAllRequests) ;
         var jsonObj  =  jsonDecode(response.body)  ;
         var jsonArr  =  jsonObj["data"] as List ;
         print(jsonArr) ;
+         if(functionName == AppConstants.vacationTypes){
+          vacationTypeList!.add(VacationType(nameAr:"اختر نوع  الاجازة"  , Id: "000" , nameEn:"choose vacation type" )) ;
+        }
         for(int i  =0  ; i< jsonArr.length ; i++  ){
            if (functionName  == AppConstants.vacationTypes){
           VacationType v  =  VacationType.fromJson(jsonArr[i]) ;
@@ -321,6 +485,9 @@ insertRequest(uri: AppConstants.AddAllRequests) ;
             else{
              VacationType v  =  VacationType.fromJsonRequests(jsonArr[i]) ;
              print(v.nameAr)  ;
+             for( int i  =  0  ;  i  <v.options!.length ; i ++){
+               v.options![i]["controller"] = TextEditingController();
+             }
              vacationTypeList!.add(v);
 
 
@@ -339,13 +506,211 @@ insertRequest(uri: AppConstants.AddAllRequests) ;
       print("Error: $e");
       return "error";
     }
+  }Future<dynamic> getHoursStatistic( ) async {
+    LoginResponsModel user =  await AuthController().getLoginData()  ;
+ String url  =  "${AppConstants.hoursCount}?id=${user.id!}"   ;
+ print(url) ;
+ try {
+    var response  = await  api.getData(url: url)  ;
+
+      if (response.statusCode == 200) {
+        print(jsonDecode(response.body));
+        var jsonObj  =  jsonDecode(response.body)  ;
+         update() ;
+          return jsonObj ;
+
+      } else {
+        return "error";
+      }
+    } catch (e) {
+      print("Error: $e");
+      return "error";
+    }
+  }
+
+  Future<dynamic> getApiList( String functionName) async {
+    apiList  = []  ;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    LoginResponsModel user =  await AuthController().getLoginData()  ;
+    data["company_id"] =user.companyId;
+ String url  =  AppConstants.getRequestApiList+"?company_id=" +user.companyId!+"&value_type_checkif="+functionName   ;
+ print(url) ;
+ try {
+    var response  = await  api.getData(url: url)  ;
+
+      if (response.statusCode == 200) {
+        print("vacations");
+        print(jsonDecode(response.body));
+        var jsonObj  =  jsonDecode(response.body)  ;
+        var jsonArr  =  jsonObj["data"] as List ;
+        print(jsonArr) ;
+        for(int i  =0  ; i< jsonArr.length ; i++  ){
+          VacationType item  =  VacationType.fromJsonApiList(jsonArr[i]) ;
+          print(item.nameAr)  ;
+           apiList!.add(item);
+        }
+
+        ////apiItemTemp =apiList![0];
+        update();
+        return jsonDecode(response.body);
+
+      } else {
+        return "error";
+      }
+    } catch (e) {
+      print("Error: $e");
+      return "error";
+    }
   }
 
 /*addRequest  (){
     Api api = Api() ;
     api.postDataWithFile(uri: AppConstants.addPermissionReq, obj: permissionsModel!, path: filePath!);
 }*/
+
+  resetLocation() async {
+    currentLocation =null  ;
+   await  getCurrentLocation() ;
+  }
+
+  setArrival  ({ required  String  id  , required String requestId   ,  required String vacationId}) async {
+      setLoading(id, true) ;
+      update();
+      Api api = Api() ;
+      final Map<String, dynamic> data = <String, dynamic>{};
+      LoginResponsModel user =  await AuthController().getLoginData()  ;
+
+      data['vacation_id'] = vacationId;
+      data['employ_id'] = user.id;
+    //  data['company_id'] = user.companyId;
+      data['lat_arrive'] = currentLocation!.latitude.toString();
+      data['lng_arrive'] = currentLocation!.longitude.toString();
+      data['request_id'] =requestId ;
+      data['id'] = id;
+      final response = await api.postData2(uri: AppConstants.setArrival, map: data) ;
+      if(response.statusCode ==200){
+        print("return data  " +response.body) ;
+        var res  =jsonDecode(response.body) ;
+        bool success = res["success"] ;
+
+       // isLoading = false;
+        setLoading(id, false) ;
+
+        if(success)
+        {
+          showOkDialog(context: Get.context
+          !,message: 'confirm_arrive'.tr ,isCancelBtn: false ,onOkClick:(){
+            Navigator.of(Get.context!).pop();
+            Navigator.push(Get.context!, MaterialPageRoute(
+                builder: (BuildContext context) => AllRequests()));
+
+          }
+          );
+        }else{
+          showOkDialog(context: Get.context
+          !,message: 'try again' ,isCancelBtn: false ,onOkClick:(){
+          });}
+
+        update();
+      }
+      {
+      //  isLoading = false;
+        setLoading(id, false) ;
+
+        update();
+        print(response.statusCode) ;
+      }
+    }
+    objectionReason ({ required  String  id  ,  String? objectionReason  , String? requestName }) async {
+      update();
+      Api api = Api() ;
+      final Map<String, dynamic> data = <String, dynamic>{};
+      LoginResponsModel user =  await AuthController().getLoginData()  ;
+      data['employ_id'] = user.id;
+      if(requestName == AppConstants.objectionReason){
+      data['objection_reason'] =objectionReason ;
+      }
+      data['id'] = id;
+      final response = await api.postData2(uri: requestName!, map: data) ;
+      if(response.statusCode ==200){
+        print("return data  " +response.body) ;
+        var res  =jsonDecode(response.body) ;
+        bool success = res["success"] ;
+       // isLoading = false;
+        if(success)
+        {
+          showOkDialog(context: Get.context
+          !,message: res["msg"] ,isCancelBtn: false ,onOkClick:(){
+            Navigator.of(Get.context!).pop();
+            Navigator.push(Get.context!, MaterialPageRoute(
+             builder: (BuildContext context) => DeductionRequests()));
+
+          }
+          );
+        }else{
+          showOkDialog(context: Get.context
+          !,message: 'try again' ,isCancelBtn: false ,onOkClick:(){
+          });
+        }
+
+        update();
+      }
+      {
+      //  isLoading = false;
+        setLoading(id, false) ;
+
+        update();
+        print(response.statusCode) ;
+      }
+    }
+  getTime  () async {
+    Api api = Api() ;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    LoginResponsModel user =  await AuthController().getLoginData()  ;
+    data['request_per_type'] = permissionTypeTemp!.name;
+    data['request_type'] = requestTypeTemp!.name;
+    data['request_per_date'] =dateController.text;
+    final response = await api.postData2(uri: "${AppConstants.getTime}?id=${user.id!}", map: data) ;
+    if(response.statusCode ==200){
+      print("return data  " +response.body) ;
+      var res  =jsonDecode(response.body) ;
+      String result = res["status"] ;
+      String checkMessage = res["mesaage_check"] ;
+      String message = res["message"] ;
+      if(result == "success"){
+ if ( checkMessage.isEmpty){
+   // save able
+   Navigator.of( Get.context!).pop();
+
+   String timeFrom = res["time_from"] ;
+   String timeTo = res["time_to"] ;
+   String minutes = res["sum_minuts"].toString() ;
+   timeFromController.text = timeFrom;
+   timeToController.text = timeTo;
+   minutesController.text = minutes +" "+ "min".tr;
+
+ }
+  else{
+   Navigator.of( Get.context!).pop();
+
+   showOkDialog(context: Get.context!, message: checkMessage, isCancelBtn: false) ;
+  }
+      }
+       else{
+        Navigator.of( Get.context!).pop();
+
+        showOkDialog(context: Get.context!, message: checkMessage, isCancelBtn: false) ;
+
+      }
+      update();
+      print(response.statusCode) ;
+    }
+    return ;
+  }
+
   Future<void> postDataWithFile({ required String uri }) async {
+    isLoading = true   ;
+    update() ;
     String url =AppConstants.baseUrl+uri;
     print(url) ;
     var request =  http.MultipartRequest("POST",   Uri.parse(url));
@@ -375,28 +740,41 @@ else{
     request.files.add(multipartFile);
 
     }
-var response  = await request.send() ;
-    print(response.statusCode) ;
-    
-      if (response.statusCode == 200){
-        print(response) ;
-        print("Uploaded!");
-        showOkDialog(context: Get.context
-            !,message: 'added_to_requests_permission'.tr ,isCancelBtn: false ,onOkClick:(){
-          Navigator.of( Get.context!).pop();
-          Navigator.push(Get.context!, MaterialPageRoute(builder: (BuildContext context) => MainPermissions()));
+    var streamedResponse = await request.send() ;
+    var response = await http.Response.fromStream(streamedResponse);
 
-          update() ;
-        } );
+    print(response.statusCode) ;
+
+    if (response.statusCode == 200){
+      var data = jsonDecode(response.body);
+      print(response) ;
+      print("Uploaded!");
+      isLoading = false   ;
+      update();
+      if(data["status"] ==  "success") {
+        showOkDialog(context: Get.context
+        !, message: data["message"], isCancelBtn: false, onOkClick: () {
+          Navigator.of(Get.context!).pop();
+          Navigator.push(Get.context!, MaterialPageRoute(
+              builder: (BuildContext context) => MainPermissions()));
+
+        });
 
         //return "success" ;
-
+      }
+      else  if (data["status"] ==  "error"){
+        showOkDialog(context: Get.context
+        !, message: data["message"], isCancelBtn: false,);
+      }
       }
 //return "error" ;
 
   }
   Future<void> insertVacationRequest({ required String uri }) async {
-    String url =AppConstants.baseUrl+uri;
+    isLoading  = true  ;
+    update() ;
+    LoginResponsModel user =  await AuthController().getLoginData()  ;
+    String url ="${AppConstants.baseUrl}$uri?employ_id=${user.id!}";
     print(url) ;
     var request =  http.MultipartRequest("POST",   Uri.parse(url));
     request.fields['vacation_typee'] =vacationTypeTemp!.Id!;
@@ -405,7 +783,9 @@ var response  = await request.send() ;
     request.fields['where_travel'] =vacationPlaceController.text;
     request.fields['start_date_vacation'] = dateFromController.text;
     request.fields['end_date_vacation'] = dateToController.text;
-    LoginResponsModel user =  await AuthController().getLoginData()  ;
+    if(vacationPlaceTemp!.id==2){
+    request.fields['exit_date'] = departureDateController.text;
+    request.fields['return_date'] = returnDateController.text;}
     request.fields['employ_id'] = user.id!;
     request.fields['company_id'] = user.companyId!;
     print(request.fields);
@@ -426,26 +806,94 @@ var response  = await request.send() ;
       request.files.add(multipartFile);
 
     }
-    var response  = await request.send() ;
+    var streamedResponse = await request.send() ;
+    var response = await http.Response.fromStream(streamedResponse);
+
     print(response.statusCode) ;
 
-    if (response.statusCode == 200) {
-      print(response);
+    if (response.statusCode == 200){
+      isLoading=  false  ;
+      var data = jsonDecode(response.body);
+      print(data.toString()) ;
+      update() ;
+      //print(data) ;
       print("Uploaded!");
       showOkDialog(context: Get.context
-      !,
-          message: 'added_to_requests_permission'.tr,
-          isCancelBtn: false,
-          onOkClick: () {
-            Navigator.of(Get.context!).pop();
-            Navigator.push(Get.context!, MaterialPageRoute(
-                builder: (BuildContext context) => VacationRequest()));
+      !,message: data["msg"] ,isCancelBtn: false ,onOkClick:(){
+        //  Navigator.of( Get.context!).pop();
+        Navigator.of( Get.context!).pop();
+          Navigator.push(Get.context!, MaterialPageRoute(builder: (BuildContext context) => VacationRequest()));
+      //  refreshCallback?.call() ;
+        update() ;
+      } );
 
-            update();
-          });
-    }}
+      //return "success" ;
+
+    }
+
+
+
+  }
+
+
+
+  Future<void> getVacationData( ) async {
+  //  String url =AppConstants.baseUrl+uri;
+
+    //var request =  http.MultipartRequest("POST",   Uri.parse(url));
+    Api api = Api() ;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    LoginResponsModel user =  await AuthController().getLoginData()  ;
+    data['vacation_typee'] =vacationTypeTemp!.Id!;
+   data['vacation_place'] = vacationPlaceTemp!.name;
+    data['start_date_vacation'] = dateFromController.text;
+    data['end_date_vacation'] = dateToController.text;
+    final response = await api.postData2(uri: "${AppConstants.getVacationData}?employ_id=${user.id!}", map: data) ;
+    if(response.statusCode ==200){
+      print("return data  " +response.body) ;
+      var res  =jsonDecode(response.body) ;
+      String status = res["status"] ;
+      if(status == "success")
+      {
+         var pendingCheck  =  res["pending_check"] ;
+         canApplyVacation  =  pendingCheck["can_apply_vacation"] ;
+        PendingCheck pendingCheckObj  =  PendingCheck.fromJson(pendingCheck) ;
+        print(pendingCheckObj.toString()) ;
+        Vacation vacationObj  =  Vacation.fromJson(res) ;
+        print(pendingCheckObj.toString()) ;
+update() ;
+if(canApplyVacation){
+  showDialog(
+    context: Get.context!,
+    builder: (_) =>
+        VacationPopup(
+    vacation: vacationObj, message: pendingCheck["message"]
+    ),
+  );
+}else{
+  showDialog(
+    context: Get.context!,
+    builder: (_) => PendingPopup(
+      pendingCheck: pendingCheckObj,
+    ),
+  );
+
+}
+
+
+
+    }
+       else if(status == "error"){
+        String msg = res["msg"] ;
+        canApplyVacation = false  ;
+        update();
+        showOkDialog(context: Get.context!, message: msg, isCancelBtn: false)  ;
+      }
+      }}
 
   Future<void> insertRequest({ required String uri }) async {
+     isLoading  = true  ;
+     update() ;
     String url =AppConstants.baseUrl+uri;
     print(url) ;
     var request =  http.MultipartRequest("POST",   Uri.parse(url));
@@ -455,6 +903,18 @@ var response  = await request.send() ;
     LoginResponsModel user =  await AuthController().getLoginData()  ;
     request.fields['employ_id'] = user.id!;
     request.fields['company_id'] = user.companyId!;
+    if(vacationTypeTemp!.Id  == "572222") {
+      if(currentLocation != null){
+      request.fields['lat'] = currentLocation!.latitude.toString();
+      request.fields['lng'] = currentLocation!.longitude.toString(); }
+      else{
+        showOkDialog(context: Get.context!    ,message: "you_have_to_allow".tr, isCancelBtn: false  ) ;
+         isLoading  = false  ;
+          return ;
+
+      }
+
+    }
     print(request.fields);
     print(stream);
     print(length);
@@ -463,30 +923,54 @@ var response  = await request.send() ;
     for (int i  = 0 ; i <vacationTypeTemp!. options!.length ; i ++) {
       TextEditingController  controller  = vacationTypeTemp!. options![i]["controller"] ;
 
-      Map<String, dynamic> map  =
-        {
-          "options_id" :vacationTypeTemp!. options![i]["options_id"],
-          "update_options_id": vacationTypeTemp!. options![i]["update_options_id"],
-          "value_type":  vacationTypeTemp!. options![i]["value_type"] ,
-          "var_name":  controller.text,
-        };
-      itemsMap.add(map) ;
+      // Map<String, dynamic> map  =
+      //   {
+      //     "options_id" :vacationTypeTemp!. options![i]["options_id"],
+      //     "update_options_id": vacationTypeTemp!. options![i]["update_options_id"],
+      //     "value_type":  vacationTypeTemp!. options![i]["value_type"] ,
+      //    "var_name":  controller.text ,
+      //   };
+      // itemsMap.add(map) ;
 
 
+      request.fields["options[$i][options_id]"] =
+      vacationTypeTemp!.options![i]["options_id"];
+      request.fields["options[$i][update_options_id]"] =
+      vacationTypeTemp!.options![i]["update_options_id"];
+      request.fields["options[$i][value_type]"] =
+      vacationTypeTemp!.options![i]["value_type"];
+       if(uri==AppConstants.editProfile){
+      request.fields["options[$i][var_name]"] = controller.text.isEmpty?vacationTypeTemp!.options![i]["value"]:controller.text;
+       }
+       else{
+      request.fields["options[$i][var_name]"] = controller.text; }
     }
-    String itemsJson = jsonEncode(itemsMap);
-    request.fields["options"] = itemsJson;
-    if(fileNameController.text.isNotEmpty){
-      var multipartFile ;
-      for(int i =0 ; i < filesList.length  ; i++) {
-        if(kIsWeb){
-          multipartFile =  http.MultipartFile.fromBytes(filesList[i].key!, filesList[i].fileBytes! ,filename: fileNameController.text);
+    // String itemsJson = jsonEncode(itemsMap);
+    // request.fields["options"] = itemsJson;
+    if(filesList.isNotEmpty){
+     // var multipartFile ;
+      print( filesList.length);
 
-        }
-        else{
-          multipartFile = http.MultipartFile(filesList[i].key!, filesList[i].stream!, filesList[i].length!,
-              filename:fileNameController.text);
-        }
+      for(int i =0 ; i < filesList.length  ; i++) {
+        // if(kIsWeb){
+        //   multipartFile =  http.MultipartFile.fromBytes(filesList[i].key!, filesList[i].fileBytes! ,filename: fileNameController.text);
+        //    print(filesList[i].key!) ;
+        //
+        // }
+        var file = filesList[i];
+
+        var multipartFile = http.MultipartFile(
+          file.key!,
+          file.stream,
+          file.length,
+          filename: file.fileName, // كل ملف باسمه
+        );
+print(file.fileName) ;
+print(file.stream) ;
+print(file.length) ;
+print(file.key) ;
+
+        //   }
         request.files.add(multipartFile);
 
       }
@@ -498,63 +982,148 @@ var response  = await request.send() ;
     print(response.statusCode) ;
     print(request.fields);
     print(request.files);
+    var responseBody = await response.stream.bytesToString();
+    print("Response Body: $responseBody");
 
     if (response.statusCode == 200) {
-      print(response);
       print("Uploaded!");
+      isLoading=  false  ;
       showOkDialog(context: Get.context
       !,
           message: 'added_to_requests_permission'.tr,
           isCancelBtn: false,
           onOkClick: () {
             Navigator.of(Get.context!).pop();
-            Navigator.push(Get.context!, MaterialPageRoute(
-                builder: (BuildContext context) => AllRequests()));
+             if(uri==AppConstants.editProfile ){
 
-            update();
+             }
+           else if(  uri == AppConstants.editMandatoryData){
+
+             }
+           else{
+               Navigator.push(Get.context!, MaterialPageRoute(
+                   builder: (BuildContext context) => AllRequests()));
+             }
+
+
           });
+      update();
+
+    }
+  else{
+      isLoading=  false  ;
+      showOkDialog(context: Get.context
+      !,
+          message: 'try_again'.tr,
+          isCancelBtn: false,
+          onOkClick: () {
+          });
+      update();
     }}
-      Future<void> insertJustification({ required String hr_question_id ,required  String hr_question_date }) async {
+  VoidCallback? refreshCallback;
+
+  Future<void> insertJustification({ Questions? question  }) async {
     String url =AppConstants.baseUrl+AppConstants.insertJustification;
     print(url) ;
     var request =  http.MultipartRequest("POST",   Uri.parse(url));
     request.fields['employee_reply'] = justificationController.text;
-    request.fields['hr_question_id'] = hr_question_id;
-    request.fields['hr_question_date'] = hr_question_date;
+    request.fields['hr_question_type'] = question!.type!;
+    request.fields['hr_question_date'] = question.date!;
     LoginResponsModel user =  await AuthController().getLoginData()  ;
     request.fields['employ_id'] = user.id!;
+    request.fields['att_name'] = fileName.text;
     print(request.fields);
     print(stream);
     print(length);
-    if(fileNameController.text.isNotEmpty){
+    if(fileName.text.isNotEmpty){
    /* var multipartFile = http.MultipartFile('files', stream, length,
         filename:fileNameController.text);*/
       var multipartFile ;
       if(kIsWeb){
-        multipartFile =  http.MultipartFile.fromBytes('files', fileBytes ,filename: fileNameController.text);
+        multipartFile =  http.MultipartFile.fromBytes('files', fileBytes ,filename: fileName.text);
 
       }
       else{
         multipartFile = http.MultipartFile('files', stream, length,
-            filename:fileNameController.text);
+            filename:fileName.text);
       }
 
       request.files.add(multipartFile);
 
     }
 
-    var response  = await request.send() ;
+    var streamedResponse = await request.send() ;
+    var response = await http.Response.fromStream(streamedResponse);
+
     print(response.statusCode) ;
 
     if (response.statusCode == 200){
+      var data = jsonDecode(response.body);
       print(response) ;
       print("Uploaded!");
       showOkDialog(context: Get.context
-      !,message: 'added_to_requests_permission'.tr ,isCancelBtn: false ,onOkClick:(){
+      !,message: data["message"] ,isCancelBtn: false ,onOkClick:(){
       //  Navigator.of( Get.context!).pop();
         Navigator.of( Get.context!).pop();
       //  Navigator.push(Get.context!, MaterialPageRoute(builder: (BuildContext context) => MainPermissions()));
+refreshCallback?.call() ;
+        update() ;
+      } );
 
+      //return "success" ;
+
+    }
+//return "error" ;
+
+  }
+Future<void> insertException({String? date }) async {
+    isLoading  = true  ;
+    update() ;
+  LoginResponsModel user =  await AuthController().getLoginData()  ;
+
+  String url ="${AppConstants.baseUrl}${AppConstants.insertException }?employ_id=${user.id!}";
+    print(url) ;
+    var request =  http.MultipartRequest("POST",   Uri.parse(url));
+    request.fields['employee_reply'] = justificationController.text;
+    request.fields['date_from'] = date!;
+    //request.fields['employ_id'] = user.id!;
+    request.fields['att_name'] = fileName.text;
+    print(request.fields);
+    print(stream);
+    print(length);
+    if(fileName.text.isNotEmpty){
+   /* var multipartFile = http.MultipartFile('files', stream, length,
+        filename:fileNameController.text);*/
+      var multipartFile ;
+      if(kIsWeb){
+        multipartFile =  http.MultipartFile.fromBytes('files', fileBytes ,filename: fileName.text);
+
+      }
+      else{
+        multipartFile = http.MultipartFile('files', stream, length,
+            filename:fileName.text);
+      }
+
+      request.files.add(multipartFile);
+
+    }
+
+    var streamedResponse = await request.send() ;
+    var response = await http.Response.fromStream(streamedResponse);
+
+    print(response.statusCode) ;
+
+    if (response.statusCode == 200){
+       isLoading=false  ;
+      var data = jsonDecode(response.body);
+      print(response) ;
+      print("Uploaded!");
+      showOkDialog(context: Get.context
+      !,message: data["msg"] ,isCancelBtn: false ,onOkClick:(){
+      //  Navigator.of( Get.context!).pop();
+        Navigator.of( Get.context!).pop();
+
+        refreshCallback?.call() ;
         update() ;
       } );
 
@@ -575,6 +1144,29 @@ var response  = await request.send() ;
     print("11111111111111111111111111111111111111111111111111111111222");
     print(data);
   }*/
+  bool isImage(String path) {
+    final ext = path.toLowerCase();
+    return ext.endsWith(".jpg") ||
+        ext.endsWith(".jpeg") ||
+        ext.endsWith(".png") ||
+        ext.endsWith(".gif") ||
+        ext.endsWith(".bmp") ||
+        ext.endsWith(".webp");
+  }
+  getDialog(String message ){
+    Get.dialog(
+      AlertDialog(
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text("OK".tr),
+          ),
+        ],
+      ),
+    );
+
+  }
 }
 
 class PermissionTypeModel {
@@ -593,4 +1185,5 @@ class RequestTypeModel {
     required this.name,
     required this.id,
   });
+
 }

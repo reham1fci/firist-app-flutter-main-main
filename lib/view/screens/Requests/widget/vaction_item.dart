@@ -1,3 +1,4 @@
+import 'package:betakety_app/util/constant.dart';
 import 'package:betakety_app/util/custom_app_theme.dart';
 import 'package:betakety_app/view/screens/Requests/widget/attach_view.dart';
 import 'package:betakety_app/view/screens/Requests/widget/justification.dart';
@@ -174,11 +175,11 @@ class VacationItem extends StatelessWidget{
                             ),
                             child: Text(
                               'attachments'.tr,
-                              style: TextStyle(
+                              style:const  TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 14,
                                 letterSpacing: 0.5,
-                                color: Color(0xFF744ACC),
+                                color:kMainColor,
                               ),
                             ),
                           ),

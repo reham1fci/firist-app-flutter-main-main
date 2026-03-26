@@ -4,9 +4,11 @@ import 'dart:async';
 import 'package:betakety_app/controllers/auth_controller.dart';
 import 'package:betakety_app/controllers/fingerprint_controller.dart';
 import 'package:betakety_app/model/login_model.dart';
+import 'package:betakety_app/util/app_constants.dart';
 import 'package:betakety_app/util/constant.dart';
 import 'package:betakety_app/util/images.dart';
 import 'package:betakety_app/util/styles.dart';
+import 'package:betakety_app/view/base/custom_lert_dialog.dart';
 import 'package:betakety_app/view/base/custom_snackbar.dart';
 import 'package:betakety_app/view/base/loading_dialog.dart';
 import 'package:betakety_app/view/screens/attendance/attendance_details.dart';
@@ -16,7 +18,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:mac_address/mac_address.dart';
 
 class FingerPrint extends StatefulWidget {
 
@@ -72,34 +73,91 @@ class _FingerPrintState extends State<FingerPrint> {
           ),
           body:
 
-          !co.isAuthenticated ?
+          !co.isAuthenticated  || co.loginB4?
 
           Column(children: [
-
+Padding(padding: const EdgeInsets.all(10) , child:
           Container(
             width: double.infinity,
-            height:250 ,
-            padding: EdgeInsets.only(top: 20),
+           // height:130 ,
+            padding: const EdgeInsets.only(top: 20),
             child:
-            co.currentLocation==null?
-            Center( child: Column(
-              children: [
-                CircularProgressIndicator(),
-                Container(margin: EdgeInsets.only(left: 7),child:Text('loading_info'.tr , style: TextStyle(color: Colors.red), ) ,),
-              ],))
-                :
-            Center(child: TextButton(
+            // co.currentLocation==null?
+            // Center( child: Column(
+            //   children: [
+            // const    CircularProgressIndicator(),
+            //     Container(margin: const EdgeInsets.only(left: 7),child:Text('loading_info'.tr ,
+            //       style: TextStyle(color: Colors.red), ) ,),
+            //   ],))
+            //     :
+            Padding(padding: const EdgeInsets.all(10)   ,child:    Row(
 
-              onPressed: co.validateFieldsAndShowSnackbar,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+//Padding(padding: EdgeInsets.all(10) ,child:
+
+    Container(
+        decoration: BoxDecoration(
+          color: Colors.green,
+
+          // shape: BoxShape.rectangle, // You can also use BoxShape.circle directly
+          borderRadius: BorderRadius.circular(10.0), // Half of the container's size
+        ),
+        width: MediaQuery.of(context).size.width/2.5,
+              child:  TextButton(
+
+              onPressed:
+              () {
+                setState(()  {
+                  co.registerFingerPrintFunction = AppConstants.loginFingerPrint;
+                  co.checkLocationReady()  ;
+                });
+
+              }
+                  ,
+
               child:
-                  Column(children: [
-                    const Center (child:  Icon(Icons.fingerprint ,size: 100),) ,
-                    Text("login finger print")
+              Center(child:    Column(children: [
+                  const   Padding (padding:EdgeInsets.only( bottom: 8) ,child:  Icon(Icons.fingerprint ,size: 30 ,color: Colors.white),) ,
+                    Text('login_finger_print'.tr ,style:const TextStyle(color: Colors.white),)
 
 
-                  ],)
+                  ],))
 
-            ),) )
+            )
+            )
+    ,
+          Container(
+              decoration: BoxDecoration(
+                color: Colors.red,
+
+                // shape: BoxShape.rectangle, // You can also use BoxShape.circle directly
+                borderRadius: BorderRadius.circular(10.0), // Half of the container's size
+              ),
+              width: MediaQuery.of(context).size.width/2.5,
+              child:  TextButton(
+
+                  onPressed:
+                  (){
+                    setState(() {
+                      co.registerFingerPrintFunction =AppConstants.logoutFingerPrint ;
+                      co.checkLocationReady()  ;
+                    });
+                },
+                  child:
+                  Center(child:    Column(children: [
+                  const  Padding (padding:EdgeInsets.only( bottom: 8) ,child:  Icon(Icons.fingerprint ,size: 30 ,color: Colors.white),) ,
+                    Text('logout_finger_print'.tr ,style:const TextStyle(color: Colors.white),)
+
+
+                  ],))
+
+              )
+          )
+
+    ] )
+      )
+          ))
          ,
   co.companyLocation!=null?
      Expanded(
@@ -116,7 +174,7 @@ class _FingerPrintState extends State<FingerPrint> {
   )):const CircularProgressIndicator(),
 
          ] ):
-          Image.asset(
+       Image.asset(
             Images.successIcon,
             height: double.infinity,
             width: double.infinity,

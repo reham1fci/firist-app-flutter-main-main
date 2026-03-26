@@ -3,8 +3,8 @@ class SendFile{
   var stream ;
   var length ;
   var fileBytes ;
-
-  SendFile({this.key, this.stream, this.length , this.fileBytes});
+  String? fileName;
+  SendFile({this.key, this.stream, this.length , this.fileBytes , this.fileName});
 
 
 }
