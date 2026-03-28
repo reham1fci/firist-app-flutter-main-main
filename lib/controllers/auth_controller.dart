@@ -1,9 +1,7 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:betakety_app/api/Api.dart';
 import 'package:betakety_app/api/api_services.dart';
-import 'package:betakety_app/firebase_notification/push_notification_services.dart';
 import 'package:betakety_app/model/login_model.dart';
 import 'package:betakety_app/model/personal_data.dart';
 import 'package:betakety_app/util/app_constants.dart';
@@ -15,11 +13,11 @@ import 'package:flutter_udid/flutter_udid.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+import '../view/base/custom_snackbar.dart';
 //import 'package:platform_device_id/platform_device_id.dart';
 
 import '../view/screens/auth/auth_screen.dart';
-import '../view/base/custom_snackbar.dart';
 import '../view/screens/home/nav_screen.dart';
 
 class AuthController extends GetxController {
@@ -121,7 +119,6 @@ resetData(){
 
     await prefs.setString(
         'user', json.encode(user.toJson()));
-      await PushNotificationService().init();
       Get.offAll(const NavBarScreen());
 
   }

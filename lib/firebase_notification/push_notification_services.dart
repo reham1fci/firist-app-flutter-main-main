@@ -3,7 +3,6 @@ import 'package:betakety_app/controllers/notification_controller.dart';
 import 'package:betakety_app/firebase_notification/local_notification_service.dart';
 import 'package:betakety_app/view/screens/home/nav_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class PushNotificationService {
@@ -17,25 +16,29 @@ class PushNotificationService {
     await _getAndSendToken();
     //foreground
     FirebaseMessaging.onMessage.listen((message) {
-      if (message.data.isNotEmpty) {
-        if (message.data['type'] == 'notification') {
-          Get.find<NotificationController>().getNotificationList();
-        }
-        LocalNotificationService.show(
-          title: message.data['title'] ?? 'Notification',
-          body: message.data['body'] ?? '',
-          payload: message.data,
-        );
+      final data = message.data;
+      final title = message.notification?.title ?? data['title'] ?? 'Notification';
+      final body = message.notification?.body ?? data['body'] ?? '';
+
+      if (data.isNotEmpty && data['type'] == 'notification') {
+        Get.find<NotificationController>().getNotificationList();
       }
+
+      LocalNotificationService.show(
+        title: title,
+        body: body,
+        payload: data.isNotEmpty ? data : {'type': 'notification'},
+      );
     });
    // background
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      if (message.data.isNotEmpty) {
-        if (message.data['type'] == 'notification') {
-          Get.find<NotificationController>().getNotificationList();
-        }
-        _handleNavigation(message.data);
+      final data = message.data;
+      if (data.isNotEmpty && data['type'] == 'notification') {
+        Get.find<NotificationController>().getNotificationList();
+      } else {
+        Get.find<NotificationController>().getNotificationList();
       }
+      _handleNavigation(data);
     });
      // if app terminated
     final initialMessage =
@@ -57,8 +60,13 @@ class PushNotificationService {
   }
 
   Future<void> _getAndSendToken() async {
-    final token = await _fcm.getToken();
-    if (token != null) {
+    String? token;
+    for (int i = 0; i < 3; i++) {
+      token = await _fcm.getToken();
+      if (token != null && token.isNotEmpty) break;
+      await Future.delayed(const Duration(milliseconds: 800));
+    }
+    if (token != null && token.isNotEmpty) {
       Get.find<AuthController>().saveToken(token: token);
     }
   }
