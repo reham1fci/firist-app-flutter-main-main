@@ -37,7 +37,7 @@ class _FingerPrintState extends State<FingerPrint> {
     // TODO: implement initState
     super.initState();
     Get.put(FingerPrintController());
-
+    Get.find<FingerPrintController>().getFingerPrintData();
 
   }
 

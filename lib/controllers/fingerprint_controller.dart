@@ -33,6 +33,8 @@ class FingerPrintController extends GetxController {
   Api api  = Api() ;
   bool inCompany = false;
   var currentLocation  ;
+  int checkDistance = 200 ;
+  int allowDistanceAnywhere  =  0  ;
   Position? currentEmployeeLocation  ;
    Future <bool?> checkLocationReady({String? from}) async {
      // 1. Check if location service is enabled (GPS on/off)
@@ -111,8 +113,15 @@ String time = DateFormat('HH:mm:ss').format(currentDate);
      String url  =  "${registerFingerPrintFunction}?employ_id=${user.id!}&hodor_ensraf_date=${date}&hodor_time=${time}&company_id=${user.companyId!}"   ;
      //String url  =  "/Employ_Salary_api.php?employ_id=662918&date_from=2024-01-01&date_to=2024-01-31&employ_type=office";
      print(url) ;
+     final Map<String, dynamic> data = <String, dynamic>{};
+    if(registerFingerPrintFunction == AppConstants.loginFingerPrint){
+      data['hoder_lat_long'] = "${currentLocation.latitude},${currentLocation.longitude}";
+    }
+    else{
+     data['ensraf_lat_long'] =  "${currentLocation.latitude},${currentLocation.longitude}";
+    }
 
-     var response  = await  api.getData(url: url)  ;
+     var response  = await  api.postData2(uri: url, map: data) ;
 
      if (response.statusCode == 200) {
 
@@ -295,7 +304,7 @@ String time = DateFormat('HH:mm:ss').format(currentDate);
      print(position);
       currentEmployeeLocation  =position ;
       currentLocation = toolkit.LatLng(position.latitude, position.longitude);
-     final companyLocation = toolkit.LatLng(double.parse(user!.companyLat!), double.parse(user!.companyLng!));
+      locationCompany ??= toolkit.LatLng(double.parse(user!.companyLat!), double.parse(user!.companyLng!));
     final testLocation = toolkit.LatLng(29.8765411,31.2921507 );
      final MarkerId markerId = MarkerId("user");
 
@@ -307,9 +316,13 @@ String time = DateFormat('HH:mm:ss').format(currentDate);
      markers[markerId] = marker2;
 
      final distance =
-     toolkit.SphericalUtil.computeDistanceBetween(currentLocation, companyLocation) ;
-
-     if(distance<200){
+     toolkit.SphericalUtil.computeDistanceBetween(currentLocation, locationCompany) ;
+     if(allowDistanceAnywhere==1){
+       inCompany  = true ;
+       update();
+     }
+else{
+     if(distance<checkDistance){
          inCompany  = true ;
          update();
 
@@ -321,7 +334,7 @@ String time = DateFormat('HH:mm:ss').format(currentDate);
         // showCustomSnackBar('out_company'.tr);
 
        update() ;
-     }
+     }}
       if(key == null) {
         String msg = "logout_confirmation";
         if (registerFingerPrintFunction == AppConstants.loginFingerPrint) {
@@ -341,6 +354,7 @@ String time = DateFormat('HH:mm:ss').format(currentDate);
    LoginResponsModel?   user ;
    String?   mobileMac ;
    CameraPosition? companyLocation ;
+   var locationCompany ;
    Map<MarkerId, Marker> markers = <MarkerId, Marker>{}; // CLASS MEMBER, MAP OF MARKS
 
    _initData() async {
@@ -365,7 +379,30 @@ String time = DateFormat('HH:mm:ss').format(currentDate);
    // checkUserLocation() ;
 
    }
+   Future<dynamic> getFingerPrintData() async {
+     LoginResponsModel user =  await AuthController().getLoginData()  ;
+     String url  =  AppConstants.getGpsSettings+"?employ_id=" +user.id!   ;
+     print(url) ;
+     var response  = await  api.getData(url: url)  ;
 
+     if (response.statusCode == 200) {
+       print(jsonDecode(response.body));
+       var data = jsonDecode(response.body) ;
+
+       if(data["status"]== "success"){
+         checkDistance  = data["allowed_gps_distance"] ;
+         allowDistanceAnywhere  = data["allow_attendance_anywhere"] ;
+         String companyLat  = data["company_lat"] ;
+         String companyLng  = data["company_lng"];
+         locationCompany= toolkit.LatLng(double.parse(companyLat), double.parse(companyLng));
+         print(checkDistance) ;
+         print(allowDistanceAnywhere) ;
+         print(companyLng) ;
+
+       }
+
+     }
+   }
 
    Future<dynamic> fakeLocationUser() async {
      LoginResponsModel user =  await AuthController().getLoginData()  ;
@@ -376,7 +413,6 @@ String time = DateFormat('HH:mm:ss').format(currentDate);
      if (response.statusCode == 200) {
        print(jsonDecode(response.body));
        var data = jsonDecode(response.body) ;
-
        if(data["success"]){
          print(data["msg"]) ;
        }
