@@ -116,11 +116,18 @@ resetData(){
     await prefs.setString(
         'response_data', json.encode(user.toJson()));
     await prefs.setBool('is_logged_in', true);
-
     await prefs.setString(
         'user', json.encode(user.toJson()));
-      Get.offAll(const NavBarScreen());
 
+    // Send FCM token to server now that user data is in prefs
+    try {
+      final String? token = await FirebaseMessaging.instance.getToken();
+      if (token != null && token.isNotEmpty) {
+        await saveToken(token: token);
+      }
+    } catch (_) {}
+
+    Get.offAll(const NavBarScreen());
   }
 
   clearUserLogin() async {

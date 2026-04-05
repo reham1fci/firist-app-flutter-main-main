@@ -4,6 +4,7 @@ import 'package:betakety_app/firebase_notification/local_notification_service.da
 import 'package:betakety_app/view/screens/home/nav_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PushNotificationService {
   final FirebaseMessaging _fcm = FirebaseMessaging.instance;
@@ -67,16 +68,23 @@ class PushNotificationService {
       await Future.delayed(const Duration(milliseconds: 800));
     }
     if (token != null && token.isNotEmpty) {
-      Get.find<AuthController>().saveToken(token: token);
+      final prefs = await SharedPreferences.getInstance();
+      final isLoggedIn = prefs.getBool('is_logged_in') ?? false;
+      if (isLoggedIn) {
+        Get.find<AuthController>().saveToken(token: token);
+      }
     }
   }
   void handleLocalNotificationTap(Map<String, dynamic> data) {
     _handleNavigation(data);
   }
   void _listenTokenRefresh() {
-    _fcm.onTokenRefresh.listen((newToken) {
-
-      Get.find<AuthController>().saveToken(token: newToken);
+    _fcm.onTokenRefresh.listen((newToken) async {
+      final prefs = await SharedPreferences.getInstance();
+      final isLoggedIn = prefs.getBool('is_logged_in') ?? false;
+      if (isLoggedIn) {
+        Get.find<AuthController>().saveToken(token: newToken);
+      }
     });
   }
   void _handleNavigation(Map<String, dynamic> data) {
