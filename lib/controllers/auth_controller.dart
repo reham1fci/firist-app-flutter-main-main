@@ -28,7 +28,9 @@ class AuthController extends GetxController {
   bool get isLoading => _isLoading;
 
   int _selectedIndex = 0;
-
+   String approved = "0" ;
+   String total = "0" ;
+   String payed = "0" ;
   int get selectedIndex => _selectedIndex;
   Api api = Api();
   String employeeId  = "" ;
@@ -110,7 +112,32 @@ resetData(){
       showCustomSnackBar("try_again".tr);
     }
   }
+  Future<dynamic> getEmployeeRewards() async {
+    personalDataList.clear();
+    LoginResponsModel user = await getLoginData();
+    String url = "${AppConstants.employeeRewards}?employ_id=${user.id!}";
+    print(url);
+    var response = await api.getData(url: url);
+    if (response.statusCode == 200) {
+      print(jsonDecode(response.body));
+      var data = jsonDecode(response.body);
+      print(data["status"]);
+      if (data["status"]) {
+        var dataObj = data["data"] ;
+        approved= dataObj["approved_total"].toString();
+        payed= dataObj["paid_total"].toString();
+        total= dataObj["grand_total"].toString();
 
+
+      }
+      else {
+        showCustomSnackBar("try_again".tr);
+      }
+      update();
+    } else {
+      showCustomSnackBar("try_again".tr);
+    }
+  }
   saveUserData(LoginResponsModel user) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString(
@@ -352,4 +379,7 @@ _isLoading  = false  ;
      print(res["message"]) ;
     }
   }
+
+
+
 }
