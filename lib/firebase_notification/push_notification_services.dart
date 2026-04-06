@@ -64,7 +64,7 @@ class PushNotificationService {
     for (int i = 0; i < 3; i++) {
       token = await _fcm.getToken();
       if (token != null && token.isNotEmpty) break;
-      await Future.delayed(const Duration(milliseconds: 800));
+      await Future.delayed(const Duration(seconds: 800));
     }
     if (token != null && token.isNotEmpty) {
       Get.find<AuthController>().saveToken(token: token);
