@@ -74,9 +74,9 @@ Future<void> main() async {
   print('User granted permission: ${settings.authorizationStatus}');
 
   await messaging.setForegroundNotificationPresentationOptions(
-    alert: true,
-    badge: true,
-    sound: true,
+    alert: false,
+    badge: false,
+    sound: false,
   );
 
   // Background message handler
