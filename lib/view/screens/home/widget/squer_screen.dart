@@ -55,6 +55,7 @@ class Squermain extends StatelessWidget {
                    padding:
                       const EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
                   child: Image.asset(
+                    height: 60,
                     image,
                   ),
                 ),

@@ -15,6 +15,7 @@ class Images {
   static const String placeholder = 'assets/image/placeholder.jpg';
   static const String empty_box = 'assets/image/empty_box.png';
   static const String cart = 'assets/image/cart.png';
+  static const String cars_maintenance = 'assets/image/cars.png';
   static const String salary = 'assets/image/salary.png';
   static const String att = 'assets/image/att.png';
   static const String request = 'assets/image/request.png';

@@ -12,6 +12,7 @@ import 'package:betakety_app/view/base/custom_snackbar.dart';
 import 'package:betakety_app/view/screens/agent_orders/agent_daily_order_screen.dart';
 import 'package:betakety_app/view/screens/home/widget/home_notification_dialog.dart';
 import 'package:betakety_app/view/screens/attendance/finger_print.dart';
+import 'package:betakety_app/view/screens/home/widget/reward_item.dart';
 import 'package:betakety_app/view/screens/home/widget/shipments_type_list.dart';
 import 'package:betakety_app/view/screens/home/widget/target_type.dart';
 import 'package:betakety_app/view/screens/profile/widgets/edit_profile.dart';
@@ -119,7 +120,7 @@ Navigator.of(context).pop() ;
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_)  {
-
+    Get.find<AuthController>().getEmployeeRewards();
 showDialog();
     });
   /*  Upgrader(
@@ -239,10 +240,18 @@ return true;
                       height: Get.width / 3,
                       screen: isMandatoryData? null:TargetType(),
                     ),
-                    SizedBox(width: Get.width / 3.2)
+                    Squermain(
+                      title: 'cars_maintenance'.tr,
+                      //title: Text("PROFILE".tr)
+                      image: Images.cars_maintenance,
+                      width: Get.width / 3.2,
+                      height: Get.width / 3,
+                      screen: isMandatoryData? null:TargetType(),
+                    ),
                   ],
                 ),
 
+                SizedBox(height: 20.0),
 
 
 //notification_screen=========================================================
@@ -488,6 +497,84 @@ return true;
                 //   height: 100,
                 //   width: 100,
                 // ),
+                Container(
+                  margin: const EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(22),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(.08),
+                        blurRadius: 15,
+                        offset: const Offset(0, 6),
+                      )
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+
+                      /// العنوان
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(Icons.card_giftcard, color: Color(0xffd32f2f), size: 26),
+                          SizedBox(width: 8),
+                          Text(
+                            "مكافآت الموظف",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xffd32f2f),
+                            ),
+                          )
+                        ],
+                      ),
+
+                      const SizedBox(height: 12),
+
+                    //  const Divider(),
+
+                      //const SizedBox(height: 15),
+
+                      /// الكروت الثلاثة
+                      Row(
+                        children: [
+
+                          Expanded(
+                            child: RewardItem(
+                              icon: "assets/image/approved.png",
+                              title: "approved",
+                              count: Get.find<AuthController>().approved,
+                            ),
+                          ),
+
+                          const SizedBox(width: 4),
+
+                          Expanded(
+                            child: RewardItem(
+                              icon: "assets/image/payed.png",
+                              title: "payed",
+                              count: Get.find<AuthController>().payed,
+                            ),
+                          ),
+
+                          const SizedBox(width: 4),
+
+                          Expanded(
+                            child: RewardItem(
+                              icon:"assets/image/total.png",
+                              title: "total",
+                              count: Get.find<AuthController>().total,
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+
               ],
             ),
           ),

@@ -689,5 +689,9 @@
   "seen": "تمت المشاهدة" ,
   "objection": "اعتراض" ,
   "financial_settlement": "طلب تسوية مستحقات",
-  "accept_deduction": "هل انت متأكد من الموافقة علي تطبيق الخصم ؟"
+  "accept_deduction": "هل انت متأكد من الموافقة علي تطبيق الخصم ؟",
+  "wait": "قيد الانتظار",
+  "cars_maintenance": "السيارات & الصيانة ",
+  "approved": "معتمدة",
+  "payed": "مدفوعة"
 }
