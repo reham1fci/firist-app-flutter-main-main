@@ -5,6 +5,7 @@ import 'package:betakety_app/model/vacation_type.dart';
 import 'package:betakety_app/util/dimensions.dart';
 import 'package:betakety_app/view/base/custom_field_with_title.dart';
 import 'package:betakety_app/view/base/custom_text_field.dart';
+import 'package:betakety_app/view/screens/shipments/widgets/file_source_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
@@ -42,10 +43,11 @@ class _AddRequestItemState extends State<AddRequestItem> {
     "12",
   ];
   String? path ;
+  bool isChecked = false;
 
   final List<int> years = List.generate(
       2028 - 2016 + 1, (index) => 2016 + index);
-
+  String? apiFunctionName ;
   @override
   void initState() {
     // TODO: implement initState
@@ -61,17 +63,21 @@ class _AddRequestItemState extends State<AddRequestItem> {
     print("test")  ;*/
     String type = widget.filteredData[widget.index]["value_type"];
     String typeName = widget.filteredData[widget.index]["option_name_ar"];
-    String apiFunctionName = widget.filteredData[widget
-        .index]["value_type_checkif"];
+    if (widget.filteredData[widget.index]["value_type_checkif"] != null) {
+      apiFunctionName = widget.filteredData[widget
+          .index]["value_type_checkif"];
+    }
     print(apiFunctionName);
     if (type == "api_list") {
-      Get.find<PermissionController>().getApiList(apiFunctionName);
+      Get.find<PermissionController>().getApiList(apiFunctionName!);
     }
+    // تهيئة البقية
     for (var item in widget.filteredData) {
-      item["controller"] ??= TextEditingController();
+      if (item["controller"] == null) {
+        item["controller"] = TextEditingController();
+      }
     }
   }
-
   @override
   Widget build(BuildContext context) {
     String type = widget.filteredData[widget.index]["value_type"];
@@ -80,8 +86,10 @@ class _AddRequestItemState extends State<AddRequestItem> {
         : widget.filteredData[widget.index]["value"];
     String typeName = widget.filteredData[widget.index]["option_name_ar"];
     String id = widget.filteredData[widget.index]["options_id"];
-    String apiFunctionName = widget.filteredData[widget
-        .index]["value_type_checkif"];
+    if( widget.filteredData[widget.index]["value_type_checkif"]!=null){
+      apiFunctionName = widget.filteredData[widget
+          .index]["value_type_checkif"];
+    }
 
     // TODO: implement build
     return GetBuilder<PermissionController>(builder: (pController) {
@@ -104,6 +112,18 @@ class _AddRequestItemState extends State<AddRequestItem> {
                 controller: widget.filteredData[widget.index]["controller"],
               )),
         )
+        :type =="checkbox"?
+        CheckboxListTile(
+          title: Text(typeName),
+          value: isChecked,
+          onChanged: (value) {
+            setState(() {
+              isChecked = value!;
+               widget.filteredData[widget.index]["controller"].text = isChecked? "1":"0";
+                print(widget.filteredData[widget.index]["controller"].text) ;
+            });
+          },
+        )
             : type == "number" || type == "money"
             ? CustomFieldWithTitle(
           requiredField: true,
@@ -123,7 +143,7 @@ class _AddRequestItemState extends State<AddRequestItem> {
               )),
         )
             : type == "file"?
-            addFile(widget.filteredData[widget.index]["controller"]
+            addFile(widget.filteredData[widget.index]["controller"]as TextEditingController
                 , pController ,typeName , id)
       //   CustomFieldWithTitle(
       //   requiredField: false,
@@ -186,10 +206,10 @@ class _AddRequestItemState extends State<AddRequestItem> {
       type == "date_month" ? getMonthList(pController, typeName) :
       type == "date_year" ? geYearList(pController, typeName) :
       type == "api_list" && apiFunctionName == "select_multi_employee" ?
-      getMultiSelect(apiFunctionName, pController, typeName) :
+      getMultiSelect(apiFunctionName!, pController, typeName) :
 
       type == "api_list" ?
-      getList(apiFunctionName, pController, typeName) :
+      getList(apiFunctionName!, pController, typeName) :
       const SizedBox();
     });
   }
@@ -433,6 +453,11 @@ class _AddRequestItemState extends State<AddRequestItem> {
                        controller, "options_files["+id+"]" );
                    print("path" + path!);
                  }
+                  else if( widget.fromScreen !=null && widget.fromScreen == "trip"){
+                  path = await showFileSourceDialog(context, pController, "options_files[]"  , controllerName: controller);
+                  print("pathfgdhhhghhgh" + path!);
+
+                 }
                  else{
                    path = await pController.selectSingleFile(
                        controller, "options_files[]" );
@@ -580,5 +605,15 @@ class _AddRequestItemState extends State<AddRequestItem> {
 
 
       ]);
+  }
+  @override
+  void dispose() {
+    // تصفية الـ controllers عند إغلاق الشاشة
+    for (var item in widget.filteredData) {
+      if (item["controller"] is TextEditingController) {
+        item["controller"].dispose();
+      }
+    }
+    super.dispose();
   }
 }

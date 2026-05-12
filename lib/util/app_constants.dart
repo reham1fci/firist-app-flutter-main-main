@@ -19,6 +19,7 @@ class AppConstants {
   static const String showPermissionReq = '/show_request_permission_api.php';
   static const String hoursCount = '/api_time_permission_view_count.php';
   static const String getTime = '/api_time_permission_view.php';
+  static const String checkUserLocation = '/check_user_location.php';
   static const String showAskingReq = '/Show_Issues_api.php';
   static const String showAskingPendingReq = '/Show_Issues_api_pending.php';
   static const String getAccountBalance = '/account_statement_api.php';
@@ -28,6 +29,7 @@ class AppConstants {
   static const String loginFingerPrint = '/add_hoder_api.php';
   static const String fakeLocation = '/fack_location.php';
   static const String getGpsSettings = '/get_gps_settings.php';
+  static const String levelOptions = '/Get_Level_Options_api.php';
   static const String logoutFingerPrint = '/add_ensraf_api.php';
   static const String getShift = '/view_shift_api.php';
   static const String showNotification  = '/view_notifications_api.php';
@@ -46,6 +48,7 @@ class AppConstants {
   static const String  getRequestTypes= '/hr_request_type_api.php';
   static const String  getRequestApiList= '/api_list.php';
   static const String  getAllRequests= '/Show_All_Request_api.php';
+  static const String  showTripRequest= '/Show_Request_Trips_api.php';
   static const String  maintenanceRequest= '/show_Maintenance_request_api.php';
   static const String  showDeductionRequest= '/Show_discount_Rquest_api.php';
   static const String  showShipmentsDriver= '/show_request_limit_new_api_receiving_driver.php';
@@ -55,6 +58,7 @@ class AppConstants {
   static const String  receivedDriverShipment= '/api_insert_shipment_received_driver.php';
   static const String  notFinishedShipment= '/api_insert_shipment_not_finished_customs_broker.php';
   static const String  AddAllRequests= '/hr_add_all_requestt_api.php';
+  static const String  processingTrip= '/Process_Trip_Request_api.php';
   static const String  confirmDailyProject= '/Daily_Target_Confirmation_API.php';
   static const String  insertException= '/request_delivery_exception_api.php';
   static const String  requiredFiles= '/show_required_files_employ_api.php';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-void showLoadingDialog(BuildContext context) {
+void showLoadingDialog(BuildContext context  , {String message = "Loading..."}) {
   showDialog(
     context: context,
     barrierDismissible: false, // يمنع المستخدم من غلق الديالوج بالضغط برا
@@ -17,7 +17,7 @@ void showLoadingDialog(BuildContext context) {
               CircularProgressIndicator(color: Colors.red),
               SizedBox(width: 20),
               Text(
-                "loading_time".tr,
+                message,
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
             ],

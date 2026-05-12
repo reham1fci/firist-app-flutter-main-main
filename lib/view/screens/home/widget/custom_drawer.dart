@@ -133,7 +133,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       }),
                appleDelete == "0" ? CustomCategoryButton(
                   icon: Images.delete_icon,
-                  buttonText: 'delete_Account'.tr,
+                  buttonText: 'delete_account'.tr,
                   onTap: () => {
                         Get.back(),
                       showOkDialog(context: context, message: 'want_to_delete_account'.tr, isCancelBtn: true , okTitle: 'delete'.tr  ,

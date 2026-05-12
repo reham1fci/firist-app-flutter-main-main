@@ -17,6 +17,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../model/File.dart';
 import '../util/app_constants.dart';
 import 'package:http/http.dart' as http;
 
@@ -42,10 +43,56 @@ class ShipmentController extends GetxController {
   bool hasMore = true;
   List<int> selectedIndexes = [];
   List<Shipment> selectedShipments = [];
+  List<dynamic> levelOptions = [];
   bool isFetching = false;
   Function()? onRefreshUi;   // هنا هنخزن الفانكشن
   TextEditingController fileName = TextEditingController();
+  TextEditingController detailsController = TextEditingController();
 
+  TextEditingController fileNameController = TextEditingController();
+
+  var stream ;
+  var length ;
+  List<SendFile> filesList  = [] ;
+  bool isImage(String path) {
+    final ext = path.toLowerCase();
+    return ext.endsWith(".jpg") ||
+        ext.endsWith(".jpeg") ||
+        ext.endsWith(".png") ||
+        ext.endsWith(".gif") ||
+        ext.endsWith(".bmp") ||
+        ext.endsWith(".webp");
+  }
+  Future<String?> selectSingleFile(TextEditingController controller, String key ,) async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    if (key.isEmpty) {
+      key = controller.text;
+    }
+
+    if (result != null) {
+      // Mobile
+      File file = File(result.files.single.path!);
+
+      stream = http.ByteStream(file.openRead())..cast();
+      length = await file.length();
+
+      controller.text = result.files.single.path!.split('/').last;
+      // fileNameController.text = result.files.single.path!;
+
+      filesList.add(SendFile(
+        key: key,
+        stream: stream,
+        length: length,
+        fileName:  result.files.single.path!.split('/').last, // يجيب الاسم بس من غير الباث
+      ));
+      update() ;
+
+      return result.files.single.path ;
+    } else {
+      // User canceled the picker
+    }
+  }
   void setFetching(bool value) {
     isFetching = value;
     update();
@@ -374,6 +421,46 @@ showOkDialog(context: Get.context!, message: data["msg"], isCancelBtn: false , o
       throw Exception('Failed to load data!');
     }
   }
+   getProcessingOptionLevel  (String levelId) async {
+     levelOptions = []; // قم بتصفية القائمة أولاً لتجنب ظهور بيانات قديمة
+     update();
+     String url;
+     url = "${AppConstants.levelOptions}?request_type_id=${levelId}";
+     print(url);
+
+     var response = await api.getData(url: url);
+
+     if (response.statusCode == 200) {
+       print(jsonDecode(response.body));
+       var data = jsonDecode(response.body);
+       print(data["success"]);
+       if (data["success"]) {
+        levelOptions = data["data"] as List;
+
+
+
+         // if(fromPriceOffer){
+         //   shipmentDetails = dataArr.map((e) => ModelBooking.fromJsonPriceOfferDetails(e)).toList();
+         //
+         // }
+         // else{
+         // shipmentDetails = dataArr.map((e) => ModelBooking.fromJsonDetails(e)).toList();}
+         isLoading = false;
+
+         update();
+
+         return levelOptions;
+       } else {
+         isLoading = false;
+
+         update();
+       }
+     } else {
+       throw Exception('Failed to load data!');
+     }
+
+   }
+
 
   int bgColor = 0xFFEEFCF0;
   Color textColor = Colors.red;
