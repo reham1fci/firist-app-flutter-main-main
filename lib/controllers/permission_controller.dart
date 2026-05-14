@@ -13,16 +13,18 @@ import 'package:betakety_app/model/vacation.dart';
 import 'package:betakety_app/model/vacation_type.dart';
 import 'package:betakety_app/util/app_constants.dart';
 import 'package:betakety_app/view/base/custom_lert_dialog.dart';
-import 'package:betakety_app/view/base/file_name_dialog.dart';
 import 'package:betakety_app/view/screens/Requests/all_requests.dart';
 import 'package:betakety_app/view/screens/Requests/deduction_requests.dart';
 import 'package:betakety_app/view/screens/Requests/main_permissions.dart';
 import 'package:betakety_app/view/screens/Requests/vacation_request.dart';
 import 'package:betakety_app/view/screens/Requests/widget/pendingPopup.dart';
 import 'package:betakety_app/view/screens/Requests/widget/vaction_popup.dart';
+import 'package:betakety_app/view/screens/shipments/trips_screens.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:betakety_app/view/base/file_name_dialog.dart';
+
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -31,6 +33,8 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+import 'package:nb_utils/nb_utils.dart';
 import '../view/base/custom_snackbar.dart';
 import '../model/requests_permissions_model.dart';
 
@@ -82,6 +86,7 @@ class PermissionController extends GetxController {
   VacationType? apiItemTemp;
    String monthTemp = "1" ;
   int? selectedYear =  2025;
+  List<dynamic> levelOptions = [];
 
   TextEditingController detailsController = TextEditingController();
   TextEditingController vacationPlaceController = TextEditingController();
@@ -99,6 +104,9 @@ class PermissionController extends GetxController {
   var stream ;
   var length ;
   List<SendFile> filesList  = [] ;
+  List<String> attachmentsPathsList  = [] ;
+  List<String> filesNames = [];
+
   resetData() {
     canApplyVacation  = true  ;
      selectedIds  .clear()  ;
@@ -123,6 +131,9 @@ class PermissionController extends GetxController {
    fileNameController.clear();
    fileName.clear();
    filesList.clear()  ;
+   levelOptions.clear()  ;
+   filesNames.clear()  ;
+   attachmentsPathsList.clear()  ;
   }
   String? filePath  ;
   RequestsPermissionsModel ? permissionsModel  ;
@@ -182,6 +193,73 @@ class PermissionController extends GetxController {
 //     }
 //      filesList.add(SendFile(key: key, stream: stream, length: length)) ;
 //   }
+
+  checkLocation ({ required Function onSuccess})async {
+isLoading =true ;
+      update()  ;
+      LoginResponsModel user =  await AuthController().getLoginData()  ;
+      String url  =  "${AppConstants.checkUserLocation}?employ_id=${user.id!}";
+      final Map<String, dynamic> data = <String, dynamic>{};
+      data['employ_id'] = user.id;
+      data['user_lat'] = currentLocation!.latitude.toString();
+      data['user_lng'] = currentLocation!.longitude.toString();
+      data['company_id'] = user.companyId;
+      print(url) ;
+
+      final response = await api.postData(uri:url, map: data) ;
+
+      if (response.statusCode == 200) {
+
+        print(jsonDecode(response.body));
+        var data = jsonDecode(response.body) ;
+        print(data["status"]);
+
+        if(data["status"]=="success"){
+          bool isInside = data["is_inside"] ;
+         bool allowAnywhere = data["allow_anywhere"] ;
+          isLoading = false;
+
+          update() ;
+          if(isInside|| allowAnywhere){
+            onSuccess() ;
+           /* Navigator.of(Get.context!).pop();
+            Navigator.push(Get.context!, MaterialPageRoute(
+                builder: (BuildContext context) => VacationRequest()));*/
+
+          }
+           else{
+            SharedPreferences sharedPreferences = Get.find();
+            String languageCode = sharedPreferences.getString(AppConstants.LANGUAGE_CODE) ?? 'ar';
+             String messageEn = data["message_en"] ;
+             String messageAr = data["message"] ;
+             showOkDialog(context: Get.context!, message: languageCode == 'ar' ? messageAr : messageEn, isCancelBtn: false , onOkClick: (){
+               Navigator.of(Get.context!).pop();
+             }) ;
+          }
+        //  loader = false;
+
+          //  return  data["data"] ;
+          return   ;
+        }
+        else{
+          isLoading = false;
+
+          update() ;
+          throw Exception('Failed to load data!');
+
+        }
+
+      }
+      else {
+        isLoading = false;
+        update() ;
+        throw Exception('Failed to load data!');
+      }
+
+    }
+
+
+
    Future<String?> selectSingleFile(TextEditingController controller, String key ,) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
 
@@ -212,8 +290,60 @@ class PermissionController extends GetxController {
       // User canceled the picker
     }
   }
+  removeFiles({  required int index , bool name = false   , bool list = false}){
+     filesList.removeAt(index) ;
+   if(list) attachmentsPathsList.removeAt(index)  ;
+   if(name)  filesNames.removeAt(index) ;
+     update() ;
+   }
+  Future<String?> pickImageFromCamera(TextEditingController controller ,String key  ,{ bool nameDialog  =  true }) async {
 
-  Future<String?> selectSingleFileWithName(TextEditingController controller, String key ,) async {
+    // فتح الكاميرا لالتقاط صورة
+    final ImagePicker picker = ImagePicker();
+    XFile? image = await picker.pickImage(source: ImageSource.camera);
+    stream = http.ByteStream(image!.openRead())..cast();
+    length = await image.length();
+    if (image != null) {
+      if(nameDialog){
+
+      FileNameDialog(
+        context: Get.context!,
+        isCancelBtn: true,
+        controller: controller,
+
+        onOkClick: () {
+          String fileNameText = controller.text.trim();
+
+          filesNames.add(fileNameText.isEmpty
+              ? image.name
+              : fileNameText);
+
+        //  identityImages.add(image);
+       //   multipartList.add(MultipartBody('files[]', image));
+
+
+          attachmentsPathsList.add(image.path) ;
+          update();
+        },
+      ); }
+      else{
+        controller.text = image.name;
+      }
+      filesList.add(SendFile(
+        key: key,
+        stream: stream,
+        length: length,
+        fileName: image.name, // يجيب الاسم بس من غير الباث
+      ));
+      return image.path;
+
+    } else {
+      // المستخدم لغى التصوير
+      print("No image captured");
+    }
+  }
+/////// select file name with name
+  Future<String?> selectSingleFileWithName(TextEditingController controller, String key ) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
     fileName.text = "";
 
@@ -235,11 +365,12 @@ class PermissionController extends GetxController {
           isCancelBtn: true,
           controller: controller,
           onOkClick: () {
-            String name = fileName .text.trim() ;
+            String name = controller .text.trim() ;
+             print("file_name") ;
              print(name) ;
             // identityImage.name  = fileNameText  ;
             // imagesList.add(ImageData(file: identityImage, fileName: fileNameText));
-          //  filesNames.add(fileNameText);
+            filesNames.add(name);
            // identityImages.add(identityImage);
            // multipartList.add(MultipartBody('files[]', identityImage));
             update();
@@ -250,6 +381,7 @@ class PermissionController extends GetxController {
         length: length,
         fileName:  result.files.single.path!.split('/').last, // يجيب الاسم بس من غير الباث
       ));
+      attachmentsPathsList.add(result.files.single.path!) ;
       update() ;
 
       return result.files.single.path ;
@@ -386,7 +518,7 @@ postDataWithFile(uri: AppConstants.addPermissionReq) ;
    else {
 insertVacationRequest(uri: AppConstants.insertVacation) ;
     }
-  } Future<void> validateRequestsAndShowSnackbar(  List<dynamic>? options) async {
+  } Future<void> validateRequestsAndShowSnackbar(  List<dynamic>? options ) async {
     for (int i  = 0 ; i < options!.length ; i ++) {
        TextEditingController  controller  = options[i]["controller"] ;
        String   req  = options[i]["required_type"] ;
@@ -411,10 +543,10 @@ insertRequest(uri: AppConstants.AddAllRequests) ;
     LoginResponsModel user =  await AuthController().getLoginData()  ;
     data["employ_id"] =user.id;
  String url  =  functionName+"?"+"employ_id=" +user.id!   ;
+// String url  =  functionName+"?"+"employ_id=" +"568714"!   ;
  print(url) ;
  try {
     var response  = await  api.getData(url: url)  ;
-
       if (response.statusCode == 200) {
         print("requests");
         print(jsonDecode(response.body));
@@ -435,12 +567,10 @@ insertRequest(uri: AppConstants.AddAllRequests) ;
     print(url) ;
     try {
       var response  = await  api.getData(url: url)  ;
-
       if (response.statusCode == 200) {
         print("requests");
         var jsonObj  =  jsonDecode(response.body)  ;
         print(jsonObj);
-
         var jsonArr  =  jsonObj["data"] as List ;
        List <Questions> questionsList = jsonArr.map((e) => Questions.fromJson(e ,)).toList();
         return questionsList;
@@ -890,7 +1020,161 @@ if(canApplyVacation){
         showOkDialog(context: Get.context!, message: msg, isCancelBtn: false)  ;
       }
       }}
+  getProcessingOptionLevel  (String levelId) async {
+    levelOptions = []; // قم بتصفية القائمة أولاً لتجنب ظهور بيانات قديمة
+    update();
+    String url;
+    url = "${AppConstants.levelOptions}?request_type_id=${levelId}";
+    print(url);
 
+    var response = await api.getData(url: url);
+
+    if (response.statusCode == 200) {
+      print(jsonDecode(response.body));
+      var data = jsonDecode(response.body);
+      print(data["success"]);
+      if (data["success"]) {
+        levelOptions = data["data"] as List;
+
+
+
+        // if(fromPriceOffer){
+        //   shipmentDetails = dataArr.map((e) => ModelBooking.fromJsonPriceOfferDetails(e)).toList();
+        //
+        // }
+        // else{
+        // shipmentDetails = dataArr.map((e) => ModelBooking.fromJsonDetails(e)).toList();}
+        isLoading = false;
+
+        update();
+
+        return levelOptions;
+      } else {
+        isLoading = false;
+
+        update();
+      }
+    } else {
+      throw Exception('Failed to load data!');
+    }
+
+  }
+  Future<void> tripProcessing({ required String uri  , required String level_id ,  required String level  , required String requestId}) async {
+    isLoading  = true  ;
+    update() ;
+    String url =AppConstants.baseUrl+uri;
+    print(url) ;
+    var request =  http.MultipartRequest("POST",   Uri.parse(url));
+
+    request.fields['request_id'] =requestId;
+    request.fields['details'] =detailsController.text;
+    LoginResponsModel user =  await AuthController().getLoginData()  ;
+    request.fields['add_user_id'] = user.id!;
+    request.fields['levell_id'] = level_id;
+    request.fields['level_num'] = level;
+      if(currentLocation != null){
+        request.fields['level_lat'] = currentLocation!.latitude.toString();
+        request.fields['level_long'] = currentLocation!.longitude.toString();
+      }
+      else{
+        showOkDialog(context: Get.context!    ,message: "you_have_to_allow".tr, isCancelBtn: false  ) ;
+        isLoading  = false  ;
+        return ;
+
+      }
+
+    print(request.fields);
+    print(stream);
+    print(length);
+    List< Map<String, dynamic>> itemsMap = [];
+
+    for (int i  = 0 ; i <levelOptions.length ; i ++) {
+      TextEditingController  controller  =levelOptions[i]["controller"] ;
+      request.fields["options[$i][options_id]"] =
+      levelOptions[i]["options_id"];
+      request.fields["options[$i][update_options_id]"] =
+      levelOptions[i]["update_options_id"];
+      request.fields["options[$i][value_type]"] =
+      levelOptions[i]["value_type"];
+      if(uri==AppConstants.editProfile){
+        request.fields["options[$i][var_name]"] = controller.text.isEmpty?levelOptions[i]["value"]:controller.text;
+      }
+      else if(levelOptions[i]["value_type"] =="checkbox" && controller.text.isEmpty){
+        request.fields["options[$i][var_name]"] ="0" ;
+      }
+      else{
+        request.fields["options[$i][var_name]"] = controller.text; }
+    }
+    if(filesList.isNotEmpty){
+      // var multipartFile ;
+      print( filesList.length);
+      for (int i = 0; i < filesNames.length; i++) {
+        request.fields['attachment_name[$i]'] = filesNames[i];
+      }
+      for(int i =0 ; i < filesList.length  ; i++) {
+        // if(kIsWeb){
+        //   multipartFile =  http.MultipartFile.fromBytes(filesList[i].key!, filesList[i].fileBytes! ,filename: fileNameController.text);
+        //    print(filesList[i].key!) ;
+        //
+        // }
+        var file = filesList[i];
+
+        var multipartFile = http.MultipartFile(
+          file.key!,
+          file.stream,
+          file.length,
+          filename: file.fileName, // كل ملف باسمه
+        );
+        print(file.fileName) ;
+        print(file.stream) ;
+        print(file.length) ;
+        print(file.key) ;
+
+        //   }
+        request.files.add(multipartFile);
+
+      }
+
+
+
+    }
+    var response  = await request.send() ;
+    print(response.statusCode) ;
+    print(request.fields);
+    print(request.files);
+    var responseBody = await response.stream.bytesToString();
+    print("Response Body: $responseBody");
+
+    if (response.statusCode == 200) {
+      print("Uploaded!");
+      isLoading=  false  ;
+      showOkDialog(context: Get.context
+      !,
+          message: 'added_to_requests_permission'.tr,
+          isCancelBtn: false,
+          onOkClick: () {
+         Navigator.of(Get.context!).pop();
+              Navigator.pushReplacement(Get.context!, MaterialPageRoute(
+                  builder: (BuildContext context) => TripsScreen()));
+
+
+
+          });
+      update();
+
+    }
+    else{
+      isLoading=  false  ;
+      showOkDialog(context: Get.context
+      !,
+          message: 'try_again'.tr,
+          isCancelBtn: false,
+          onOkClick: () {
+          });
+      update();
+    }
+
+  }
   Future<void> insertRequest({ required String uri }) async {
      isLoading  = true  ;
      update() ;
@@ -1019,7 +1303,9 @@ print(file.key) ;
           onOkClick: () {
           });
       update();
-    }}
+    }
+
+  }
   VoidCallback? refreshCallback;
 
   Future<void> insertJustification({ Questions? question  }) async {

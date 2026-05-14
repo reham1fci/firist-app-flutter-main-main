@@ -4,6 +4,7 @@ import 'package:betakety_app/util/constant.dart';
 import 'package:betakety_app/view/screens/Requests/all_requests.dart';
 import 'package:betakety_app/view/screens/Requests/widget/requests_type_item.dart';
 import 'package:betakety_app/view/screens/shipments/shipments_screen.dart';
+import 'package:betakety_app/view/screens/shipments/trips_screens.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -92,10 +93,17 @@ getUserData() ;
                         },):SizedBox() ,
 
 
-
                 ],
               ):SizedBox(),
             ),
+            RequestsTypeItem(title:
+            'trips'.tr,
+
+              onTap: (){
+               // print("ttttttttttttt${employeeType!}") ;
+                Get.to(() => TripsScreen());
+              },)
+
           ],
         ),
       ),

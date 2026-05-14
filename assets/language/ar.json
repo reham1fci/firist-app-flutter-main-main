@@ -343,7 +343,7 @@
   "total": "المجموع",
   "more_from_the_shop": "المزيد من المتجر",
   "max": "الأعلى",
-  "to": "ل",
+  "to": "الي",
   "qty": "الكمية",
   "order_summary": "ملخص الطلب",
   "extra_inst": "(تعليمات إضافية / معلومات إضافية)",
@@ -693,5 +693,11 @@
   "wait": "قيد الانتظار",
   "cars_maintenance": "السيارات & الصيانة ",
   "approved": "معتمدة",
+  "other_attachments": "مرفقات اخرى",
+  "processed": "المعالجة",
+  "want_to_process_request": "هل انت  تريد معاجة الرحلة لهذا المستوي ?",
+  "loading_process": "جاري المعالجة",
+  "confirm_location": "التحقق من الموقع",
+  "trips": "الرحلات",
   "payed": "مدفوعة"
 }
