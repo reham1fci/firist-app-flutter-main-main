@@ -5,8 +5,8 @@ import 'package:betakety_app/util/images.dart';
 class AppConstants {
   static const String appName = 'HR Marsa';
   static const double appVersion = 2.2;
-  static const String company_name = 'Marsa Company';
-  static const String hr_system = 'HR System';
+  static const String company_name = 'MarsaINTLS';
+  static const String hr_system = 'MarsaINTLS';
   static const String baseUrl = "https://marsalogistics.com/new/hr_marsa_system/ar/api_hr_apps";
   static const String notificationBaseUrl = "https://www.marsalogistics.com/new/hr_marsa_system/ar/app_setting/api";
   static const String loginUri = '/Login_Api.php';
@@ -20,6 +20,7 @@ class AppConstants {
   static const String hoursCount = '/api_time_permission_view_count.php';
   static const String getTime = '/api_time_permission_view.php';
   static const String checkUserLocation = '/check_user_location.php';
+  static const String addTrip = '/Add_Trip_Request_api.php';
   static const String showAskingReq = '/Show_Issues_api.php';
   static const String showAskingPendingReq = '/Show_Issues_api_pending.php';
   static const String getAccountBalance = '/account_statement_api.php';

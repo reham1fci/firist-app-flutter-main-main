@@ -63,7 +63,7 @@ class AppConstants {
   static const String login = '/login1.php';
   static const String requestPermission = '/show_request_permission_api.php';
 
-  static const String appName = 'Marsa HR';
+  static const String appName = 'MarsaINTLS';
   static const bool demo = true;
 
   // Shared Key

@@ -695,6 +695,8 @@
   "objection_reason": "Objection Reason" ,
   "write_objection_reason": "Write your Objection Reason" ,
   "enter_register_phone": "Enter your phone have been register",
+  "add_trip": "Add Trip",
+  "confirm_add_trip": "هل انت  متأكد تريد اضافة رحلة ?",
   "accept_deduction": "are you sure you want to accept this deduction ?"
 
 }

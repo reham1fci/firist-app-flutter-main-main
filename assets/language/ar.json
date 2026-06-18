@@ -695,8 +695,10 @@
   "other_attachments": "مرفقات اخرى",
   "processed": "المعالجة",
   "want_to_process_request": "هل انت  تريد معاجة الرحلة لهذا المستوي ?",
+  "confirm_add_trip": "هل انت  متأكد تريد اضافة رحلة ?",
   "loading_process": "جاري المعالجة",
   "confirm_location": "التحقق من الموقع",
   "trips": "الرحلات",
+  "add_trip": "اضافة رحلة",
   "payed": "مدفوعة"
 }

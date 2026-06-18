@@ -46,9 +46,9 @@ class AuthController extends GetxController {
   TextEditingController? confirmPasswordController = TextEditingController();
   bool get isPasswordValid =>
       hasMinLength && hasUpperCase && hasLowerCase && hasSpecialChar;
-  void logout() {
+  void logout() async{
     // authRepo.logout()
-    clearUserLogin();
+  await  clearUserLogin();
     Get.offAll(const AuthScreen());
   }
   void validatePassword(String password) {
@@ -159,6 +159,7 @@ resetData(){
     await FirebaseMessaging.instance.deleteToken();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove("user");
+    prefs.remove("response_data");
     await prefs.setBool('is_logged_in', false);
   }
 
@@ -379,8 +380,8 @@ _isLoading  = false  ;
         uri: AppConstants.deactivateToken, map: data , isNotification: true);
     if (response.statusCode == 200) {
       print("return data  " + response.body);
-      var res = jsonDecode(response.body);
-     print(res["message"]) ;
+     // var res = jsonDecode(response.body);
+    // print(res["message"]) ;
     }
   }
 

@@ -1,3 +1,5 @@
+import 'package:betakety_app/view/base/custom_lert_dialog.dart';
+import 'package:betakety_app/view/base/loading_dialog.dart';
 import 'package:betakety_app/view/screens/Requests/add_request.dart';
 import 'package:betakety_app/view/screens/Requests/add_request_permission.dart';
 import 'package:betakety_app/view/screens/Requests/add_vaction_request.dart';
@@ -6,6 +8,7 @@ import 'package:betakety_app/view/screens/Requests/asking_body.dart';
 import 'package:betakety_app/view/screens/Requests/vaction_request_body.dart';
 import 'package:betakety_app/view/screens/shipments/widgets/trips_body.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:nb_utils/nb_utils.dart';
 import '../../../controllers/permission_controller.dart';
@@ -27,7 +30,25 @@ class AllRequestsState extends State<TripsScreen> {
       length: 2,
       child: Scaffold(
         // backgroundColor: kFirstColor,
-        appBar: AppBar(
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            // Add Trip Action
+            showOkDialog(
+              context: context,
+              message: "confirm_add_trip".tr,
+              onOkClick: () async {
+            //    showLoadingDialog(context , message: "confirm_location".tr+"......") ;
+ PermissionController pController = Get.find() ;
+                Position currentLocation = await pController.getCurrentLocation();
+                pController.addTrip() ;
+
+              },
+              isCancelBtn: true,
+            );
+          },
+          icon: const Icon(Icons.add),
+          label:  Text("add_trip".tr),
+        ),        appBar: AppBar(
           iconTheme: const IconThemeData(color: kTitleColor),
           centerTitle: true,
           title: Text(
