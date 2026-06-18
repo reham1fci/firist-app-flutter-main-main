@@ -200,8 +200,7 @@ return true;
                       width: Get.width / 3.2,
                       height: Get.width / 3,
                       screen:
-               //   isMandatoryData? null:
-                      WidgetList(),
+                isMandatoryData? null:WidgetList(),
                     ),
                     Squermain(
                       title: 'salaries'.tr,
@@ -230,8 +229,8 @@ return true;
                       image: Images.shipments,
                       width: Get.width / 3.2,
                       height: Get.width / 3,
-                      screen: ShipmentsTypeList(),
-                    //  screen: isMandatoryData? null:ShipmentsTypeList(),
+                     screen: ShipmentsTypeList(),
+                     // screen: isMandatoryData? null:ShipmentsTypeList(),
                     ),
                     Squermain(
                       title: 'target'.tr,
