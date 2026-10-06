@@ -21,6 +21,8 @@ class AppConstants {
   static const String getTime = '/api_time_permission_view.php';
   static const String checkUserLocation = '/check_user_location.php';
   static const String addTrip = '/Add_Trip_Request_api.php';
+  static const String addTrip2 = '/Add_Trip.php';
+  static const String getCities = '/get_cities.php';
   static const String showAskingReq = '/Show_Issues_api.php';
   static const String showAskingPendingReq = '/Show_Issues_api_pending.php';
   static const String getAccountBalance = '/account_statement_api.php';

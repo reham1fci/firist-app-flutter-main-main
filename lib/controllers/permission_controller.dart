@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:betakety_app/api/Api.dart';
 import 'package:betakety_app/controllers/auth_controller.dart';
 import 'package:betakety_app/controllers/fingerprint_controller.dart';
+import 'package:betakety_app/controllers/trip_controller.dart';
 import 'package:betakety_app/model/File.dart';
 import 'package:betakety_app/model/Questions.dart';
 import 'package:betakety_app/model/login_model.dart';
@@ -259,60 +260,15 @@ isLoading =true ;
 
     }
 
-  addTrip ()async {
-    isLoading =true ;
-    update()  ;
-    LoginResponsModel user =  await AuthController().getLoginData()  ;
-    String url  =  "${AppConstants.addTrip}?employ_id=${user.id!}";
-    final Map<String, dynamic> data = <String, dynamic>{};
-   // data['employ_id'] = user.id;
-    data['lat'] = currentLocation!.latitude.toString();
-    data['lng'] = currentLocation!.longitude.toString();
-   // data['company_id'] = user.companyId;
-    print(url) ;
-
-    final response = await api.postData2(uri:url, map: data) ;
-print(data);
-    if (response.statusCode == 200) {
-
-      print(jsonDecode(response.body));
-      var data = jsonDecode(response.body) ;
-      print(data["status"]);
-
-      if(data["success"]){
-      //  bool isInside = data["is_inside"] ;
-        //bool allowAnywhere = data["allow_anywhere"] ;
-        isLoading = false;
-
-        update() ;
-
-         // SharedPreferences sharedPreferences = Get.find();
-         // String languageCode = sharedPreferences.getString(AppConstants.LANGUAGE_CODE) ?? 'ar';
-          String message = data["msg"] ;
-          showOkDialog(context: Get.context!, message: message, isCancelBtn: false , onOkClick: (){
-            Navigator.of(Get.context!).pop();
-          }) ;
-
-        //  loader = false;
-
-        //  return  data["data"] ;
-        return   ;
-      }
-      else{
-        isLoading = false;
-
-        update() ;
-        throw Exception('Failed to load data!');
-
-      }
-
-    }
-    else {
-      isLoading = false;
-      update() ;
-      throw Exception('Failed to load data!');
-    }
-
+  addTrip ({String? fromCity, String? toCity, String? details}) async {
+    TripController tripController = Get.isRegistered<TripController>()
+        ? Get.find<TripController>()
+        : Get.put(TripController());
+    return await tripController.addTrip(
+      fromCity: fromCity,
+      toCity: toCity,
+      details: details,
+    );
   }
 
    Future<String?> selectSingleFile(TextEditingController controller, String key ,) async {

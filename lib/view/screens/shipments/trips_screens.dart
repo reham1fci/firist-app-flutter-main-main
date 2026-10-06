@@ -1,16 +1,7 @@
-import 'package:betakety_app/view/base/custom_lert_dialog.dart';
-import 'package:betakety_app/view/base/loading_dialog.dart';
-import 'package:betakety_app/view/screens/Requests/add_request.dart';
-import 'package:betakety_app/view/screens/Requests/add_request_permission.dart';
-import 'package:betakety_app/view/screens/Requests/add_vaction_request.dart';
-import 'package:betakety_app/view/screens/Requests/all_requests_body.dart';
-import 'package:betakety_app/view/screens/Requests/asking_body.dart';
-import 'package:betakety_app/view/screens/Requests/vaction_request_body.dart';
+import 'package:betakety_app/view/screens/shipments/widgets/add_trip_dialog.dart';
 import 'package:betakety_app/view/screens/shipments/widgets/trips_body.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:nb_utils/nb_utils.dart';
 import '../../../controllers/permission_controller.dart';
 import '../../../util/constant.dart';
 import '../../../util/styles.dart';
@@ -32,19 +23,8 @@ class AllRequestsState extends State<TripsScreen> {
         // backgroundColor: kFirstColor,
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
-            // Add Trip Action
-            showOkDialog(
-              context: context,
-              message: "confirm_add_trip".tr,
-              onOkClick: () async {
-            //    showLoadingDialog(context , message: "confirm_location".tr+"......") ;
- PermissionController pController = Get.find() ;
-                Position currentLocation = await pController.getCurrentLocation();
-                pController.addTrip() ;
-
-              },
-              isCancelBtn: true,
-            );
+            // Open Add Trip Dialog window
+            showAddTripDialog(context);
           },
           icon: const Icon(Icons.add),
           label:  Text("add_trip".tr),
@@ -66,6 +46,7 @@ class AllRequestsState extends State<TripsScreen> {
 
 
             onTap: (value) {
+
               Get.find<PermissionController>().changeSelected(value);
             },
             labelColor: kTitleColor,
