@@ -53,7 +53,19 @@ class _MyappState extends State<Myapp> {
   List<dynamic> _Data = [];
   List<InstructorItem> instructorsList = [];
   bool loader   = false  ;
-  final appcastURL = 'https://www.marsalogistics.com/new/marsadelivery/appcast.xml';
+
+  static const appcastURL =
+      'https://www.marsalogistics.com/new/marsadelivery/appcast.xml';
+
+  // ✅ تعريف upgrader خارج دالة build لضمان عدم إعادة إنشائه عند كل Rebuild
+  final _upgrader = Upgrader(
+    debugLogging: true, // لطباعة تفاصيل الفحص في Logcat
+    durationUntilAlertAgain: const Duration(seconds: 0),
+    appcastConfig: AppcastConfiguration(
+      url: appcastURL,
+      supportedOS: ['android', 'ios'],
+    ),
+  );
 
   AppUpdateInfo? _updateInfo;
 
@@ -145,28 +157,20 @@ showDialog();
   }
   @override
   Widget build(BuildContext context) {
-     const appcastURL =
-        'https://www.marsalogistics.com/new/marsadelivery/appcast.xml';
-    final upgrader = Upgrader(
-        durationUntilAlertAgain: const Duration(seconds: 3),
-        appcastConfig:
-        AppcastConfiguration(url: appcastURL, supportedOS: ['android' ,'ios']));
-    return
-     UpgradeAlert(
-       onIgnore: (){
+    return UpgradeAlert(
+        upgrader: _upgrader,
+        showIgnore: false,     // 🔒 إجبار التحديث وعدم السماح بالتخطي
+        showLater: false,      // 🔒 إخفاء زر "لاحقاً"
+        canDismissDialog: false, // 🔒 منع إغلاق النافذة
+        onIgnore: () {
           SystemNavigator.pop();
           throw UnsupportedError('_');
-        } ,
-        upgrader: upgrader,
-         onUpdate: (){
-_openStore()  ;
-SystemNavigator.pop();
-throw UnsupportedError('_');
-return true;
-         },
-          showIgnore: true,
-         showLater: false,
-
+        },
+        onUpdate: () {
+          _openStore();
+          SystemNavigator.pop();
+          return true;
+        },
          child:
 
       Scaffold(
